@@ -24,11 +24,27 @@
         </div>
 
         <div>
+            <x-input-label for="country" :value="__('Country')" />
+            <x-text-input id="country" name="country" type="text" class="mt-1 block w-full" :value="old('country', $user->country)" required autofocus autocomplete="country" />
+            <x-input-error class="mt-2" :messages="$errors->get('country')" />
+        </div>
+
+
+        <div>
+            <x-input-label for="sex" :value="__('Sex')" />
+            <select name="sex" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <option @if(isset($user->sex) && $user->sex ==1) selected @endif value="1" > Male </option>
+                <option @if(isset($user->sex) && $user->sex ==0) selected @endif value="0" > Female </option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('sex')" />
+        </div>
+
+        <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+            @if (!$user->hasVerifiedEmail())
                 <div>
                     <p class="text-sm mt-2 text-gray-800">
                         {{ __('Your email address is unverified.') }}
