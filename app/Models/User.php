@@ -25,7 +25,8 @@ class User extends Authenticatable
         'balance',
         'country',
         'sex',
-        'role_id'
+        'role_id',
+        'avatar'
     ];
 
     /**

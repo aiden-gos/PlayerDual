@@ -23,6 +23,7 @@ return new class extends Migration
             $table->double('balance')->default(0);
             $table->string('country')->nullable();
             $table->boolean('sex')->nullable();
+            $table->string('avatar')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
             $table->rememberToken();
             $table->timestamps();
