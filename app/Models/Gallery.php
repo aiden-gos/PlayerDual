@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
+    const TYPE_IMAGE = "image";
+    const TYPE_VIDEO = "video";
+    
     use HasFactory;
 
        /**

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Gallery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -48,6 +50,19 @@ class ProfileController extends Controller
     {
         return view('profile.payment', [
             'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Display the user's accout form.
+     */
+    public function gallery(Request $request): View
+    {
+        $gallery = Gallery::where('user_id', $request->user()->id)->get();
+
+        return view('profile.gallery', [
+            'user' => $request->user(),
+            'gallery' => $gallery
         ]);
     }
 

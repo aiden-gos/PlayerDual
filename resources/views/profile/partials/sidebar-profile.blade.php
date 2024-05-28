@@ -7,6 +7,10 @@
         {{ __('Edit profile') }}
     </x-nav-link>
 
+    <x-nav-link :href="route('profile.gallery')" :active="request()->routeIs('profile.gallery')">
+        {{ __('Gallery') }}
+    </x-nav-link>
+
     <x-nav-link :href="route('profile.password')" :active="request()->routeIs('profile.password')">
         {{ __('Update password') }}
     </x-nav-link>
