@@ -22,6 +22,26 @@ class ProfileController extends Controller
     }
 
     /**
+     * Display the user's change password form.
+     */
+    public function changePassword(Request $request): View
+    {
+        return view('profile.password', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Display the user's accout form.
+     */
+    public function account(Request $request): View
+    {
+        return view('profile.account', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse

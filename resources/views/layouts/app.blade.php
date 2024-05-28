@@ -16,21 +16,28 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+            <div id="header" class="fixed w-full shadow">
+                @include('layouts.navigation')
+            </div>
+ 
+            <div id="content" class="flex flex-row w-full">
+                @if (isset($header))
+                    {{$header}}
+                @endif
+                <!-- Page Content -->
+                <main id="main" class="w-full">
+                    {{ $slot }}
+                </main>
+            </div>
         </div>
     </body>
+    <script type="module">
+    $(window).on('load',function() {
+        var contentPlacement = $('#header').position().top + $('#header').height();
+        $('#content').css('padding-top',contentPlacement);
+
+        var sidePlacement = $('#side-bar').position().left + $('#side-bar').width();
+        $('#main').css('padding-left',sidePlacement+30);
+    });
+    </script>
 </html>
