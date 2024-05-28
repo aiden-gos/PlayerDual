@@ -1,23 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div id="side-bar" class="bg-white fixed h-screen w-48 shadow flex flex-col gap-4 p-4">
-            
-            <div class="text-xl">
-                {{ __('Profile setting') }}
-            </div>
-
-            <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                {{ __('Edit profile') }}
-            </x-nav-link>
-
-            <x-nav-link :href="route('profile.password')" :active="request()->routeIs('profile.password')">
-                {{ __('Update password') }}
-            </x-nav-link>
-
-            <x-nav-link :href="route('profile.account')" :active="request()->routeIs('profile.account')">
-                {{ __('Account') }}
-            </x-nav-link>
-        </div>
+        @include('profile.partials.sidebar-profile')
     </x-slot>
 
     <div class="py-12">

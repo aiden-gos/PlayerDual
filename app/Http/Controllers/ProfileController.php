@@ -42,6 +42,16 @@ class ProfileController extends Controller
     }
 
     /**
+     * Display the user's accout form.
+     */
+    public function payment(Request $request): View
+    {
+        return view('profile.payment', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
