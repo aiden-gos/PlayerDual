@@ -21,6 +21,9 @@ class ProfileUpdateRequest extends FormRequest
             'sex'=> ['boolean'],
             'avatar'=>['image'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'card_number' => ['regex:/^\d{16}$/'],
+            'card_expire' => ['regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/'],
+            'card_cvv' => ['regex:/^\d{3,4}$/'],
         ];
     }
 }

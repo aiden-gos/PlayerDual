@@ -26,7 +26,10 @@ class User extends Authenticatable
         'country',
         'sex',
         'role_id',
-        'avatar'
+        'avatar',
+        'card_number',
+        'card_expire',
+        'card_cvv'
     ];
 
     /**
@@ -37,6 +40,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'card_cvv'
     ];
 
     /**

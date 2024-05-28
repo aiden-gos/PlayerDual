@@ -24,6 +24,9 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->boolean('sex')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('card_number')->nullable();
+            $table->string('card_expire')->nullable();
+            $table->string('card_cvv')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
             $table->rememberToken();
             $table->timestamps();
