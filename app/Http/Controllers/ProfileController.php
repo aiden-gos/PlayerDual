@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Gallery;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -92,6 +93,43 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.payment')->with('status', 'payment-updated');
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function updateAvatar(ProfileUpdateRequest $request): RedirectResponse
+    {
+        if($request->hasFile('avatar')) {
+            if(!empty($request->user()->avatar)){
+                $public_id =  explode('.',explode('/', $request->user()->avatar)[7])[0];
+                Cloudinary::destroy($public_id);
+            }
+            $uploaded= Cloudinary::upload($request->file('avatar')->getRealPath());
+            $uploadedFileUrl = $uploaded->getSecurePath();
+            Log::debug($uploadedFileUrl);
+        }
+        $request->user()->update(['avatar'=> $uploadedFileUrl]);
+        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+    }
+
+     /**
+     *
+     */
+    public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
+    {
+        if($request->hasFile('upload')) {
+            if(in_array($request->file('upload')->guessExtension(),['jpg','png','gif'])){
+                $uploaded= Cloudinary::upload($request->file('upload')->getRealPath());
+                $uploadedFileUrl = $uploaded->getSecurePath();
+                Gallery::create(['type'=>'image', 'link'=>$uploadedFileUrl, 'user_id'=> $request->user()->id]);
+            }else if(in_array($request->file('upload')->guessExtension(),['mp4','wmv','avi'])){
+                $uploaded= Cloudinary::uploadVideo($request->file('upload')->getRealPath());
+                $uploadedFileUrl = $uploaded->getSecurePath();
+                Gallery::create(['type'=>'video', 'link'=>$uploadedFileUrl, 'user_id'=> $request->user()->id]);
+            }
+        }
+        return Redirect::route('profile.gallery');
     }
 
     /**

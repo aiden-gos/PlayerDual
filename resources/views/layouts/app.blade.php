@@ -9,14 +9,19 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
+        
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+        <link
+            href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
+            rel="stylesheet"/>
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        @vite(['resources/css/app.css', 'resources/js/app.js','node_modules/@pqina/pintura/pintura.css'])
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            <div id="header" class="fixed w-full shadow">
+            <div id="header" class="fixed w-full shadow z-50">
                 @include('layouts.navigation')
             </div>
  

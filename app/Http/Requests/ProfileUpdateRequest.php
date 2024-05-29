@@ -19,7 +19,6 @@ class ProfileUpdateRequest extends FormRequest
             'name' => ['string', 'max:255'],
             'country'=> ['string', 'max:255'],
             'sex'=> ['boolean'],
-            'avatar'=>['image'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'card_number' => ['regex:/^\d{16}$/'],
             'card_expire' => ['regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/'],

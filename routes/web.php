@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment', [ProfileController::class, 'payment'])->name('profile.payment');
     Route::get('/gallery', [ProfileController::class, 'gallery'])->name('profile.gallery');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::post('/gallery', [ProfileController::class, 'uploadGallery'])->name('profile.gallery');
     Route::patch('/payment', [ProfileController::class, 'updatePayment'])->name('profile.payment');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

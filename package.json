@@ -16,6 +16,11 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "jquery": "^3.7.1"
+        "@pqina/filepond-plugin-image-editor": "^9.1.0",
+        "@pqina/pintura": "^8.81.1",
+        "filepond": "^4.31.1",
+        "filepond-plugin-file-poster": "^2.5.1",
+        "jquery": "^3.7.1",
+        "jquery-filepond": "^1.0.0"
     }
 }
