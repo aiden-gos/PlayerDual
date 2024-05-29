@@ -23,24 +23,35 @@
                                 accept="image/png, image/jpeg, image/gif, video/mp4">
                         </form>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                @if (empty($gallery))
-                    <div class="text-gray-600">Empty gallery</div>
-                @else
-                    @foreach ($gallery as $ele)
-                        @if (isset($ele->type) && $ele->type == 'image')
-                            <div>
-                                <img class="w-[340px] h-[200px] rounded-lg object-cover" src="{{$ele->link}}" alt="">
-                            </div>
-                        @elseif (isset($ele->type) && $ele->type == 'video')
-                            <video controls class="w-[340px] h-[200px] rounded-lg object-cover">
-                                <source src="{{$ele->link}}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        @endif
+                <div class="">
+                    @if (empty($gallery))
+                        <div class="text-gray-600">Empty gallery</div>
+                    @else
+                            <div ID="ngy2p" data-nanogallery2='{
+                                "itemsBaseURL": "http://nanogallery2.nanostudio.org/samples/",
+                                "thumbnailWidth": "300",
+                                "thumbnailBorderVertical": 0,
+                                "thumbnailBorderHorizontal": 0,
+                                "colorScheme": {
+                                "thumbnail": {
+                                    "background": "rgba(255,255,255,1)"
+                                }
+                                },
+                                "thumbnailLabel": {
+                                "position": "overImageOnBottom"
+                                },
+                                "thumbnailHoverEffect2": "imageScaleIn80",
+                                "thumbnailGutterWidth": 10,
+                                "thumbnailGutterHeight": 10,
+                                "thumbnailOpenImage": true
+                            }'>
+                        @foreach ($gallery as $ele)
+                            <a href="{{$ele->link}}" data-ngthumb="{{$ele->link}}" data-ngdesc=""></a>
+                        @endforeach
+                        </div>
 
-                    @endforeach
-                @endif
+                        
+                    @endif
                 </div>
             </div>
         </div>
