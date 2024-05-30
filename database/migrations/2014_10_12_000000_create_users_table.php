@@ -23,7 +23,7 @@ return new class extends Migration
             $table->double('balance')->default(0);
             $table->string('country')->nullable();
             $table->boolean('sex')->nullable();
-            $table->string('avatar')->nullable();
+            $table->string('avatar')->nullable()->default(env("DEFAULT_IMAGE"));
             $table->double('price')->default(0);
             $table->string('card_number')->nullable();
             $table->string('card_expire')->nullable();
