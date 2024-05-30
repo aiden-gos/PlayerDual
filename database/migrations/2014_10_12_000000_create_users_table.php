@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->boolean('sex')->nullable();
             $table->string('avatar')->nullable();
+            $table->double('price')->default(0);
             $table->string('card_number')->nullable();
             $table->string('card_expire')->nullable();
             $table->string('card_cvv')->nullable();

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div id="side-bar" class="bg-white fixed h-screen w-48 shadow flex flex-col gap-4 p-4">               
+        <div id="side-bar" class="bg-white fixed h-screen w-48 shadow flex flex-col gap-4 p-4">
             <div class="text-xl">
                 {{ __('Dashboard') }}
             </div>

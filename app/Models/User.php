@@ -24,6 +24,7 @@ class User extends Authenticatable
         'status',
         'balance',
         'country',
+        'price',
         'sex',
         'role_id',
         'avatar',
