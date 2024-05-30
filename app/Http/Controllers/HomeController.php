@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    public function index(Request $request)
+    {
+        $vip_user = User::query()->orderBy("balance","DESC")->limit(15)->get();
+        $hot_user = User::query()->orderBy("price","DESC")->limit(15)->get();
+
+        return view('welcome',[
+            'vip_user'=> $vip_user,
+            'hot_user'=> $hot_user,
+        ]);
+    }
+
     public function search(Request $request)
     {
         $user = User::query();
@@ -24,7 +35,7 @@ class HomeController extends Controller
         if(!empty($request->query("priceMax"))){
             $user->where("price","<", $request->query("priceMax"));
         }
-        $reslut = $user->get();
+        $reslut = $user->limit(20)->get();
         return response()->json($reslut, 200);
     }
 }

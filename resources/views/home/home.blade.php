@@ -41,32 +41,32 @@
         <div class="mt-6">
             <h3 class="text-gray-600 text-2xl font-medium">VIP PLAYERS</h3>
             <div class="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-6">
-                @for ($i=0; $i<9;$i++)
+                @foreach ($vip_user as $user)
                     <div class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
-                        <div class="flex items-end justify-end h-56 w-full bg-cover" style="background-image: url('https://playerduo.net/api/upload-service/images/1ce35a07-ef71-432f-8c50-e5acaa079c3a__c5003980-4f23-11ee-bec4-f929e725acab__player_avatar.jpg')">
+                        <div class="flex items-end justify-end h-56 w-full bg-cover" style="background-image: url('{{$user->avatar}}')">
                         </div>
                         <div class="px-5 py-3">
-                            <h3 class="text-gray-700 uppercase">Player name</h3>
-                            <span class="text-gray-500 mt-2">$12/h</span>
+                            <h3 class="text-gray-700 uppercase">{{$user->name}}</h3>
+                            <span class="text-gray-500 mt-2">${{$user->price}}/h</span>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
 
         <div class="mt-16">
             <h3 class="text-gray-600 text-2xl font-medium">HOT PLAYER</h3>
             <div class="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-6">
-                @for ($i=0; $i<12;$i++)
-                    <div class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
-                        <div class="flex items-end justify-end h-56 w-full bg-cover" style="background-image: url('https://playerduo.net/api/upload-service/images/1ce35a07-ef71-432f-8c50-e5acaa079c3a__c5003980-4f23-11ee-bec4-f929e725acab__player_avatar.jpg')">
-                        </div>
-                        <div class="px-5 py-3">
-                            <h3 class="text-gray-700 uppercase">Player name</h3>
-                            <span class="text-gray-500 mt-2">$12/h</span>
-                        </div>
+                @foreach ($hot_user as $user)
+                <div class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
+                    <div class="flex items-end justify-end h-56 w-full bg-cover" style="background-image: url('{{$user->avatar}}')">
                     </div>
-                @endfor
+                    <div class="px-5 py-3">
+                        <h3 class="text-gray-700 uppercase">{{$user->name}}</h3>
+                        <span class="text-gray-500 mt-2">${{$user->price}}/h</span>
+                    </div>
+                </div>
+            @endforeach
             </div>
         </div>
     </div>

@@ -25,6 +25,7 @@ class UserFactory extends Factory
             'avatar' => fake()->imageUrl(),
             'sex'=>random_int(0,1),
             'balance' => random_int(100, 100000),
+            'price' => random_int(0,100),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];
