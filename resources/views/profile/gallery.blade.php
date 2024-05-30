@@ -1,3 +1,4 @@
+@vite(["node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"])
 <x-app-layout>
     <x-slot name="header">
         @include('profile.partials.sidebar-profile')
@@ -14,8 +15,8 @@
                                 <h1 class="text-2xl">Gallery</h1>
                                 <x-primary-button>Upload</x-primary-button>
                             </div>
-                            
-                            <input type="file" 
+
+                            <input type="file"
                                 class="filepond"
                                 name="upload"
                                 data-allow-reorder="true"
@@ -49,8 +50,6 @@
                             <a href="{{$ele->link}}" data-ngthumb="{{$ele->link}}" data-ngdesc=""></a>
                         @endforeach
                         </div>
-
-                        
                     @endif
                 </div>
             </div>
@@ -62,10 +61,16 @@
 import * as FilePond from "{{Vite::asset('node_modules/filepond/dist/filepond.esm.js')}}";
 import FilePondPluginFilePoster from "{{Vite::asset('node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js')}}";
 import FilePondPluginImageEditor from "{{Vite::asset('node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js')}}";
+import FilePondPluginFileValidateSize from "{{Vite::asset('node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.esm.js')}}";
+import FilePondPluginImagePreview from "{{Vite::asset('/node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js')}}";
+import FilePondPluginImageExifOrientation from "{{Vite::asset('node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.esm.js')}}";
 
 FilePond.registerPlugin(
     FilePondPluginImageEditor,
-    FilePondPluginFilePoster
+    FilePondPluginFilePoster,
+    // FilePondPluginImagePreview,
+    FilePondPluginImageExifOrientation,
+    FilePondPluginFileValidateSize
 );
 
 import {
@@ -79,23 +84,16 @@ import {
 FilePond.create(document.querySelector('input[name=upload]'), {
     storeAsFile: true,
     allowReorder: true,
-    filePosterMaxHeight: 256,
     imageEditor: {
         createEditor: openEditor,
         imageReader: [createDefaultImageReader],
         imageWriter: [
             createDefaultImageWriter,
-            {
-                targetSize: {
-                    width: 128,
-                },
-            },
         ],
         imageProcessor: processImage,
         editorOptions: {
             ...getEditorDefaults({
             }),
-            imageCropAspectRatio: 1,
         },
     }
 });
