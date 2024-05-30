@@ -102,8 +102,12 @@ class ProfileController extends Controller
     {
         if($request->hasFile('avatar')) {
             if(!empty($request->user()->avatar)){
-                $public_id =  explode('.',explode('/', $request->user()->avatar)[7])[0];
-                Cloudinary::destroy($public_id);
+                try {
+                    $public_id =  explode('.',explode('/', $request->user()->avatar)[7])[0];
+                    Cloudinary::destroy($public_id);
+                } catch (\Throwable $th) {
+                    Log::error("Error detroy old avatar");
+                }
             }
             $uploaded= Cloudinary::upload($request->file('avatar')->getRealPath());
             $uploadedFileUrl = $uploaded->getSecurePath();
