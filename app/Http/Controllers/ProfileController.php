@@ -51,6 +51,8 @@ class ProfileController extends Controller
     {
         return view('profile.payment', [
             'user' => $request->user(),
+            'payment_method' => $request->user()->paymentMethods(),
+            'intent' => $request->user()->createSetupIntent()
         ]);
     }
 

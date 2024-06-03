@@ -38,8 +38,36 @@
         </div>
   </div>
 
-<script type="module">
+  <script type="module">
     $(document).ready(function () {
+    let time = 0;
+    $('#name').on('input', function () {
+        clearTimeout(time);
+        time = setTimeout(function() {
+        if($('#name').val() != "") {
+            var name = $("#name").val();
+            var sex = $("#sex").val();
+            var priceMin = $("#price-min").val();
+            var priceMax = $("#price-max").val();
+            $.ajax(
+                {
+                    url: "{{route('home.search')}}",
+                    type: 'GET',
+                    data:{
+                            "name": name,
+                            "sex" : sex,
+                            "priceMin": priceMin,
+                            "priceMax": priceMax
+                        } ,
+                    success: function(result){
+                        handleSuccessAjax(result);
+                    }
+                }
+            );
+        }
+    }, 300);
+    });
+
     $("#search-btn").click(function() {
         var name = $("#name").val();
         var sex = $("#sex").val();
@@ -56,7 +84,6 @@
                         "priceMax": priceMax
                     } ,
                 success: function(result){
-
                     handleSuccessAjax(result);
                 }
             }
@@ -64,37 +91,63 @@
     })
 
     function handleSuccessAjax(result) {
-            $("#search-result").empty();
+            $(".search").empty();
             var script = ``;
 
             if(result?.length > 0){
-                script += `<div class="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-6">`
+                script += `<section class="food_section layout_padding-bottom">
+            <div class="container">
+              <div class="heading_container heading_center m-5">
+                <h2>
+                    Search result
+                </h2>
+              </div>
+
+              <div class="filters-content">
+                <div class="row grid">`;
                 result.forEach(element => {
-                    console.log(element);
                     var eleScript =`
-                            <div class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
-                                <div class="flex items-end justify-end h-56 w-full bg-cover" style="background-image: url('${element?.avatar != null ? element?.avatar:'' }')">
-                                </div>
-                                <div class="px-5 py-3">
-                                    <h3 class="text-gray-700 uppercase">${element?.name}</h3>
-                                    <span class="text-gray-500 mt-2">$${element?.price}/h</span>
-                                </div>
+                    <div class="col-sm-4 col-lg-3 all pizza">
+                        <div class="box">
+                        <div>
+                            <div>
+                            <img src="${element.avatar}" alt="">
                             </div>
-                            `;
+                            <div class="detail-box">
+                            <h5>
+                                ${element.name}
+                            </h5>
+                            <div class="options">
+                                <h6>
+                                ${element.price}/h
+                                </h6>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
                     script += eleScript;
                 });
-                script += `</div>`;
+                script += `</div>
+              </div>
+            </div>
+          </section>`;
             }else{
                 script += `
-                            <div class="w-full overflow-hidden py-5 flex justify-center">
-                                <div class="p-6 text-gray-900 text-xl">
-                                    {{ __("Not found player") }}
-                                </div>
+                        <div class="container">
+                            <div class="heading_container heading_center m-5">
+                                <h2>
+                                    Search result
+                                </h2>
+                                <h4 class="p-5">
+                                    Not found player
+                                </h4>
                             </div>
+                        </div>
                         `;
             }
-            $("#search").removeClass("hidden")
-            $("#search-result").append(script);
+            $(".search").append(script);
+            console.log("dawd")
         }
     })
-</script>
+    </script>

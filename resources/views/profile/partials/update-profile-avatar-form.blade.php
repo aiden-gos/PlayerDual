@@ -8,16 +8,16 @@
             {{ __("Update your account's avatar.") }}
         </p>
     </header>
-
+<div class="flex flex-row gap-20">
     <form method="post" action="{{ route('profile.avatar') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         <div class="flex flex-row gap-10">
-            <input type="file" 
+            <input type="file"
                 class="filepond h-48 w-48 -z-1" id="avatar-input"
                 name="avatar"
                 accept="image/png, image/jpeg, image/gif"/>
         </div>
-        
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
@@ -32,6 +32,33 @@
             @endif
         </div>
     </form>
+    <div>
+        Balance: ${{Auth::user()->balance}}
+        <form method="post" action="{{ route('payment.checkout') }}" class="mt-6 space-y-6">
+            <x-text-input type="number" name="money"/>
+            <x-primary-button>{{ __('Checkout') }}</x-primary-button>
+            @if (session('status') === 'checkout-ok')
+            <p
+                x-data="{ show: true }"
+                x-show="show"
+                x-transition
+                x-init="setTimeout(() => show = false, 2000)"
+                class="text-sm text-gray-600"
+            >{{ __('Checkout Success.') }}</p>
+            @endif
+
+            @if (session('status') === 'checkout-fail')
+            <p
+                x-data="{ show: true }"
+                x-show="show"
+                x-transition
+                x-init="setTimeout(() => show = false, 2000)"
+                class="text-sm text-gray-600"
+            >{{ __('Checkout Error.') }}</p>
+            @endif
+        <form>
+    </div>
+</div>
 </section>
 
 <script type="module">
