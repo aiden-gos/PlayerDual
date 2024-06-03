@@ -18,11 +18,14 @@ class StripeController extends Controller
         $money = $request->input('money') * 100;
         $paymentMethod = $request->user()->defaultPaymentMethod();
 
-        if(empty($paymentMethod) || $money <= 0 ){
-            return Redirect::route("profile.edit")->with('status', 'checkout-fail');;
+        if(empty($paymentMethod)){
+            return Redirect::route("profile.edit")->with('status', 'checkout-fail-1');
+        }else if($money <= 0) {
+            return Redirect::route("profile.edit")->with('status', 'checkout-fail-2');
         }
-
-        $request->user()->invoiceFor('Checkout', $money);
-        return Redirect::route("profile.edit")->with('status', 'checkout-ok');;
+        $user =  $request->user();
+        $user->invoiceFor('Checkout', $money);
+        $user->update(['balance'=> ($user->balance + ($money/100))]);
+        return Redirect::route("profile.edit")->with('status', 'checkout-ok');
     }
 }
