@@ -23,6 +23,7 @@ class StripeController extends Controller
         }else if($money <= 0) {
             return Redirect::route("profile.edit")->with('status', 'checkout-fail-2');
         }
+
         $user =  $request->user();
         $user->invoiceFor('Checkout', $money);
         $user->update(['balance'=> ($user->balance + ($money/100))]);
