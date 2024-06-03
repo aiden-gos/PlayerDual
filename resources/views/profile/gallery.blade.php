@@ -22,6 +22,8 @@
                                 data-allow-reorder="true"
                                 data-max-file-size="3MB"
                                 accept="image/png, image/jpeg, image/gif, video/mp4">
+                                <button id="chooser-button" class="btn btn-primary">Choose from Dropbox</button>
+                                <div id="file-info"></div>
                         </form>
                 </div>
                 <div class="">
@@ -56,6 +58,27 @@
         </div>
     </div>
 </x-app-layout>
+
+<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="57e7cwbrqrgxbxm"></script>
+<script>
+    document.getElementById('chooser-button').addEventListener('click', function() {
+        Dropbox.choose({
+            success: function(files) {
+                alert("Here's the file link: " + files[0].link)
+
+                var fileInfo = document.getElementById('file-info');
+                fileInfo.innerHTML = '<div class="alert alert-success">Tệp đã chọn: <a href="' + files[0].link + '" target="_blank">' + files[0].name + '</a></div>';
+            },
+            cancel: function() {
+                var fileInfo = document.getElementById('file-info');
+                fileInfo.innerHTML = '<div class="alert alert-warning">Không có tệp nào được chọn.</div>';
+            },
+            linkType: "preview", // or "direct"
+            multiselect: false, // or true
+            extensions: ['.pdf', '.doc', '.docx', '.png', '.jpg', 'jpeg']
+        });
+    });
+</script>
 
 <script type="module">
 import * as FilePond from "{{Vite::asset('node_modules/filepond/dist/filepond.esm.js')}}";

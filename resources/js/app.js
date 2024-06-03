@@ -1,4 +1,4 @@
-import './bootstrap';
+import './bootstrap-init';
 
 import Alpine from 'alpinejs';
 import jQuery from 'jquery';
