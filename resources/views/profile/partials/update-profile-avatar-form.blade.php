@@ -35,6 +35,7 @@
     <div>
         Balance: ${{Auth::user()->balance}}
         <form method="post" action="{{ route('payment.checkout') }}" class="mt-6 space-y-6">
+            Type the number
             <x-text-input type="number" name="money"/>
             <x-primary-button>{{ __('Checkout') }}</x-primary-button>
             @if (session('status') === 'checkout-ok')
@@ -47,14 +48,23 @@
             >{{ __('Checkout Success.') }}</p>
             @endif
 
-            @if (session('status') === 'checkout-fail')
+            @if (session('status') === 'checkout-fail-1')
             <p
                 x-data="{ show: true }"
                 x-show="show"
                 x-transition
                 x-init="setTimeout(() => show = false, 2000)"
                 class="text-sm text-gray-600"
-            >{{ __('Checkout Error.') }}</p>
+            >{{ __('Please add payment method.') }}</p>
+            @endif
+            @if (session('status') === 'checkout-fail-2')
+            <p
+                x-data="{ show: true }"
+                x-show="show"
+                x-transition
+                x-init="setTimeout(() => show = false, 2000)"
+                class="text-sm text-gray-600"
+            >{{ __('Input > 0.') }}</p>
             @endif
         <form>
     </div>
