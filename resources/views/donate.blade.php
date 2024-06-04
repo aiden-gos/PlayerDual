@@ -26,40 +26,45 @@
                     </svg>
                 </button>
             </div>
-
+            <style>label.error{color: red}</style>
             <!-- content -->
             <div>
-                <form method="post" action="{{ route('donate') }}" class="mt-6 space-y-6">
+                <form id="donate" method="post" action="{{ route('donate') }}" class="mt-6 space-y-6">
                     @csrf
 
                     <input type="hidden" name="user_id" value="{{$user->id}}">
 
-                    <div class="flex flex-row w-full">
-                        <x-input-label for="name" :value="__('Reciver')" />
-                        <div>{{$user->name}}</div>
+                    <div class="flex flex-row items-center">
+                        <div class="w-full">
+                            <x-input-label for="name" :value="__('Reciver')" />
+                        </div>
+                        <div class="w-full">
+                            <div>{{$user->name}}</div>
+                        </div>
                     </div>
 
-                    <div>
-                        <x-input-label for="name" :value="__('Balance')" />
-                        <div>{{Auth::user()->balance}}</div>
+                    <div class="flex flex-row items-center">
+                        <div class="w-full">
+                            <x-input-label for="name" :value="__('Balance')" />
+                        </div>
+                        <div class="w-full">
+                            <div>${{Auth::user()->balance}}</div>
+                        </div>
                     </div>
 
                     <div>
                         <x-input-label for="money" :value="__('Money')" />
                         <x-text-input id="money" name="money" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-                        <x-input-error class="mt-2" :messages="$errors->get('money')" />
                     </div>
 
                     <div>
                         <x-input-label for="name" :value="__('Display name')" />
-                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-                        <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', Auth::user()->name)" required autofocus autocomplete="name" />
                     </div>
 
                     <div>
                         <x-input-label for="msg" :value="__('Message')" />
                         <textarea name="msg" id="msg" cols="50" rows="10"></textarea>
-                        <x-input-error class="mt-2" :messages="$errors->get('msg')" />
                     </div>
 
                     <x-primary-button>{{ __('Donate') }}</x-primary-button>
@@ -68,3 +73,18 @@
         </div>
     </div>
 </div>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+<script>
+    $("#donate").validate({
+		onfocusout: false,
+		onkeyup: false,
+		onclick: false,
+		rules: {
+			"money": {
+				required: true,
+				min: 0,
+                max:{{Auth::user()->balance}}
+			}
+		}
+	});
+</script>

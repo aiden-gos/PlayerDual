@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ActionNotify as EventsActionNotify;
 use App\Events\EventActionNotify;
 use App\Models\Donate;
 use App\Models\User;
 use App\Notifications\ActionNotify;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
+
 
 class DonateController extends Controller
 {
     public function donate(Request $request)
     {
+
         $money = $request->input('money');
         $user_id = $request->input('user_id');
         $msg = $request->input('msg');
 
-        if($request->user()->balance >= $money){
+        if($request->user()->balance >= $money && $money > 0){
             try {
                 DB::beginTransaction();
                 $request->user()->update(['balance' => ($request->user()->balance - $money)]);
@@ -47,8 +46,8 @@ class DonateController extends Controller
                 DB::rollBack();
                 Log::debug($e);
             }
-        }
         return Redirect::back();
+        }
 
     }
 }
