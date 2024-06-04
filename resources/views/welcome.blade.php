@@ -1,6 +1,12 @@
 <x-app-layout>
     @vite(['resources/css/style.css','resources/css/responsive.css','resources/css/bootstrap.css',])
-
+<style>a:hover{
+    text-decoration: none;color:black;
+}
+a{
+    color: black;
+}
+</style>
 <!-- end header section -->
     <!-- slider section -->
 <div class="hero_area">
@@ -101,7 +107,8 @@
         <div class="filters-content">
           <div class="row grid">
           @foreach ($vip_user as $player)
-            <div class="col-sm-4 col-lg-3 all pizza">
+          <a class="col-sm-4 col-lg-3 hover:none all pizza" href='/user/{{Auth::user()->id}}'>
+            <div class="">
               <div class="box">
                 <div>
                   <div class="">
@@ -120,6 +127,7 @@
                 </div>
               </div>
             </div>
+          </a>
           @endforeach
           </div>
         </div>
@@ -254,7 +262,8 @@
     <!-- isotope js -->
     <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
     <!-- nice select -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script> --}}
+    @vite(["resources/js/nice-select.js"])
     <!-- custom js -->
     <script src="{{Vite::asset('resources/js/custom.js')}}"></script>
     </script>
