@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "league/flysystem": "^3.28",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/flysystem-dropbox": "^3.0"
     },
     "require-dev": {
