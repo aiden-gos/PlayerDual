@@ -32,7 +32,7 @@
                     {{$header}}
                 @endif
                 <!-- Page Content -->
-                <main id="main" class="w-full">
+                <main id="main" class="w-full pt-12">
                     {{ $slot }}
                 </main>
             </div>
@@ -40,11 +40,14 @@
     </body>
     <script type="module">
     $(document).ready(function() {
-        var contentPlacement = $('#header').position().top + $('#header').height();
-        $('#content').css('padding-top',contentPlacement);
+        // var contentPlacement = $('#header').position().top + $('#header').height();
+        // $('#content').css('padding-top',contentPlacement);
 
-        var sidePlacement = $('#side-bar').position().left + $('#side-bar').width();
-        $('#main').css('padding-left',sidePlacement+30);
+        try {
+            var sidePlacement = $('#side-bar').position().left + $('#side-bar').width();
+            $('#main').css('padding-left',sidePlacement+30);
+        } catch (error) {}
+
     });
     </script>
 </html>
