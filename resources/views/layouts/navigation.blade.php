@@ -69,23 +69,18 @@
                 {{-- Notification --}}
 
                 {{-- Add $ --}}
-                <x-dropdown align="right" width="60">
-                    <x-slot name="trigger">
-                        <button id="btn-noti" class="inline-flex items-center px-3 py-2 text-sm font-mdium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div class="ml-1">
-                                <div class="flex flex-row items-center justify-center rounded-xl p-2 text-black">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
-                                        <path d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M21,16h-5v5 c0,0.553-0.448,1-1,1s-1-0.447-1-1v-5H9c-0.552,0-1-0.447-1-1s0.448-1,1-1h5V9c0-0.553,0.448-1,1-1s1,0.447,1,1v5h5 c0.552,0,1,0.447,1,1S21.552,16,21,16z"></path>
-                                    </svg>
-                                    ${{Auth::user()->balance}}
-                                </div>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                    </x-slot>
-                </x-dropdown>
+                <button x-data=""
+                    x-on:click.prevent="$dispatch('open-modal', 'checkout')"
+                    class="inline-flex items-center px-3 py-2 text-sm font-mdium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                    <div class="ml-1">
+                        <div class="flex flex-row items-center justify-center rounded-xl p-2 text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+                                <path d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M21,16h-5v5 c0,0.553-0.448,1-1,1s-1-0.447-1-1v-5H9c-0.552,0-1-0.447-1-1s0.448-1,1-1h5V9c0-0.553,0.448-1,1-1s1,0.447,1,1v5h5 c0.552,0,1,0.447,1,1S21.552,16,21,16z"></path>
+                            </svg>
+                            ${{Auth::user()->balance}}
+                        </div>
+                    </div>
+                </button>
                 {{-- Add $ --}}
 
                 <x-dropdown align="right" width="72">
@@ -184,6 +179,20 @@
                     </x-slot>
                 </x-dropdown>
                 {{-- Notification --}}
+                {{-- Add $ --}}
+                <button x-data=""
+                    x-on:click.prevent="$dispatch('open-modal', 'checkout')"
+                    class="inline-flex items-center px-3 py-2 text-sm font-mdium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                    <div class="ml-1">
+                        <div class="flex flex-row items-center justify-center rounded-xl p-2 text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+                                <path d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M21,16h-5v5 c0,0.553-0.448,1-1,1s-1-0.447-1-1v-5H9c-0.552,0-1-0.447-1-1s0.448-1,1-1h5V9c0-0.553,0.448-1,1-1s1,0.447,1,1v5h5 c0.552,0,1,0.447,1,1S21.552,16,21,16z"></path>
+                            </svg>
+                            ${{Auth::user()->balance}}
+                        </div>
+                    </div>
+                </button>
+                {{-- Add $ --}}
                 @endauth
                 @endif
 
@@ -284,3 +293,55 @@
 </script>
 @endauth
 @endif
+
+{{-- Form checkout  --}}
+<style>label.error{color: red}</style>
+<x-modal name="checkout" focusable>
+    <form id="recharge" method="post" action="{{ route('payment.checkout') }}" class="p-6">
+        @csrf
+
+        <h2 class="text-lg font-medium text-gray-900">
+            {{ __('Deposit money into account') }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600">
+            {{ __('Deposit money into your account. Please enter the amount you want to deposit.') }}
+        </p>
+
+        <div class="mt-6">
+            <x-input-label for="am" value="{{ __('Money') }}" class="sr-only" />
+
+            <x-text-input
+                id="am"
+                name="money"
+                type="number"
+                class="mt-1 block w-3/4"
+                placeholder="{{ __('Type number') }}"
+            />
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <x-secondary-button x-on:click="$dispatch('close')">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+            <x-primary-button class="ml-3">
+                {{ __('Recharge') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-modal>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+<script>
+    $("#recharge").validate({
+    onfocusout: false,
+    onkeyup: false,
+    onclick: false,
+    rules: {
+        "money": {
+            required: true,
+            min: 5,
+        }
+    }
+    });
+</script>
