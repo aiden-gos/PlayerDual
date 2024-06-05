@@ -1,14 +1,13 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="mx-auto sm:px-6 lg:px-8 space-y-6 flex flex-row">
-
+        <div class="mx-auto sm:px-6 lg:px-8 space-y-6 flex flex-col">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
 
-                <div class="w-full flex flex-col items-end">
+                <div class="w-full flex flex-col md:items-end">
                     <div class="flex flex-col items-center gap-5">
-                        <img src="{{$user->avatar}}" width="250" height="250">
-                        <div>Status</div>
-                        <div>Create at: {{$user->created_at}}</div>
+                        <img class="rounded-xl" src="{{$user->avatar}}" width="250" height="250">
+                        <div class="text-green-500 font-bold text-xl">Ready</div>
+                        <div>Day participation: {{date_format($user->created_at,"d/m/20y")}}</div>
                     </div>
                 </div>
 
@@ -34,10 +33,6 @@
                             </x-primary-button>
                         </form>
                         @endif
-
-
-
-
                     </div>
 
                     <div class="flex flex-row gap-2">
@@ -71,12 +66,54 @@
                 <div class="w-full">
                     <div class="flex flex-col items-start gap-2">
                         <div class=" text-2xl">${{$user->price}}/h</div>
-                        <button class="bg-black text-white w-full py-3 rounded-md">Hire</button>
+                        <button class="bg-black text-white w-full py-3 rounded-md max-w-64">Rent</button>
                         @include('donate')
-                        <button class="bg-white text-black border w-full py-3 rounded-md">Chat</button>
+                        <button class="bg-white text-black border w-full py-3 rounded-md max-w-64">Chat</button>
                     </div>
                 </div>
             </div>
+
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
+                <div class="w-full md:px-[20%]">
+                    <h1 class="text-2xl font-bold">Information</h1> <br> <hr> <br>
+
+                    "Mình nhận chơi các game sau (Chơi được sever NA / OC / EU / Korea / Japan / PBE):" <br><br>
+
+                    - LOL / ĐTCL (TFT) <br><br>
+
+                    - VALORANT<br><br>
+
+                    - NARAKA<br><br>
+
+                    🌸 Game giải trí, sinh tồn, kinh dị, bla bla:<br><br>
+
+                    - Pal World, Goose Goose Duck (zịt), Business Tour (cờ tỷ phú), Scrible it (vẽ), Agrou (ma sói), Among us, Deceit, Prop and Seek, Phasmophobia, Pummel Party, Raft, Fall Guys, Dead by Daylight, Sons Of The Forest, Green Hell, Let 4 Dead 2, Human Fall Flat, Secret Neighbor, Gartic Phone, Boo Men, Inside the Backrooms ...
+                    <br><br>
+                    (Mình có thể Down game trên Steam, Epic,.. theo yêu cầu nếu được hướng dẫn chơi ạ)<br><br>
+
+                    - Ngoài ra mình còn nhận stream phim trên Netflix và mở nhạc trong Discord nữa nhoo<br><br>
+
+                    __________________________________<br>
+                    <br>
+                    Cảm ơn mọi người đã đến đây, have a nice day 💜
+                    <br><br>
+                    <hr>
+                    <br><br>
+                    <iframe class="w-full" height="500" src="https://www.youtube.com/embed/womd8BFIbDY?si=gJnPguPRhBoU0CQD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
+                <div class="w-full md:px-[20%]">
+                    <h1 class="text-2xl font-bold">Rating</h1> <br> <hr> <br>
+                        @for($i = 0; $i < 10; $i++)
+                            <x-comment>
+                            </x-comment>
+                            <hr>
+                        @endfor
+                </div>
+            </div>
+
         </div>
     </div>
 </x-app-layout>
