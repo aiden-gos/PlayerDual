@@ -1,7 +1,7 @@
 <div class="w-full donate-form hidden" x-data="{ 'showModal': false }"
     @keydown.escape="showModal = false" >
     <!-- Trigger for Modal -->
-    <button class="bg-white text-black border w-full py-3 rounded-md" type="button" @click="showModal = true">Donate</button>
+    <button class="bg-white text-black border w-full py-3 rounded-md max-w-64" type="button" @click="showModal = true">Donate</button>
 
     <!-- Modal -->
     <div
