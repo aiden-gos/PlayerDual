@@ -26,8 +26,11 @@
             <div class="flex flex-col">
             <label for="game" class="text-stone-600 text-sm font-medium">Game</label>
 
-            <select name="game" id="game" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option>Game name</option>
+            <select id="game" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="">None</option>
+                @foreach ($games as $game)
+                    <option value="{{$game->id}}">{{$game->name}}</option>
+                @endforeach
             </select>
             </div>
         </div>
@@ -46,18 +49,13 @@
         time = setTimeout(function() {
         if($('#name').val() != "") {
             var name = $("#name").val();
-            var sex = $("#sex").val();
-            var priceMin = $("#price-min").val();
-            var priceMax = $("#price-max").val();
+
             $.ajax(
                 {
                     url: "{{route('home.search')}}",
                     type: 'GET',
                     data:{
                             "name": name,
-                            "sex" : sex,
-                            "priceMin": priceMin,
-                            "priceMax": priceMax
                         } ,
                     success: function(result){
                         handleSuccessAjax(result);
@@ -73,6 +71,8 @@
         var sex = $("#sex").val();
         var priceMin = $("#price-min").val();
         var priceMax = $("#price-max").val();
+        var game = $("#game").val();
+
         $.ajax(
             {
                 url: "{{route('home.search')}}",
@@ -81,7 +81,8 @@
                         "name": name,
                         "sex" : sex,
                         "priceMin": priceMin,
-                        "priceMax": priceMax
+                        "priceMax": priceMax,
+                        "game": game
                     } ,
                 success: function(result){
                     handleSuccessAjax(result);
@@ -147,7 +148,6 @@
                         `;
             }
             $(".search").append(script);
-            console.log("dawd")
         }
     })
     </script>

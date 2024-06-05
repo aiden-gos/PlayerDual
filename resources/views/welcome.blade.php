@@ -146,7 +146,7 @@ a{
           <div class="row grid">
           @foreach ($hot_user as $player)
           <a class="col-sm-4 col-lg-3 hover:none all pizza" href='/user/{{$player->id}}'>
-            <div class="col-sm-4 col-lg-3 all pizza2">
+            <div class="">
               <div class="box">
                 <div>
                   <div class="">
