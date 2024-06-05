@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="py-12">
         <div class="mx-auto sm:px-6 lg:px-8 space-y-6 flex flex-col">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
 
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
                 <div class="w-full flex flex-col md:items-end">
                     <div class="flex flex-col items-center gap-5">
                         <img class="rounded-xl" src="{{$user->avatar}}" width="250" height="250">
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
+            <div class="p-4 sm:p-8 bg-white sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
                 <div class="w-full md:px-[20%]">
                     <h1 class="text-2xl font-bold">Information</h1> <br> <hr> <br>
 
@@ -103,12 +103,11 @@
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
+            <div class="p-4 sm:p-8 bg-white sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
                 <div class="w-full md:px-[20%]">
                     <h1 class="text-2xl font-bold">Rating</h1> <br> <hr> <br>
                         @for($i = 0; $i < 10; $i++)
-                            <x-comment>
-                            </x-comment>
+                            <x-comment></x-comment>
                             <hr>
                         @endfor
                 </div>
@@ -117,8 +116,3 @@
         </div>
     </div>
 </x-app-layout>
-<script>
-    $(document).ready(function () {
-        $('.donate-form').removeClass('hidden')
-    })
-</script>
