@@ -1,25 +1,7 @@
-
+@auth
 <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'donate-form')"
     class="bg-white text-black border w-full py-3 rounded-md max-w-64">Donate</button>
-
-
-
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
-<script>
-    $("#donate").validate({
-		onfocusout: false,
-		onkeyup: false,
-		onclick: false,
-		rules: {
-			"money": {
-				required: true,
-				min: 1,
-                max:{{Auth::user()->balance}}
-			}
-		}
-	});
-</script>
 
 <x-modal name="donate-form" focusable>
     <style>label.error{color: red}</style>
@@ -27,7 +9,7 @@
         @csrf
 
         <div>
-            <h2 class="text-lg font-medium text-gray-900">
+            <h2 class="text-lg font-medium text-gray-900 text-3xl">
                 {{ __('Donate money') }}
             </h2>
 
@@ -35,7 +17,7 @@
                 {{ __('Please enter the amount you want to donate.') }}
             </p>
         </div>
-
+        <br>
         <input type="hidden" name="user_id" value="{{$user->id}}">
 
         <div class="flex flex-row items-center">
@@ -82,3 +64,22 @@
         </div>
     </form>
 </x-modal>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+<script>
+    $("#donate").validate({
+		onfocusout: false,
+		onkeyup: false,
+		onclick: false,
+		rules: {
+			"money": {
+				required: true,
+				min: 1,
+                max:{{Auth::user()->balance}}
+			}
+		}
+	});
+</script>
+@else
+<a href="{{route('login')}}" class="bg-white text-black border w-full py-3 rounded-md max-w-64 text-center">Donate</a>
+@endauth

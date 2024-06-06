@@ -345,3 +345,5 @@
     }
     });
 </script>
+
+@include('order.order-request')
