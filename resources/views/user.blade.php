@@ -66,9 +66,9 @@
                 <div class="w-full">
                     <div class="flex flex-col items-start gap-2">
                         <div class=" text-2xl">${{$user->price}}/h</div>
-                        <button class="bg-black text-white w-full py-3 rounded-md max-w-64">Rent</button>
+                        @include('rent')
                         @include('donate')
-                        <button class="bg-white text-black border w-full py-3 rounded-md max-w-64">Chat</button>
+                        <button id="chat" class="bg-white text-black border w-full py-3 rounded-md max-w-64">Chat</button>
                     </div>
                 </div>
             </div>
