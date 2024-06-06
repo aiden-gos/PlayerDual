@@ -8,3 +8,8 @@ Route::get('/user/{id}', [UserController::class, 'get'])->name('user');
 
 Route::post('/donate', [DonateController::class, 'donate'])->name('donate');
 
+
+Route::post(
+    'stripe/webhook',
+    [\App\Http\Controllers\StripeController::class, 'handleWebhook']
+);
