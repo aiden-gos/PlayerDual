@@ -12,7 +12,7 @@
         <div>
             @if(count($payment_method) > 0)
                 @foreach ($payment_method as $ele)
-                    <div></div>
+                    <div>{{strval($ele->id)}}</div>
                 @endforeach
             @else
                 <div class="text-gray-700 pt-9">Not found payment method</div>
