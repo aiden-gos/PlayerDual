@@ -49,9 +49,16 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            Order::find(['id'=>$id])->first()->update([
+            $order = Order::find(['id'=>$id])->first();
+
+            $order->update([
                 'status'=> 'accepted'
             ]);
+
+            $user = User::find(["id" => $order->ordering_user_id])->first();
+
+            $user->update(['balance' => $user->balance - $order->total_price]);
+
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -71,14 +78,27 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
+    public function endRent(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            Order::find(['id'=>$id])->first()->update([
+                'status'=> 'completed'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+        return redirect()->back();
+    }
+
     private function checkUserBalance(Request $request, $user_ordered, $cost)
     {
-        $orderConflict = Order::where('status','<>','complete')->where('ordering_user_id', $request->user()->id)
-        ->orWhere('ordered_user_id', $request->user()->id)->where('status','<>','complete')->first();
 
-        if($user_ordered && $request->user()->balance > $cost && !$orderConflict){
+        if($request->user()->balance >= $cost){
+            Log::alert('Order ok');
             return true;
         }
+        Log::alert('Order fasle');
         return false;
     }
 

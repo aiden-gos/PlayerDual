@@ -71,4 +71,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Game::class);
     }
+    public function ordering()
+    {
+        return $this->belongsToMany(User::class, 'orders', 'ordering_user_id', 'ordered_user_id');
+    }
+    public function ordered()
+    {
+        return $this->belongsToMany(User::class, 'orders', 'ordered_user_id', 'ordering_user_id');
+    }
 }
