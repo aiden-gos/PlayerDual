@@ -247,7 +247,7 @@ a{
             &copy; <span id="displayYear"></span> All Rights Reserved By
             <a href="https://html.design/">Free Html Templates</a><br><br>
             &copy; <span id="displayYear"></span> Distributed By
-            <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+            {{-- <a href="https://themewagon.com/" target="_blank">ThemeWagon</a> --}}
           </p>
         </div>
       </div>

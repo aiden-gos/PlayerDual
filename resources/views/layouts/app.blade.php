@@ -36,13 +36,12 @@
                     {{ $slot }}
                 </main>
             </div>
+
+            @include('order.current-order')
         </div>
     </body>
     <script type="module">
     $(document).ready(function() {
-        // var contentPlacement = $('#header').position().top + $('#header').height();
-        // $('#content').css('padding-top',contentPlacement);
-
         try {
             var sidePlacement = $('#side-bar').position().left + $('#side-bar').width();
             $('#main').css('padding-left',sidePlacement+30);

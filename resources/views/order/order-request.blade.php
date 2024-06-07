@@ -1,3 +1,4 @@
+@auth
 <button id="order-btn" class="hidden" x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'order-modal')"
     class="inline-flex items-center px-3 py-2 text-sm font-mdium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -80,3 +81,4 @@
 
 
 </script>
+@endauth
