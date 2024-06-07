@@ -265,7 +265,7 @@ a{
     <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
     <!-- nice select -->
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script> --}}
-    @vite(["resources/js/nice-select.js"])
+    {{-- @vite(["resources/js/nice-select.js"]) --}}
     <!-- custom js -->
     <script src="{{Vite::asset('resources/js/custom.js')}}"></script>
     </script>

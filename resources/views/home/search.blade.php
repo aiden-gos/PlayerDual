@@ -1,4 +1,4 @@
-<div class="m-2 mt-10">
+<div style="padding-bottom: 80px;">
         <div class="rounded-xl p-6">
         <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <div class="flex flex-col">
@@ -34,10 +34,10 @@
             </select>
             </div>
         </div>
-
-        <div class="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
-            <button id="search-btn" class="active:scale-95 rounded-lg bg-black px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90">Search</button>
-        </div>
+        <br><br><br>
+            <div class="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
+                <button id="search-btn" class="h-10 active:scale-95 rounded-lg bg-black px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90">Search</button>
+            </div>
         </div>
   </div>
 
