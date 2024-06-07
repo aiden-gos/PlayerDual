@@ -59,6 +59,7 @@ class OrderController extends Controller
 
             $user->update(['balance' => $user->balance - $order->total_price]);
 
+            event(new EventActionNotify($order->ordering_user_id.'-rent-request', ['order' => $order]));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -69,9 +70,15 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            Order::find(['id'=>$id])->first()->update([
+            $order = Order::find(['id'=>$id])->first();
+
+            $order->update([
                 'status'=> 'rejected'
             ]);
+
+            Log::debug("realtime reject");
+            event(new EventActionNotify($order->ordering_user_id.'-rent-request', ['order' => $order]));
+
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -82,9 +89,14 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            Order::find(['id'=>$id])->first()->update([
+            $order = Order::find(['id'=>$id])->first();
+
+            $order->update([
                 'status'=> 'completed'
             ]);
+            Log::debug($order->ordered_user_id);
+            event(new EventActionNotify($order->ordered_user_id.'-rent-request', ['order' => $order]));
+
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -95,10 +107,8 @@ class OrderController extends Controller
     {
 
         if($request->user()->balance >= $cost){
-            Log::alert('Order ok');
             return true;
         }
-        Log::alert('Order fasle');
         return false;
     }
 

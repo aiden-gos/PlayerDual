@@ -97,4 +97,27 @@ function startTimer(duration, display) {
 }
 </script>
 @endif
+
+{{-- Listening End Rent event --}}
+<script type="module">
+
+    const key = "{{env('VITE_PUSHER_APP_KEY')}}";
+    const cluster =  "{{env('VITE_PUSHER_APP_CLUSTER')}}";
+
+    var pusher = new Pusher(key, {
+        cluster: cluster
+    });
+
+    var channel = pusher.subscribe('{{Auth::user()->id}}-rent-request');
+        channel.bind("App\\Events\\EventActionNotify", function(data) {
+            console.log(data.message.order);
+            if(data.message.order.status == 'rejected'){
+                $('#cancel-form').empty();
+                $('#cancel-form').append("The request had been rejected");
+            }else{
+                location.reload();
+            }
+        });
+</script>
+{{--  --}}
 @endauth
