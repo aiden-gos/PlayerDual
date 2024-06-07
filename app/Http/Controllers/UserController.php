@@ -21,7 +21,7 @@ class UserController extends Controller
             ->where('followed_user_id', $id)
             ->first();
 
-            $orderConflict = Order::where('status','<>' ,'completed')->where(function ($query) use ($request, $user) {
+            $orderConflict = Order::where('status','<>' ,'completed')->where('status','<>' ,'rejected')->where(function ($query) use ($request, $user) {
                 $query->where('ordering_user_id', $request->user()->id)
                     ->orWhere('ordered_user_id', $request->user()->id)
                     ->orWhere('ordering_user_id', $user->id)
@@ -29,8 +29,6 @@ class UserController extends Controller
             })
             ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
             ->first();
-
-            Log::debug($orderConflict);
         } catch (\Throwable $th) {
         }
 

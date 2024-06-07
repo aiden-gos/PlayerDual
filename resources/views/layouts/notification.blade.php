@@ -17,17 +17,26 @@
     <x-slot name="content">
         <div class="notification-content">
         @forelse (Auth::user()->notifications()->take(15)->get() as $noti)
-            <x-dropdown-link class="h-12 flex items-center border-b">
-                <div>{{$noti->data[0]}}</div>
+            @if(!empty($noti->read_at))
+            <x-dropdown-link href="{{route('notification.read',$noti->id)}}" class="h-12 flex items-center border-b notify bg-gray-100 ">
+                <div>
+                    {{$noti->data[0]}}
+                </div>
             </x-dropdown-link>
+            @else
+            <x-dropdown-link href="{{route('notification.read',$noti->id)}}" class="h-12 flex items-center border-b notify">
+                <div>
+                    {{$noti->data[0]}}
+                </div>
+            </x-dropdown-link>
+            @endif
         @empty
             <x-dropdown-link class="no-noc h-12">
                 Not found notification
             </x-dropdown-link>
         @endforelse
             <div>
-                <input id="noti-user-id" type="hidden">
-                <button class="text-center w-full">
+                <button id='read-all' class="pt-2 text-center w-full">
                     {{ __('Read all') }}
                 </button>
             </div>
@@ -35,52 +44,3 @@
     </x-slot>
 </x-dropdown>
 {{-- Notification --}}
-
-
-@if (Route::has('login'))
-@auth
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script type="module">
-    // Pusher.logToConsole = true;
-    const key = "{{env('VITE_PUSHER_APP_KEY')}}";
-    const cluster =  "{{env('VITE_PUSHER_APP_CLUSTER')}}";
-
-    var pusher = new Pusher(key, {
-        cluster: cluster
-    });
-
-    var channel = pusher.subscribe('{{Auth::user()->id}}');
-    channel.bind("App\\Events\\EventActionNotify", function(data) {
-        console.log(data.message);
-        $('.notification-content').prepend(`
-        <a class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-            ${data.message}
-        </a>
-        `)
-        $('.active-noti').show()
-        $('.no-noc').hide()
-    });
-
-    $('#btn-noti').click(function() {
-        $('.active-noti').hide()
-    })
-
-</script>
-@endauth
-@endif
-
-<script>
-    var id =$('#noti-user-id').val();
-    $.ajax(
-            {
-                url: "{{route('home.search')}}",
-                type: 'GET',
-                data:{
-                        "user_id": id,
-                    } ,
-                success: function(result){
-
-                }
-            }
-        );
-</script>

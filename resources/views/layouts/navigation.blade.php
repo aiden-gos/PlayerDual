@@ -254,4 +254,69 @@
     });
 </script>
 
+{{-- Noti JS --}}
+@if (Route::has('login'))
+@auth
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script type="module">
+    // Pusher.logToConsole = true;
+    const key = "{{env('VITE_PUSHER_APP_KEY')}}";
+    const cluster =  "{{env('VITE_PUSHER_APP_CLUSTER')}}";
+
+    var pusher = new Pusher(key, {
+        cluster: cluster
+    });
+
+    var channel = pusher.subscribe('{{Auth::user()->id}}');
+    channel.bind("App\\Events\\EventActionNotify", function(data) {
+        console.log(data.message);
+        $('.notification-content').prepend(`
+        <a class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out h-12 flex items-center border-b notify">
+            <div>
+                ${data.message}
+            </div>
+        </a>`)
+
+        $('.active-noti').show()
+        $('.no-noc').hide()
+    });
+
+    $('#btn-noti').click(function() {
+        $('.active-noti').hide()
+    })
+
+</script>
+@endauth
+@endif
+
+<script>
+    var id =$('#noti-id').val();
+    $('#read-all').click(function () {
+        $.ajax(
+            {
+                url: "{{route('notification.readAll')}}",
+                type: 'GET',
+                success: function(result){
+                    $(".notify").addClass('bg-gray-100')
+                }
+            }
+        );
+    })
+
+    $('.notify').click(function name(e) {
+        e.preventDefault();
+        this.classList.add('bg-gray-100')
+        $.ajax(
+            {
+                url: this.href,
+                type: 'GET',
+                success: function(result){
+                }
+            }
+        );
+    })
+</script>
+{{--  --}}
+
 @include('order.order-request')
+@include('order.pending-order')

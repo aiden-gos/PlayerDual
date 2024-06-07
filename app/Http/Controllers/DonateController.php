@@ -44,7 +44,7 @@ class DonateController extends Controller
                 DB::commit();
             } catch (\PDOException $e) {
                 DB::rollBack();
-                Log::debug($e);
+                Log::error($e);
             }
         return Redirect::back();
         }
