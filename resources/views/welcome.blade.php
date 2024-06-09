@@ -97,11 +97,10 @@ a{
         </div>
 
         <ul class="filters_menu">
-          <li class="active" data-filter="*">All</li>
-          <li data-filter=".burger">LoL</li>
-          <li data-filter=".pizza">Cod</li>
-          <li data-filter=".pasta">Pugb</li>
-          <li data-filter=".fries">WZ</li>
+            <li class="active" data-filter="*">All</li>
+            @foreach ($games as $game)
+                <li data-filter=".{{$game->id}}">{{$game->name}}</li>
+            @endforeach
         </ul>
 
         <div class="filters-content">
@@ -145,7 +144,7 @@ a{
         <div class="filters-content">
           <div class="row grid">
           @foreach ($hot_user as $player)
-          <a class="col-sm-4 col-lg-3 hover:none all pizza" href='/user/{{$player->id}}'>
+          <a class="col-sm-4 col-lg-3 hover:none all {{rand(1,5)}} {{rand(1,5)}} {{rand(1,5)}}" href='/user/{{$player->id}}'>
             <div class="">
               <div class="box">
                 <div>
@@ -153,7 +152,7 @@ a{
                     <img src="{{$player->avatar}}" alt="">
                   </div>
                   <div class="detail-box">
-                    <h5>
+                    <h5 id='name-tag'>
                       {{$player->name}}
                     </h5>
                     <div class="options">
