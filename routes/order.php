@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PreOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {

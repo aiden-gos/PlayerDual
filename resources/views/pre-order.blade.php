@@ -1,46 +1,30 @@
 @auth
-@if(!$orderConflict)
+@if(!$preOrderStatus && $orderConflict)
 <button x-data=""
-    x-on:click.prevent="$dispatch('open-modal', 'Rent-form')"
+    x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
     class="bg-black text-white w-full py-3 rounded-md max-w-64" >
-
-    @if(Auth::user()->id == $user->id)
-        Offline
-    @else
-        Rent
-    @endif
-
+        Pre-order
 </button>
 @else
 <button x-data=""
-    x-on:click.prevent="$dispatch('open-modal', 'Rent-form')"
-    class="bg-gray-300 text-white w-full py-3 rounded-md max-w-64" disabled>Rent</button>
+    x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
+    class="bg-gray-300 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button>
 @endif
 
-<x-modal name="Rent-form" focusable>
+<x-modal name="Pre-order-form" focusable>
     <style>label.error{color: red}</style>
     <form id="Rent" method="post"
-    @if(Auth::user()->id != $user->id)
-     action="{{ route('rent') }}"
-    @else
-        action="{{ route('off') }}"
-    @endif
+     action="{{ route('pre-order') }}"
      class="p-6 space-y-6">
         @csrf
 
         <div>
             <h2 class="text-lg font-medium text-gray-900 text-3xl">
-    @if(Auth::user()->id == $user->id)
-
-                {{ __('Offline') }}
-    @else
-                {{ __('Rent player') }}
-    @endif
+                {{ __('Pre-order player') }}
             </h2>
         </div>
         <input type="hidden" name="user_id" value="{{$user->id}}">
 
-        @if(Auth::user()->id != $user->id)
         <div class="flex flex-row items-center">
             <div class="w-full">
                 <x-input-label for="name" :value="__('Player')" />
@@ -59,14 +43,9 @@
             </div>
         </div>
         <hr>
-        @endif
 
         <div class="flex flex-row items-center">
-        @if(Auth::user()->id != $user->id)
             <x-input-label class="w-full" for="time" :value="__('Time to rent')" />
-        @else
-            <x-input-label class="w-full" for="time" :value="__('Off time')" />
-        @endif
             <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="time" id="time">
                 <option value="1">1 hour</option>
                 <option value="2">2 hour</option>
@@ -96,7 +75,6 @@
             </select>
         </div>
 
-        @if(Auth::user()->id != $user->id)
         <div class="flex flex-row items-center">
             <div class="w-full">
                 <x-input-label for="" :value="__('Cost')" />
@@ -110,7 +88,6 @@
             <x-input-label for="msg" :value="__('Message')" />
             <textarea class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" name="msg" id="msg" cols="65" rows="10"></textarea>
         </div>
-        @endif
 
         <div class="mt-6 flex justify-end">
             <x-secondary-button x-on:click="$dispatch('close')">
@@ -118,17 +95,12 @@
             </x-secondary-button>
 
             <x-primary-button class="ml-3">
-        @if(Auth::user()->id != $user->id)
-                {{ __('Rent') }}
-        @else
-                {{ __('Off') }}
-        @endif
+                {{ __('Pre-order') }}
             </x-primary-button>
         </div>
     </form>
 </x-modal>
 <script>
-
     updateCost()
     $('#time').on('change',function () {
         updateCost()

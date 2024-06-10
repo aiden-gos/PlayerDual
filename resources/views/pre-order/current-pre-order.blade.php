@@ -2,15 +2,13 @@
 <?php
     $renting = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
             ->where('ordering_user_id',Auth::user()->id)
-            ->where('orders.status', 'accepted')
-            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+            ->where('orders.status', 'pre-ordered')
             ->join('users','ordered_user_id','users.id')
             ->first();
 
     $rented = App\Models\Order::select(['orders.*', 'users.id', 'users.name', 'users.avatar'])
             ->where('ordered_user_id',Auth::user()->id)
-            ->where('orders.status', 'accepted')
-            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+            ->where('orders.status', 'pre-ordered')
             ->join('users','ordering_user_id','users.id')
             ->first();
 
@@ -40,18 +38,19 @@
             </div>
             <div class="flex flex-row gap-5">
                 <div>
+                    <div class="font-bold">Pre-order</div>
                     <div id='name-rent' class="font-bold">{{$renting->name}}</div>
                     <div id='cost-rent'>${{$renting->total_price}}</div>
                     <div i='time-rent'>{{$renting->duration}} hour</div>
-
+                    {{-- <div id="countdown" class="w-20">00:00:00</div> --}}
                 </div>
-                <div id="countdown" class="w-20 text-center content-center">00:00:00</div>
+
                 <div class="flex justify-center items-center">
-                    <form method="post" action="{{ route('rent.end') }}">
+                    <form method="post" action="{{ route('pre-order.end') }}">
                         @csrf
                         <input id="end-id" type="hidden" name="id" value="{{$renting->id}}">
                         <x-primary-button class="ml-3">
-                            {{ __('end') }}
+                            {{ __('Cancel') }}
                         </x-primary-button>
                     </form>
                 </div>
@@ -64,40 +63,18 @@
         </div>
         <div class="flex flex-row gap-5">
             <div>
+                <div class="font-bold">Pre-order</div>
                 <div id='name-rent' class="font-bold">{{$rented->name}}</div>
                 <div id='cost-rent'>${{$rented->total_price}}</div>
                 <div i='time-rent'>{{$rented->duration}} hour</div>
+                {{-- <div id="countdown" class="w-20">00:00:00</div> --}}
             </div>
-            <div id="countdown" class="w-20 text-center content-center">00:00:00</div>
         </div>
-        @endif
-
-        @if($renting && $rented)
-            <div class="pt-2">
-                <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
-            </div>
-            <div class="flex flex-row gap-5">
-                <div>
-                    <div class="font-bold">Off time</div>
-                    <div i='time-rent'>{{$renting->duration}} hour</div>
-                    <div id="countdown" class="w-20">00:00:00</div>
-                </div>
-
-                <div class="flex justify-center items-center">
-                    <form method="post" action="{{ route('rent.end') }}">
-                        @csrf
-                        <input id="end-id" type="hidden" name="id" value="{{$renting->id}}">
-                        <x-primary-button class="ml-3">
-                            {{ __('Stop') }}
-                        </x-primary-button>
-                    </form>
-                </div>
-            </div>
         @endif
 
     </div>
 </div>
-<script>
+{{-- <script>
 var time = '{{$remainingTime}}'
 startTimer(time, $('#countdown'));
 
@@ -119,7 +96,7 @@ function startTimer(duration, display) {
         }
     }, 1000);
 }
-</script>
+</script> --}}
 @endif
 
 {{-- Listening End Rent event --}}
@@ -132,7 +109,7 @@ function startTimer(duration, display) {
         cluster: cluster
     });
 
-    var channel = pusher.subscribe('{{Auth::user()->id}}-rent-request');
+    var channel = pusher.subscribe('{{Auth::user()->id}}-pre-order-request');
         channel.bind("App\\Events\\EventActionNotify", function(data) {
             console.log(data.message.order);
             if(data.message.order.status == 'rejected'){
