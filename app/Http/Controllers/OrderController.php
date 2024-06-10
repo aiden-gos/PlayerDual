@@ -6,6 +6,7 @@ use App\Events\EventActionNotify;
 use App\Models\Order;
 use App\Models\User;
 use App\Notifications\ActionNotify;
+use App\Notifications\RentNotify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -13,6 +14,7 @@ class OrderController extends Controller
 {
     public function rent(Request $request)
     {
+
         $user_id = $request->input('user_id');
         $durationTime = $request->input('time');
         $msg = $request->input('msg');
@@ -34,6 +36,7 @@ class OrderController extends Controller
                 ]);
 
                 $user_ordered->notify(new ActionNotify([$request->user()->name . " rent you now"]));
+                $user_ordered->notify(new RentNotify($request->user()->id, $request->user()->name));
                 //Realtime notification
 
                 event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
@@ -42,6 +45,36 @@ class OrderController extends Controller
                 Log::error($th);
             }
         }
+        return redirect()->back();
+    }
+
+    public function off(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $durationTime = $request->input('time');
+
+        $user_ordered = User::find(['id'=>$user_id])->first();
+
+        try {
+            $order = Order::create([
+                'ordering_user_id' => $request->user()->id,
+                'ordered_user_id' => $user_ordered->id,
+                'status' => 'accepted',
+                'price' => 0,
+                'duration' => $durationTime,
+                'total_price' => 0,
+                'message' => 'off'
+            ]);
+
+            $user_ordered->notify(new ActionNotify([$request->user()->name . " rent you now"]));
+            //Realtime notification
+
+            event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
+            event(new EventActionNotify($user_ordered->id.'-rent', ['order' => $order, 'user' => $request->user()]));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+
         return redirect()->back();
     }
 
