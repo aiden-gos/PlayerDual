@@ -106,7 +106,7 @@ a{
         <div class="filters-content">
           <div class="row grid">
           @foreach ($vip_user as $player)
-          <a class="col-sm-4 col-lg-3 hover:none all pizza" href='/user/{{$player->id}}'>
+          <a class="col-sm-4 col-lg-3 hover:none all {{rand(1,5)}} {{rand(1,5)}} {{rand(1,5)}}" href='/user/{{$player->id}}'>
             <div class="">
               <div class="box">
                 <div>
@@ -144,7 +144,7 @@ a{
         <div class="filters-content">
           <div class="row grid">
           @foreach ($hot_user as $player)
-          <a class="col-sm-4 col-lg-3 hover:none all {{rand(1,5)}} {{rand(1,5)}} {{rand(1,5)}}" href='/user/{{$player->id}}'>
+          <a class="col-sm-4 col-lg-3 hover:none all" href='/user/{{$player->id}}'>
             <div class="">
               <div class="box">
                 <div>
