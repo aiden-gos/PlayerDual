@@ -1,5 +1,5 @@
 @auth
-@if(!$preOrderStatus && $orderConflict)
+@if(!$preOrderStatus && $orderConflict && Auth::user()->id != $user->id)
 <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
     class="bg-black text-white w-full py-3 rounded-md max-w-64" >
@@ -13,7 +13,7 @@
 
 <x-modal name="Pre-order-form" focusable>
     <style>label.error{color: red}</style>
-    <form id="Rent" method="post"
+    <form id="PreOrder" method="post"
      action="{{ route('pre-order') }}"
      class="p-6 space-y-6">
         @csrf
@@ -45,8 +45,8 @@
         <hr>
 
         <div class="flex flex-row items-center">
-            <x-input-label class="w-full" for="time" :value="__('Time to rent')" />
-            <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="time" id="time">
+            <x-input-label class="w-full" for="time-pre-order" :value="__('Time to Pre-order')" />
+            <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="time" id="timePreOrder">
                 <option value="1">1 hour</option>
                 <option value="2">2 hour</option>
                 <option value="3">3 hour</option>
@@ -80,7 +80,7 @@
                 <x-input-label for="" :value="__('Cost')" />
             </div>
             <div class="w-full flex flex-col">
-                <input id="cost" name="cost" type="number" disabled class="border-0"/>
+                <input id="costPreOrder" name="cost" type="number" readonly="readonly"  class="border-0"/>
             </div>
         </div>
 
@@ -101,21 +101,21 @@
     </form>
 </x-modal>
 <script>
-    updateCost()
-    $('#time').on('change',function () {
-        updateCost()
+    updateCostPreOrder()
+    $('#timePreOrder').on('change',function () {
+        updateCostPreOrder()
     })
 
-    function updateCost() {
-        cost = $('#time').val() * {{$user->price}};
-        $('#cost').val(cost);
+    function updateCostPreOrder() {
+        cost = $('#timePreOrder').val() * {{$user->price}};
+        $('#costPreOrder').val(cost);
+
     }
 </script>
 
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
 <script>
-    var cost = $('#cost-value').val();
-    $("#Rent").validate({
+    $("#PreOrder").validate({
 		onfocusout: false,
 		onkeyup: false,
 		onclick: false,
@@ -128,5 +128,5 @@
 	});
 </script>
 @else
-    <a class="bg-black text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Rent</a>
+    <a class="bg-black text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a>
 @endauth

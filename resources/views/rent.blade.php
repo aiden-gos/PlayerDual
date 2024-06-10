@@ -102,7 +102,7 @@
                 <x-input-label for="" :value="__('Cost')" />
             </div>
             <div class="w-full flex flex-col">
-                <input id="cost" name="cost" type="number" disabled class="border-0"/>
+                <input id="cost" name="cost" type="number" readonly="readonly"  class="border-0"/>
             </div>
         </div>
 
@@ -142,14 +142,15 @@
 
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
 <script>
-    var cost = $('#cost-value').val();
     $("#Rent").validate({
+        ignore:[],
 		onfocusout: false,
 		onkeyup: false,
 		onclick: false,
 		rules: {
 			"cost": {
 				required: true,
+                min:0,
                 max:{{Auth::user()->balance}}
 			}
 		}

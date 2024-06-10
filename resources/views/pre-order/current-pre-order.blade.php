@@ -36,7 +36,7 @@
             <div class="pt-2">
                 <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
             </div>
-            <div class="flex flex-row gap-5">
+            <div class="flex flex-row gap-5 justify-between w-full">
                 <div>
                     <div class="font-bold">Pre-order</div>
                     <div id='name-rent' class="font-bold">{{$renting->name}}</div>

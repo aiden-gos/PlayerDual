@@ -41,11 +41,16 @@ class UserController extends Controller
             ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
             ->first();
 
-            $preOrderStatus = Order::where('status','=' ,'pre-ordering')->orWhere('status','=' ,'pre-ordered')->orWhere('status','=' ,'pending')->where(function ($query) use ($request, $user) {
-                $query->where('ordering_user_id', $user->id)
-                    ->orWhere('ordered_user_id', $user->id);
+            $preOrderStatus = Order::where(function ($query) use ($request, $user) {
+                $query->where('ordering_user_id', $request->user()->id)->where('status','=' ,'accepted')
+                ->orWhere('ordered_user_id', $request->user()->id)->where('status','=' ,'accepted')
+                ->orWhere('ordering_user_id', $user->id)->where('status','=' ,'pending')
+                ->orWhere('ordered_user_id', $user->id)->where('status','=' ,'pending')
+                ->orWhere('ordering_user_id', $user->id)->where('status','=' ,'pre-ordering')
+                ->orWhere('ordered_user_id', $user->id)->where('status','=' ,'pre-ordering')
+                ->orWhere('ordering_user_id', $user->id)->where('status','=' ,'pre-ordered')
+                ->orWhere('ordered_user_id', $user->id)->where('status','=' ,'pre-ordered');
             })
-            ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
             ->first();
 
         } catch (\Throwable $th) {
