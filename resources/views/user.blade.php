@@ -6,7 +6,11 @@
                 <div class="w-full flex flex-col md:items-end">
                     <div class="flex flex-col items-center gap-5">
                         <img class="rounded-xl" src="{{$user->avatar}}" width="250" height="250">
-                        <div class="text-green-500 font-bold text-xl">Ready</div>
+                        @if($userStatus)
+                            <div class="text-red-500 font-bold text-xl">Busy</div>
+                        @else
+                            <div class="text-green-500 font-bold text-xl">Ready</div>
+                        @endif
                         <div>Day participation: {{date_format($user->created_at,"d/m/20y")}}</div>
                     </div>
                 </div>

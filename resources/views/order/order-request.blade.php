@@ -9,7 +9,7 @@
         @csrf
 
         <h2 id="title-rent" class="text-lg font-medium text-gray-900">
-            Rent Rent Rent Rent
+            Rent Player
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">

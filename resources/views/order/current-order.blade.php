@@ -30,10 +30,11 @@
     $remainingTime = $time - $currentTime;
 
 ?>
+
 @if($renting || $rented)
 <div class="fixed bottom-10 right-10">
     <div class="backdrop-blur-3xl bg-black/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
-        @if($renting)
+        @if($renting && !$rented)
             <div class="pt-2">
                 <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
             </div>
@@ -57,7 +58,7 @@
             </div>
         @endif
 
-        @if($rented)
+        @if($rented && !$renting)
         <div class="pt-2">
             <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$rented->avatar}}" alt="ps" class="avt-1-15 avt-img">
         </div>
@@ -69,6 +70,29 @@
                 <div id="countdown" class="w-20">00:00:00</div>
             </div>
         </div>
+        @endif
+
+        @if($renting && $rented)
+            <div class="pt-2">
+                <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
+            </div>
+            <div class="flex flex-row gap-5">
+                <div>
+                    <div class="font-bold">Off time</div>
+                    <div i='time-rent'>{{$renting->duration}} hour</div>
+                    <div id="countdown" class="w-20">00:00:00</div>
+                </div>
+
+                <div class="flex justify-center items-center">
+                    <form method="post" action="{{ route('rent.end') }}">
+                        @csrf
+                        <input id="end-id" type="hidden" name="id" value="{{$renting->id}}">
+                        <x-primary-button class="ml-3">
+                            {{ __('Stop') }}
+                        </x-primary-button>
+                    </form>
+                </div>
+            </div>
         @endif
 
     </div>
