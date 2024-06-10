@@ -31,7 +31,17 @@ class UserController extends Controller
             ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
             ->first();
 
-            $userStatus = Order::where('status','<>' ,'completed')->where('status','<>' ,'rejected')->where(function ($query) use ($request, $user) {
+            $userStatus = Order::where('status','<>' ,'completed')
+                            ->where('status','<>' ,'rejected')
+                            ->where('status','<>' ,'pre-ordering')
+                            ->where(function ($query) use ($request, $user) {
+                $query->where('ordering_user_id', $user->id)
+                    ->orWhere('ordered_user_id', $user->id);
+            })
+            ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
+            ->first();
+
+            $preOrderStatus = Order::where('status','=' ,'pre-ordering')->orWhere('status','=' ,'pre-ordered')->orWhere('status','=' ,'pending')->where(function ($query) use ($request, $user) {
                 $query->where('ordering_user_id', $user->id)
                     ->orWhere('ordered_user_id', $user->id);
             })
@@ -45,7 +55,8 @@ class UserController extends Controller
             'user' => $user,
             'follow' => $follow,
             'orderConflict' => $orderConflict,
-            'userStatus' => $userStatus
+            'userStatus' => $userStatus,
+            'preOrderStatus' => $preOrderStatus,
         ]);
     }
 }

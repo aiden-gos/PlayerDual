@@ -71,6 +71,7 @@
                     <div class="flex flex-col items-start gap-2">
                         <div class=" text-2xl">${{$user->price}}/h</div>
                         @include('rent')
+                        @include('pre-order')
                         @include('donate')
                         <button id="chat" class="bg-white text-black border w-full py-3 rounded-md max-w-64">Chat</button>
                     </div>

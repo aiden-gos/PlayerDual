@@ -2,13 +2,13 @@
 <?php
     $renting_pending = App\Models\Order::select(['orders.*','users.name', 'users.avatar'])
             ->where('ordering_user_id',Auth::user()->id)
-            ->where('orders.status', 'pending')
+            ->where('orders.status', 'pre-ordering')
             ->join('users','ordered_user_id','users.id')
             ->first();
 
     $rented_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
             ->where('ordered_user_id',Auth::user()->id)
-            ->where('orders.status', 'pending')
+            ->where('orders.status', 'pre-ordering')
             ->join('users','ordering_user_id','users.id')
             ->first();
 ?>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div id="cancel-form" class="flex justify-center items-center">
-                    <form method="post" action="{{ route('rent.end') }}">
+                    <form method="post" action="{{ route('pre-order.end') }}">
                         @csrf
                         <input id="end-id" type="hidden" name="id" value="{{$renting_pending->id}}">
                         <x-primary-button class="ml-3">
@@ -51,7 +51,7 @@
             </div>
 
             <div class="flex justify-center items-center">
-                <form method="post" action="{{ route('rent.reject') }}">
+                <form method="post" action="{{ route('pre-order.reject') }}">
                     @csrf
                     <input id="accept-id" type="hidden" name="id" value="{{$rented_pending->id}}">
                     <x-danger-button x-on:click="$dispatch('close')">
@@ -59,7 +59,7 @@
                     </x-secondary-button>
                 </form>
 
-                <form method="post" action="{{ route('rent.accept') }}">
+                <form method="post" action="{{ route('pre-order.accept') }}">
                     @csrf
                     <input id="reject-id" type="hidden" name="id" value="{{$rented_pending->id}}">
                     <x-primary-button class="ml-3">
@@ -80,7 +80,7 @@
         cluster: cluster
     });
 
-    var channel = pusher.subscribe('{{Auth::user()->id}}-rent-request');
+    var channel = pusher.subscribe('{{Auth::user()->id}}-pre-order-request');
         channel.bind("App\\Events\\EventActionNotify", function(data) {
             console.log(data.message.order);
             if(data.message.order.status == 'rejected'){

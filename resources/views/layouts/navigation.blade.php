@@ -319,4 +319,12 @@
 {{--  --}}
 
 @include('order.order-request')
-@include('order.pending-order')
+@include('pre-order.pre-order-request')
+
+<div class="fixed bottom-10 right-10 flex flex-col gap-4">
+    @include('order.current-order')
+    @include('order.pending-order')
+
+    @include('pre-order.pending-pre-order')
+    @include('pre-order.current-pre-order')
+</div>

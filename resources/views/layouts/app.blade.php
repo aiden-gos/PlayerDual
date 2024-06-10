@@ -36,8 +36,6 @@
                     {{ $slot }}
                 </main>
             </div>
-
-            @include('order.current-order')
         </div>
     </body>
     <script type="module">
