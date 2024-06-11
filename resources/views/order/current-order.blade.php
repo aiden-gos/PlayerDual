@@ -18,10 +18,10 @@
     $duration = 0;
 
     if($renting){
-        $time = $renting->updated_at;
+        $time = $renting->start_at;
         $duration = $renting->duration;
     }else if($rented){
-        $time = $rented->updated_at;
+        $time = $rented->start_at;
         $duration = $rented->duration;
     }
 
