@@ -16,14 +16,12 @@
     $duration = 0;
 
     if($renting){
-        $time = $renting->updated_at;
-        $duration = $renting->duration;
+        $time = $renting->start_at;
     }else if($rented){
-        $time = $rented->updated_at;
-        $duration = $rented->duration;
+        $time = $rented->start_at;
     }
 
-    $time = strtotime($time.' +'. $duration .' hour');
+    $time = strtotime($time);
     $currentTime = time();
     $remainingTime = $time - $currentTime;
 
@@ -42,9 +40,8 @@
                     <div id='name-rent' class="font-bold">{{$renting->name}}</div>
                     <div id='cost-rent'>${{$renting->total_price}}</div>
                     <div i='time-rent'>{{$renting->duration}} hour</div>
-                    {{-- <div id="countdown" class="w-20">00:00:00</div> --}}
                 </div>
-
+                <div id="countdown-pre-order" class="w-20 text-center content-center">00:00:00</div>
                 <div class="flex justify-center items-center">
                     <form method="post" action="{{ route('pre-order.end') }}">
                         @csrf
@@ -67,16 +64,16 @@
                 <div id='name-rent' class="font-bold">{{$rented->name}}</div>
                 <div id='cost-rent'>${{$rented->total_price}}</div>
                 <div i='time-rent'>{{$rented->duration}} hour</div>
-                {{-- <div id="countdown" class="w-20">00:00:00</div> --}}
             </div>
+            <div id="countdown-pre-order" class="w-20 text-center content-center">00:00:00</div>
         </div>
         @endif
 
     </div>
 </div>
-{{-- <script>
+<script>
 var time = '{{$remainingTime}}'
-startTimer(time, $('#countdown'));
+startTimer(time, $('#countdown-pre-order'));
 
 function startTimer(duration, display) {
     var timer = duration, hours, minutes, seconds;
@@ -96,7 +93,7 @@ function startTimer(duration, display) {
         }
     }, 1000);
 }
-</script> --}}
+</script>
 @endif
 
 {{-- Listening End Rent event --}}
