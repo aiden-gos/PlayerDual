@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Notifications\ActionNotify;
 use App\Notifications\RentNotify;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -32,7 +33,7 @@ class OrderController extends Controller
                     'status' => 'pending',
                     'price' => $user_ordered->price,
                     'duration' => $durationTime,
-                    'total_price' => $cost
+                    'total_price' => $cost,
                 ]);
 
                 $user_ordered->notify(new ActionNotify([$request->user()->name . " rent you now"]));
@@ -80,21 +81,25 @@ class OrderController extends Controller
 
     public function acceptRent(Request $request)
     {
+        DB::beginTransaction();
         try {
-
             $id = $request->input('id');
             $order = Order::find(['id'=>$id])->first();
 
             $order->update([
-                'status'=> 'accepted'
+                'status'=> 'accepted',
+                'start_at' => now(),
+                'end_at' => now()->addHours($order->duration)
             ]);
 
             $user = User::find(["id" => $order->ordering_user_id])->first();
 
             $user->update(['balance' => $user->balance - $order->total_price]);
+            DB::commit();
 
             event(new EventActionNotify($order->ordering_user_id.'-rent-request', ['order' => $order]));
         } catch (\Throwable $th) {
+            DB::rollback();
             Log::error($th);
         }
         return redirect()->back();
@@ -125,7 +130,8 @@ class OrderController extends Controller
             $order = Order::find(['id'=>$id])->first();
 
             $order->update([
-                'status'=> 'completed'
+                'status'=> 'completed',
+                'end_at' => now()
             ]);
 
             event(new EventActionNotify($order->ordered_user_id.'-rent-request', ['order' => $order]));

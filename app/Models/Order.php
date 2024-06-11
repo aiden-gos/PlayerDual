@@ -16,6 +16,8 @@ class Order extends Model
         'status',
         'price',
         'duration',
-        'total_price'
+        'total_price',
+        'start_at',
+        'end_at'
     ];
 }

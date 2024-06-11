@@ -30,7 +30,7 @@ class PreOrderController extends Controller
                     'status' => 'pre-ordering',
                     'price' => $user_ordered->price,
                     'duration' => $durationTime,
-                    'total_price' => $cost
+                    'total_price' => $cost,
                 ]);
 
                 $user_ordered->notify(new ActionNotify([$request->user()->name . " pre-order you now"]));
@@ -52,9 +52,11 @@ class PreOrderController extends Controller
 
             $id = $request->input('id');
             $order = Order::find(['id'=>$id])->first();
-
+            $currentOrder = Order::where('ordered_user_id', $order->ordered_user_id)->where('status', 'accepted')->first();
             $order->update([
-                'status'=> 'pre-ordered'
+                'status'=> 'pre-ordered',
+                'start_at' => $currentOrder->end_at,
+                'end_at' => date('Y-m-d H:i:s', strtotime($currentOrder->end_at . ' + '.$order->duration.' hours'))
             ]);
 
             $user = User::find(["id" => $order->ordering_user_id])->first();
