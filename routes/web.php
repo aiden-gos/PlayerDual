@@ -45,4 +45,5 @@ require __DIR__.'/follow.php';
 require __DIR__.'/order.php';
 require __DIR__.'/pre-order.php';
 require __DIR__.'/notification.php';
+require __DIR__.'/rate.php';
 
