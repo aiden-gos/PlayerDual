@@ -18,13 +18,14 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link>
+                    <x-nav-link href="#">
                         {{ __('STORIES') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link>
+                    <x-nav-link href="#" x-data=""
+                    x-on:click.prevent="$dispatch('open-modal', 'rank-modal')">
                         {{ __('RANK') }}
                     </x-nav-link>
                 </div>
@@ -317,6 +318,7 @@
     })
 </script>
 {{--  --}}
+@include('rank')
 
 @include('order.order-request')
 @include('pre-order.pre-order-request')
