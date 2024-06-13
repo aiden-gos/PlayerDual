@@ -102,40 +102,51 @@ class ProfileController extends Controller
      */
     public function updateAvatar(ProfileUpdateRequest $request): RedirectResponse
     {
-        if($request->hasFile('avatar')) {
-            if(!empty($request->user()->avatar)){
+        if ($request->hasFile('avatar')) {
+            if (!empty($request->user()->avatar)) {
                 try {
-                    $public_id =  explode('.',explode('/', $request->user()->avatar)[7])[0];
+                    $public_id =  explode('.', explode('/', $request->user()->avatar)[7])[0];
                     Cloudinary::destroy($public_id);
                 } catch (\Throwable $th) {
                     Log::error("Error detroy old avatar");
                 }
             }
-            $uploaded= Cloudinary::upload($request->file('avatar')->getRealPath());
+            $uploaded = Cloudinary::upload($request->file('avatar')->getRealPath());
             $uploadedFileUrl = $uploaded->getSecurePath();
             Log::debug($uploadedFileUrl);
         }
-        $request->user()->update(['avatar'=> $uploadedFileUrl]);
+        $request->user()->update(['avatar' => $uploadedFileUrl]);
         return Redirect::route('profile.edit')->with('status', 'avatar-updated');
     }
 
-     /**
+    /**
      *
      */
     public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
     {
-        if($request->hasFile('upload')) {
-            if(in_array($request->file('upload')->guessExtension(),['jpg','png','gif'])){
-                $uploaded= Cloudinary::upload($request->file('upload')->getRealPath());
+        if ($request->hasFile('upload')) {
+            if (in_array($request->file('upload')->guessExtension(), ['jpg', 'png', 'gif'])) {
+                $uploaded = Cloudinary::upload($request->file('upload')->getRealPath());
                 $uploadedFileUrl = $uploaded->getSecurePath();
-                Gallery::create(['type'=>'image', 'link'=>$uploadedFileUrl, 'user_id'=> $request->user()->id]);
-            }else if(in_array($request->file('upload')->guessExtension(),['mp4','wmv','avi'])){
-                $uploaded= Cloudinary::uploadVideo($request->file('upload')->getRealPath());
+                Gallery::create(['type' => 'image', 'link' => $uploadedFileUrl, 'user_id' => $request->user()->id]);
+            } else if (in_array($request->file('upload')->guessExtension(), ['mp4', 'wmv', 'avi'])) {
+                $uploaded = Cloudinary::uploadVideo($request->file('upload')->getRealPath());
                 $uploadedFileUrl = $uploaded->getSecurePath();
-                Gallery::create(['type'=>'video', 'link'=>$uploadedFileUrl, 'user_id'=> $request->user()->id]);
+                Gallery::create(['type' => 'video', 'link' => $uploadedFileUrl, 'user_id' => $request->user()->id]);
             }
         }
         return Redirect::route('profile.gallery');
+    }
+
+    public function uploadDropbox(Request $request)
+    {
+        $link = $request->input('link');
+
+        if (in_array(array_reverse(explode('.', $link))[0], ['jpg', 'png', 'gif'])) {
+            Gallery::create(['type' => 'image', 'link' => $link, 'user_id' => $request->user()->id]);
+        } else if (in_array(array_reverse(explode('.', $link))[0], ['mp4', 'wmv', 'avi'])) {
+            Gallery::create(['type' => 'video', 'link' => $link, 'user_id' => $request->user()->id]);
+        }
     }
 
     /**

@@ -29,22 +29,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/gallery', [ProfileController::class, 'uploadGallery'])->name('profile.gallery');
+    Route::post('/gallery', [ProfileController::class, 'uploadDropbox'])->name('profile.gallery.dropbox');
     Route::patch('/payment', [ProfileController::class, 'updatePayment'])->name('profile.payment');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/payment', [ProfileController::class, 'payment'])->name('profile.payment');
     Route::get('/add_payment', [StripeController::class, 'paymentMethod'])->name('payment.add');
     Route::post('/checkout', [StripeController::class, 'checkout'])->name('payment.checkout');
-
 });
 
-require __DIR__.'/auth.php';
-require __DIR__.'/home.php';
-require __DIR__.'/user.php';
-require __DIR__.'/follow.php';
-require __DIR__.'/order.php';
-require __DIR__.'/pre-order.php';
-require __DIR__.'/notification.php';
-require __DIR__.'/rate.php';
-require __DIR__.'/rank.php';
-
+require __DIR__ . '/auth.php';
+require __DIR__ . '/home.php';
+require __DIR__ . '/user.php';
+require __DIR__ . '/follow.php';
+require __DIR__ . '/order.php';
+require __DIR__ . '/pre-order.php';
+require __DIR__ . '/notification.php';
+require __DIR__ . '/rate.php';
+require __DIR__ . '/rank.php';
+require __DIR__ . '/stories.php';
