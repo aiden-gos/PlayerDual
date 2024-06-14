@@ -15,7 +15,7 @@
 
                         @include('components.ratingbar')
 
-                        <button class="bg-red-600 text-white w-full py-3 rounded-md max-w-64">Send</button>
+                        <button class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64">Send</button>
                     </div>
                 </form>
             </div>
@@ -36,7 +36,7 @@
 
                         @include('components.ratingbar')
 
-                        <button class="bg-red-600 text-white w-full py-3 rounded-md max-w-64">Update</button>
+                        <button class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64">Update</button>
                     </div>
                 </form>
             </div>

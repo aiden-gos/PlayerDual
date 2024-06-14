@@ -62,7 +62,7 @@
                         <p class="text-sm font-bold" x-text="story?.user?.name"></p>
                     </div>
                 </div>
-                <a :href="'user/' + story?.user?.id" class="bg-red-600 text-white p-2 rounded-xl h-10">Rent</a>
+                <a :href="'user/' + story?.user?.id" class="bg-rose-500 text-white p-2 rounded-xl h-10">Rent</a>
             </div>
             <br>
             <hr>
@@ -124,7 +124,7 @@
                     <textarea id="comment-content"
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" name="content"
                         id="content" cols="50" rows="1"></textarea>
-                    <button @click="handleComment(story.id)" class="bg-red-600 text-white rounded-md p-2">Comment</button>
+                    <button @click="handleComment(story.id)" class="bg-rose-500 text-white rounded-md p-2">Comment</button>
                 </div>
             @endauth
             {{--  --}}

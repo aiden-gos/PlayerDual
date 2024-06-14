@@ -29,7 +29,7 @@
 
 @if($renting || $rented)
 <div class="">
-    <div class="backdrop-blur-3xl bg-red-600/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
+    <div class="backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
         @if($renting && !$rented)
             <div class="pt-2">
                 <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
