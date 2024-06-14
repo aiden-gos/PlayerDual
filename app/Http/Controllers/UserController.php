@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Rate;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -14,9 +15,13 @@ class UserController extends Controller
     {
         $id = $request->route('id');
         $user = User::where('id', $id)->first();
+        Log::info($user->id);
         $follow = false;
         $orderConflict = false;
         $userStatus = false;
+        $preOrderStatus = false;
+        $rate = [];
+        $showRate = false;
         try {
             $follow = Follow::where('following_user_id', $request->user()->id)
                 ->where('followed_user_id', $id)
@@ -65,8 +70,9 @@ class UserController extends Controller
             $rateExits = Rate::where('user_id', $user->id)
                 ->where('author_id', $request->user()->id)
                 ->exists();
-            $showRate = $orderExits && !$rateExits && $request->user()->id != $user->id;
+            $showRate = $orderExits && !$rateExits && isset($request->user()->id) && $request->user()->id != $user->id;
         } catch (\Throwable $th) {
+            Log::error($th);
         }
 
         return view('user', [

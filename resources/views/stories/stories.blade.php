@@ -23,6 +23,7 @@
                         content: "{{$story->content}}",
                         like: {{$story->like}},
                         is_liked_by_user: "{{$story->is_liked_by_user}}",
+                        comment_count: "{{$story->comment_count}}",
                         user: {
                             id: "{{$story->user->id}}",
                             name: "{{$story->user->name}}",

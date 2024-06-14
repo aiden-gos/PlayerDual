@@ -22,8 +22,10 @@
                 </svg>
             </button>
             <div class="h-full flex items-end">
-
-                <button x-show="!is_liked_by_user" @click="like(story.id)" id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
+                {{-- unlike --}}
+                <button x-show="!story.is_liked_by_user"
+                    @click="like(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like += 1; "
+                    id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
                     <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                         viewBox="0 0 544.582 544.582" xml:space="preserve">
@@ -34,8 +36,10 @@
                         </g>
                     </svg>
                 </button>
-
-                <button x-show="is_liked_by_user" @click="like(story.id)" id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
+                {{-- like --}}
+                <button x-show="story.is_liked_by_user"
+                    @click="unlike(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like -= 1;"
+                    id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
                     <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                         viewBox="0 0 544.582 544.582" xml:space="preserve">
@@ -57,7 +61,7 @@
                         <p class="text-sm font-bold" x-text="story?.user?.name"></p>
                     </div>
                 </div>
-                <button class="bg-black text-white p-2 rounded-xl h-10">Rent</button>
+                <a :href="'user/' + story?.user?.id" class="bg-black text-white p-2 rounded-xl h-10">Rent</a>
             </div>
             <br>
             <hr>
@@ -83,7 +87,7 @@
                             d="M 25 4 C 12.316406 4 2 12.972656 2 24 C 2 30.1875 5.335938 36.066406 10.949219 39.839844 C 10.816406 40.890625 10.285156 43.441406 8.183594 46.425781 L 7.078125 47.992188 L 9.054688 48 C 14.484375 48 18.15625 44.671875 19.363281 43.394531 C 21.195313 43.796875 23.089844 44 25 44 C 37.683594 44 48 35.027344 48 24 C 48 12.972656 37.683594 4 25 4 Z">
                         </path>
                     </svg>
-                    <span x-text="story.comment"></span>
+                    <span id='comment-count' x-text="story.comment_count"></span>
                 </p>
                 <p class="flex flex-row gap-1  ">
                     <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
@@ -114,19 +118,24 @@
                     </div> --}}
 
             </div>
-            <div class="flex flex-row items-start gap-2">
-                <textarea id="comment-content"
-                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" name="content"
-                    id="content" cols="50" rows="1"></textarea>
-                <button @click="handleComment(story.id)" class="bg-black text-white rounded-md p-2">Comment</button>
-            </div>
+            @auth
+                <div class="flex flex-row items-start gap-2">
+                    <textarea id="comment-content"
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" name="content"
+                        id="content" cols="50" rows="1"></textarea>
+                    <button @click="handleComment(story.id)" class="bg-black text-white rounded-md p-2">Comment</button>
+                </div>
+            @endauth
             {{--  --}}
         </div>
     </div>
     <script>
         function like(id) {
-            axios.get('/stories/like/' + id).then((response) => {
-            })
+            axios.get('/stories/like/' + id).then((response) => {})
+        }
+
+        function unlike(id) {
+            axios.get('/stories/unlike/' + id).then((response) => {})
         }
 
         function renderComment(id) {
@@ -134,13 +143,18 @@
             axios.get('/comment/' + id)
                 .then((response) => {
                     $('#comment-content').val('');
+                    var id = '{{ isset(Auth::user()->id) ? Auth::user()->id : 'null' }}';
+
                     response.data.forEach(e => {
                         $('#comment').append(`
                         <div class="py-2">
                             <div class="flex flex-row gap-2">
                                 <img src="${e?.user?.avatar}" alt="profile" class="w-8 h-8 rounded-full">
                                 <div class="flex items-start flex-col">
+                                    <div class="flex flex-row gap-20">
                                     <p class="text-sm font-bold">${e?.user?.name}</p>
+                                      ${ id == e?.user?.id ? `<div class="text-xs text-red-600 mt-1">Delete</div>` : "" }
+                                    </div>
                                     <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
                                     <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>
                                 </div>
@@ -158,12 +172,17 @@
             }).then((response) => {
                 $('#comment-content').val('');
                 var e = response.data;
+                var id = '{{ isset(Auth::user()->id) ? Auth::user()->id : 'null' }}';
+
                 $('#comment').append(`
                         <div class="py-2">
                             <div class="flex flex-row gap-2">
-                                <img src="{{ Auth::user()->avatar }}" alt="profile" class="w-8 h-8 rounded-full">
+                                <img src="{{ isset(Auth::user()->avatar) ? Auth::user()->avatar : '' }}" alt="profile" class="w-8 h-8 rounded-full">
                                 <div class="flex items-start flex-col">
-                                    <p class="text-sm font-bold">{{ Auth::user()->name }}</p>
+                                    <div class="flex flex-row gap-20">
+                                        <p class="text-sm font-bold">{{ isset(Auth::user()->name) ? Auth::user()->name : '' }}</p>
+                                        <div class="text-xs text-red-600 mt-1">Delete</div>
+                                    </div>
                                     <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
                                     <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>
                                 </div>
@@ -171,6 +190,7 @@
                         </div>
                     `);
                 $('#comment').scrollTop($('#comment').prop('scrollHeight'));
+                $('#comment-count').text(parseInt($('#comment-count').text()) + 1);
             });
         }
     </script>

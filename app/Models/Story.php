@@ -21,7 +21,7 @@ class Story extends Model
 
     protected $with = ['user'];
 
-    protected $appends = ['is_liked_by_user'];
+    protected $appends = ['is_liked_by_user', 'comment_count'];
 
     public function user()
     {
@@ -41,5 +41,10 @@ class Story extends Model
     public function getIsLikedByUserAttribute()
     {
         return $this->likes()->where('user_id', auth()->id())->exists();
+    }
+
+    public function getCommentCountAttribute()
+    {
+        return $this->comments()->count();
     }
 }
