@@ -38,9 +38,9 @@ class CommentController extends Controller
 
         $comment = Comment::find(['id' => $id])->first();
 
-        if ($comment && $request->user()->id == $comment->author->id) {
+        if ($comment && $request->user()->id == $comment->user->id) {
             $comment->delete();
-            return redirect()->back()->with('success', 'comment deleted successfully.');
         }
+        return response()->json($comment);
     }
 }

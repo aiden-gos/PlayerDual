@@ -50,6 +50,7 @@
     style="display: {{ $show ? 'block' : 'none' }};"
 >
     <div
+        @click="show = false"
         x-show="show"
         class="fixed inset-0 transform transition-all"
         x-transition:enter="ease-out duration-300"
