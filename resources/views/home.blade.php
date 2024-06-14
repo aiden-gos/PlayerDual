@@ -461,7 +461,7 @@
                     {{-- Game List  --}}
                     @foreach ($games as $game)
                         <div class="list-item">
-                            <div class="flex flex-row gap-2 items-center">
+                            <div class="flex flex-row gap-2 py-1 items-center">
                                 <img style="width: 35px; height: 35px;"
                                     alt="715867c6-698f-411a-b4f9-1e9093130b60__f364f2e0-34ce-11ed-838c-b120e70abb59__game_avatars.jpg"
                                     src="https://genk.mediacdn.vn/2019/9/18/lmht-1568783583618859188609.jpg">

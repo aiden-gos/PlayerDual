@@ -2,7 +2,7 @@
 @if(!$orderConflict)
 <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Rent-form')"
-    class="bg-red-600 text-white w-full py-3 rounded-md max-w-64" >
+    class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64" >
 
     @if(Auth::user()->id == $user->id)
         Offline
@@ -157,5 +157,5 @@
 	});
 </script>
 @else
-    <a class="bg-red-600 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Rent</a>
+    <a class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Rent</a>
 @endauth

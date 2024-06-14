@@ -1,18 +1,18 @@
 <div class='w-full flex flex-row gap-2 p-5'>
-    <div class="">
+    <a href="/user/{{ $item->author->id }}">
         <div class="pt-2"><img class="rounded-[50%]" width="50" height="50" src="{{ $item->author->avatar }}"
                 class="avt-1-15 avt-img" alt="PD"></div>
-    </div>
+    </a>
     <div class="flex flex-row justify-between w-full p-2 items-center">
-        <div>
+        <a href="/user/{{ $item->author->id }}">
             <p class="font-bold">{{ $item->author->name }}</p>
             <p class=""><span>{{ $item->created_at }}</span></p>
             <p class="py-2">{{ $item->content }}</p>
             @if ($item->author->id == Auth::user()->id)
                 <div class="flex flex-row gap-5">
                     <button id="update-rate" class="text-yellow-600">Update</button>
-                    <input type="hidden" id="id" value="{{$item->id}}">
-                    <form method="post" action="{{ route('rate.create') }}/{{$item->id}}" >
+                    <input type="hidden" id="id" value="{{ $item->id }}">
+                    <form method="post" action="{{ route('rate.create') }}/{{ $item->id }}">
                         @csrf
                         @method('delete')
                         <input type="hidden" name="id">
@@ -20,7 +20,7 @@
                     </form>
                 </div>
             @endif
-        </div>
+        </a>
         <div class="">
             <div class="flex flex-row">
 
@@ -61,20 +61,20 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-    var btnUpdate = $('#update-rate');
-    var stateFormShow =true;
-    btnUpdate.click(function () {
-        if(stateFormShow){
-            $("#update-form-rate").removeClass('hidden')
-            btnUpdate.text('Cancel')
-            stateFormShow = false;
-        }else{
-            $("#update-form-rate").addClass('hidden')
-            btnUpdate.text('Update')
-            stateFormShow = true;
-        }
+    $(document).ready(function() {
+        var btnUpdate = $('#update-rate');
+        var stateFormShow = true;
+        btnUpdate.click(function() {
+            if (stateFormShow) {
+                $("#update-form-rate").removeClass('hidden')
+                btnUpdate.text('Cancel')
+                stateFormShow = false;
+            } else {
+                $("#update-form-rate").addClass('hidden')
+                btnUpdate.text('Update')
+                stateFormShow = true;
+            }
 
+        })
     })
-})
 </script>

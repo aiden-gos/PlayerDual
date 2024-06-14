@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donate;
 use App\Models\Follow;
+use App\Models\Gallery;
 use App\Models\Order;
 use App\Models\Rate;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -15,6 +18,17 @@ class UserController extends Controller
     {
         $id = $request->route('id');
         $user = User::where('id', $id)->first();
+        $gallery = Gallery::where('user_id', $id)->take(5)->get();
+        $top_donate = User::select('users.*', DB::raw('SUM(donates.price) as donate_price'))
+            ->leftJoin('donates', function ($join) {
+                $join->on('users.id', '=', 'donates.donating_user_id');
+            })
+            ->groupBy('users.id')
+            ->havingRaw('SUM(donates.price) > 0')
+            ->orderBy('donate_price', 'desc')
+            ->take(10)
+            ->get();
+
         $follow = false;
         $orderConflict = false;
         $userStatus = false;
@@ -82,6 +96,8 @@ class UserController extends Controller
             'preOrderStatus' => $preOrderStatus,
             'rate' => $rate,
             'showRate' => $showRate,
+            'gallery' => $gallery,
+            'top_donate' => $top_donate,
         ]);
     }
 }
