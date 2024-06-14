@@ -16,7 +16,6 @@ class CommentController extends Controller
             // ->orderByRaw('CASE WHEN story_id = ? THEN 0 ELSE 1 END, created_at ASC', [$request->user()->id])
             ->orderBy('created_at', 'ASC')
             ->get();
-        Log::debug($comment);
         return response()->json($comment);
     }
 

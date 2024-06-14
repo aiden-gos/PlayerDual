@@ -6,7 +6,8 @@
                 color: red
             }
         </style>
-        <form id="story" method="post" action="{{ route('stories.up') }}" class="p-6  flex flex-row gap-10" enctype="multipart/form-data">
+        <form id="story" method="post" action="{{ route('stories.up') }}" class="p-6  flex flex-row gap-10"
+            enctype="multipart/form-data">
             @csrf
             <div class="w-full">
                 <div>
@@ -40,21 +41,32 @@
             <div class="w-full flex items-center">
                 <input class="w-full" id="upload" type="file" class="filepond" name="upload"
                     data-allow-reorder="true" data-max-file-size="20MB" accept="video/mp4">
+                <div id='update-err' class="text-red-500"></div>
             </div>
         </form>
     </x-modal>
 
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
     <script>
-        $("#story").validate({
-            onfocusout: false,
-            onkeyup: false,
-            onclick: false,
-            rules: {
-                "content": {
-                    required: true,
+        $(document).ready(function() {
+            var validator = $("#story").validate({
+                rules: {
+                    content: {
+                        required: true,
+                    },
+                    update: {
+                        required: true,
+                        extension: "mp4"
+                    },
                 },
-            }
+                messages: {
+                    ok: {
+                        required: "input type is required",
+                        extension: "select valied input file format (mp4)"
+                    }
+                }
+            });
         });
 
         $(document).ready(function() {
@@ -81,7 +93,4 @@
             allowReorder: true,
         });
     </script>
-@else
-    <a href="{{ route('login') }}"
-        class="bg-white text-black border w-full py-3 rounded-md max-w-64 text-center">Donate</a>
 @endauth

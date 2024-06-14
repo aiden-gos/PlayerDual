@@ -21,7 +21,7 @@
             </div>
         @endif
 
-        @if ($rate[0] && $rate[0]->author->id == Auth::user()->id)
+        @if (isset($rate[0]) && $rate[0]->author->id == Auth::user()->id)
             {{-- form update hidden --}}
             <div id='update-form-rate' class="flex flex-row gap-5 hidden">
                 <div>Comment</div>
@@ -50,9 +50,11 @@
         @empty
             Not found rate
         @endforelse
+        @if(isset($rate[0]))
         <div class="py-10 px-40 ">
             {{ $rate->appends(request()->except('page'))->fragment('rating')->links() }}
         </div>
+        @endif
     </div>
 </div>
 <script></script>

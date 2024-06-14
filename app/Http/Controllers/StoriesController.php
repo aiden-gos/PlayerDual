@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Like;
 use Illuminate\Http\Request;
 use App\Models\Story;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -14,13 +15,16 @@ class StoriesController extends Controller
 {
     public function index(Request $request)
     {
-        $stories = Story::where('status', 'open')
-            ->orderByRaw("user_id = ? DESC", $request->user()->id)
-            ->orderBy("created_at", "DESC")
-            // ->take(20)
-            ->get();
-        Log::alert($stories);
+        $stories_query = Story::where('status', 'open');
+
+        if (isset($request->user()->id))
+            $stories_query->orderByRaw("user_id = ? DESC", $request->user()->id);
+
+        $stories_query->orderBy("created_at", "DESC");
+
+        $stories = $stories_query->get();
         $top_stories = Story::where('status', 'open')->orderBy("view", "DESC")->take(10)->get();
+
         return view('stories.stories', ['stories' => $stories, 'top_stories' => $top_stories]);
     }
 
@@ -62,12 +66,33 @@ class StoriesController extends Controller
         DB::beginTransaction();
         try {
             $story = Story::find(['id' => $id])->first();
-            $story->update([
-                "like" => $story->like + 1
-            ]);
             $story->likes()->create([
                 'user_id' => $request->user()->id
             ]);
+            $story->update([
+                "like" => Like::where('story_id', $id)->count()
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+        }
+    }
+
+    public function updateUnLike(Request $request)
+    {
+        $id = $request->route('id');
+        DB::beginTransaction();
+        try {
+            $story = Story::find(['id' => $id])->first();
+
+            $like = Like::where('story_id', $id)->where('user_id', $request->user()->id);
+            if ($like) $like->delete();
+
+            $story->update([
+                "like" => Like::where('story_id', $id)->count()
+            ]);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
