@@ -15,7 +15,6 @@ class UserController extends Controller
     {
         $id = $request->route('id');
         $user = User::where('id', $id)->first();
-        Log::info($user->id);
         $follow = false;
         $orderConflict = false;
         $userStatus = false;

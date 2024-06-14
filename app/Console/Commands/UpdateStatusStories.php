@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Story;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateStatusStories extends Command
 {
@@ -37,6 +38,7 @@ class UpdateStatusStories extends Command
         foreach ($stories as $story) {
             $story->status = 'closed';
             $story->save();
+            Log::info("Story with id {$story->id} has been closed.");
         }
     }
 }

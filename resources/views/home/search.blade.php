@@ -36,7 +36,7 @@
         </div>
         <br><br><br>
             <div class="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
-                <button id="search-btn" class="h-10 active:scale-95 rounded-lg bg-black px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90">Search</button>
+                <button id="search-btn" class="h-10 active:scale-95 rounded-lg bg-red-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90">Search</button>
             </div>
         </div>
   </div>

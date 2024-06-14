@@ -26,7 +26,7 @@
                     {{-- unlike --}}
                     <button x-show="!story.is_liked_by_user"
                         @click="like(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like += 1; "
-                        id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
+                        id="like-btn" class="bg-red-300 p-2 rounded-full mb-24 ml-[-20px]">
                         <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                             viewBox="0 0 544.582 544.582" xml:space="preserve">
@@ -40,7 +40,7 @@
                     {{-- like --}}
                     <button x-show="story.is_liked_by_user"
                         @click="unlike(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like -= 1;"
-                        id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
+                        id="like-btn" class="bg-red-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
                         <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                             viewBox="0 0 544.582 544.582" xml:space="preserve">
@@ -62,7 +62,7 @@
                         <p class="text-sm font-bold" x-text="story?.user?.name"></p>
                     </div>
                 </div>
-                <a :href="'user/' + story?.user?.id" class="bg-black text-white p-2 rounded-xl h-10">Rent</a>
+                <a :href="'user/' + story?.user?.id" class="bg-red-600 text-white p-2 rounded-xl h-10">Rent</a>
             </div>
             <br>
             <hr>
@@ -124,7 +124,7 @@
                     <textarea id="comment-content"
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" name="content"
                         id="content" cols="50" rows="1"></textarea>
-                    <button @click="handleComment(story.id)" class="bg-black text-white rounded-md p-2">Comment</button>
+                    <button @click="handleComment(story.id)" class="bg-red-600 text-white rounded-md p-2">Comment</button>
                 </div>
             @endauth
             {{--  --}}
