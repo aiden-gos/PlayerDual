@@ -15,7 +15,6 @@
         url: "{{ route('rank.income') }}",
         type: 'GET',
         success: function(result) {
-            console.log(result);
             result.forEach((element, index) => {
                 $('#contain').append(`
                     <div class="flex flex-row justify-between py-2">

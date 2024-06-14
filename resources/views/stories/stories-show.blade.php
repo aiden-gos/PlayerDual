@@ -8,7 +8,10 @@
                         clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <video autoplay loop height="900" width="400" controls x-init="$watch('story.video_link', () =>{ $el.load(); $el.play();})">
+            <video autoplay loop height="900" width="400" controls x-init="$watch('story.video_link', () => {
+                $el.load();
+                $el.play();
+            })">
                 <source type="video/mp4" :src="story.video_link">
             </video>
             <button>
@@ -18,6 +21,33 @@
                         clip-rule="evenodd"></path>
                 </svg>
             </button>
+            <div class="h-full flex items-end">
+
+                <button x-show="!is_liked_by_user" @click="like(story.id)" id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
+                    <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+                        viewBox="0 0 544.582 544.582" xml:space="preserve">
+                        <g>
+                            <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                        C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                        c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                        </g>
+                    </svg>
+                </button>
+
+                <button x-show="is_liked_by_user" @click="like(story.id)" id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
+                    <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+                        viewBox="0 0 544.582 544.582" xml:space="preserve">
+                        <g>
+                            <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                        C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                        c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                        </g>
+                    </svg>
+                </button>
+
+            </div>
         </div>
         <div class="flex flex-col w-[400px] bg-gray-100 p-5">
             <div class="flex flex-row gap-4 justify-between">
@@ -38,7 +68,8 @@
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                         viewBox="0 0 544.582 544.582" xml:space="preserve">
                         <g>
-                            <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                            <path
+                                d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
                             C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
                             c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
                         </g>
@@ -69,26 +100,78 @@
             <hr>
             <br>
             {{-- Coment --}}
-            <div class="overflow-auto">
-                @for ($i = 0; $i < 15; $i++)
-                    <div class="py-2">
+            <div id="comment" class="overflow-auto h-full">
+
+                {{-- <div class="py-2">
                         <div class="flex flex-row gap-2">
-                            <img src="{{ $story->user->avatar }}" alt="profile" class="w-8 h-8 rounded-full">
+                            <img src="" alt="profile" class="w-8 h-8 rounded-full">
                             <div class="flex items-start flex-col">
                                 <p class="text-sm font-bold">Username</p>
                                 <p class="text-xs text-stone-600"><span>dd-mm-yyy</span></p>
                             </div>
                         </div>
                         <p class="py-2 text-[14px] text-stone-600">comment comment comment</p>
-                    </div>
-                @endfor
+                    </div> --}}
+
             </div>
             <div class="flex flex-row items-start gap-2">
-                <textarea class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
-                    name="content" id="content" cols="50" rows="1"></textarea>
-                <button class="bg-black text-white rounded-md p-2">Comment</button>
+                <textarea id="comment-content"
+                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" name="content"
+                    id="content" cols="50" rows="1"></textarea>
+                <button @click="handleComment(story.id)" class="bg-black text-white rounded-md p-2">Comment</button>
             </div>
             {{--  --}}
         </div>
     </div>
+    <script>
+        function like(id) {
+            axios.get('/stories/like/' + id).then((response) => {
+            })
+        }
+
+        function renderComment(id) {
+            $('#comment').empty();
+            axios.get('/comment/' + id)
+                .then((response) => {
+                    $('#comment-content').val('');
+                    response.data.forEach(e => {
+                        $('#comment').append(`
+                        <div class="py-2">
+                            <div class="flex flex-row gap-2">
+                                <img src="${e?.user?.avatar}" alt="profile" class="w-8 h-8 rounded-full">
+                                <div class="flex items-start flex-col">
+                                    <p class="text-sm font-bold">${e?.user?.name}</p>
+                                    <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
+                                    <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    });
+                });
+        }
+
+        function handleComment(id) {
+            var content = $("#comment-content").val();
+            axios.post('/comment/' + id, {
+                "content": content
+            }).then((response) => {
+                $('#comment-content').val('');
+                var e = response.data;
+                $('#comment').append(`
+                        <div class="py-2">
+                            <div class="flex flex-row gap-2">
+                                <img src="{{ Auth::user()->avatar }}" alt="profile" class="w-8 h-8 rounded-full">
+                                <div class="flex items-start flex-col">
+                                    <p class="text-sm font-bold">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
+                                    <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                $('#comment').scrollTop($('#comment').prop('scrollHeight'));
+            });
+        }
+    </script>
 </x-modal-story>

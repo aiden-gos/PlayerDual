@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "577a17421b845233c9b1f8102e3ca722",
+    "content-hash": "41b880026a8dceb44250b8a815bf8600",
     "packages": [
         {
             "name": "brick/math",
@@ -327,6 +327,69 @@
                 "source": "https://github.com/cloudinary/php-transformation-builder-sdk/tree/1.5.0"
             },
             "time": "2024-05-27T12:26:00+00:00"
+        },
+        {
+            "name": "dcblogdev/laravel-dropbox",
+            "version": "v3.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dcblogdev/laravel-dropbox.git",
+                "reference": "e4f1b959e18a37c75fba02244cdb363bfd3aaee2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dcblogdev/laravel-dropbox/zipball/e4f1b959e18a37c75fba02244cdb363bfd3aaee2",
+                "reference": "e4f1b959e18a37c75fba02244cdb363bfd3aaee2",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6|^7",
+                "illuminate/support": "^5.5|^5.6|^5.7|^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Dcblogdev\\Dropbox\\DropboxServiceProvider"
+                    ],
+                    "aliases": {
+                        "Dropbox": "Dcblogdev\\Dropbox\\Facades\\Dropbox"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dcblogdev\\Dropbox\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Carr",
+                    "email": "dave@dcblog.dev",
+                    "homepage": "https://dcblog.dev"
+                }
+            ],
+            "description": "A Laravel Dropbox v2 package",
+            "homepage": "https://github.com/dcblogdev/laravel-dropbox",
+            "keywords": [
+                "dropbox",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/dcblogdev/laravel-dropbox/issues",
+                "source": "https://github.com/dcblogdev/laravel-dropbox/tree/v3.0.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/dcblogdev",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-12T11:06:12+00:00"
         },
         {
             "name": "dflydev/dot-access-data",

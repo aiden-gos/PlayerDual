@@ -16,18 +16,19 @@
             <hr>
             @foreach ($top_stories as $story)
                 <button class="story" href="" x-data=""
-                    x-on:click.prevent="$dispatch('open-modal',{name : 'story-detail', story: {
-                        id: '{{$story->id}}',
-                        video_link: '{{$story->video_link}}',
-                        view: '{{$story->view}}',
-                        content: '{{$story->content}}',
+                    x-on:click.prevent='$dispatch("open-modal",{name : "story-detail", story: {
+                        id: "{{$story->id}}",
+                        video_link: "{{$story->video_link}}",
+                        view: "{{$story->view}}",
+                        content: "{{$story->content}}",
                         like: {{$story->like}},
+                        is_liked_by_user: "{{$story->is_liked_by_user}}",
                         user: {
-                            id: '{{$story->user->id}}',
-                            name: '{{$story->user->name}}',
-                            avatar: '{{$story->user->avatar}}'
+                            id: "{{$story->user->id}}",
+                            name: "{{$story->user->name}}",
+                            avatar: "{{$story->user->avatar}}"
                         },
-                    }})">
+                    }})'>
                     <input type="hidden" value="{{ $story->id }}">
                     <div class="flex flex-row gap-4">
                         <img src="{{ $story->user->avatar }}" alt="profile" class="w-12 h-12 rounded-full">
@@ -39,7 +40,7 @@
             @endforeach
         </div>
     </x-slot>
-    <div class="py-5 bg-white">
+    <div class="py-5 bg-white h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class=" overflow-hidden  sm:rounded-lg">
                 <div class="p-6 text-gray-900">
