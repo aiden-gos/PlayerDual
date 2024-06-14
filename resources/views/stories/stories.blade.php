@@ -25,9 +25,9 @@
                         is_liked_by_user: "{{$story->is_liked_by_user}}",
                         comment_count: "{{$story->comment_count}}",
                         user: {
-                            id: "{{$story->user->id}}",
-                            name: "{{$story->user->name}}",
-                            avatar: "{{$story->user->avatar}}"
+                            id: "{{isset($story->user->id) ? $story->user->id : ''}}",
+                            name: "{{isset($story->user->name) ? $story->user->name : ''}}",
+                            avatar: "{{isset($story->user->avatar) ? $story->user->avatar : ''}}",
                         },
                     }})'>
                     <input type="hidden" value="{{ $story->id }}">

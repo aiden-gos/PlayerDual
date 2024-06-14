@@ -23,6 +23,7 @@ class StoriesController extends Controller
         $stories_query->orderBy("created_at", "DESC");
 
         $stories = $stories_query->get();
+        Log::debug($stories);
         $top_stories = Story::where('status', 'open')->orderBy("view", "DESC")->take(10)->get();
 
         return view('stories.stories', ['stories' => $stories, 'top_stories' => $top_stories]);
