@@ -2,13 +2,13 @@
 @if(!$preOrderStatus && $orderConflict && Auth::user()->id != $user->id)
 <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
-    class="bg-black text-white w-full py-3 rounded-md max-w-64" >
+    class="bg-red-600 text-white w-full py-3 rounded-md max-w-64" >
         Pre-order
 </button>
 @else
 <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
-    class="bg-gray-300 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button>
+    class="bg-red-200 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button>
 @endif
 
 <x-modal name="Pre-order-form" focusable>
@@ -128,5 +128,5 @@
 	});
 </script>
 @else
-    <a class="bg-black text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a>
+    <a class="bg-red-600 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a>
 @endauth
