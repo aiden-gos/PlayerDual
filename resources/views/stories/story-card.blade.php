@@ -9,9 +9,9 @@
                         is_liked_by_user: "{{ $story->is_liked_by_user }}",
                         comment_count: "{{ $story->comment_count }}",
                         user: {
-                            id: "{{ $story->user->id }}",
-                            name: "{{ $story->user->name }}",
-                            avatar: "{{ $story->user->avatar }}"
+                            id: "{{ isset($story->user->id) ? $story->user->id : ""}}",
+                            name: "{{ isset($story->user->name) ? $story->user->name : ""}}",
+                            avatar: "{{ isset($story->user->avatar) ? $story->user->avatar : ""}}"
                         },
                     }})'>
         <input type="hidden" value="{{ $story->id }}">
@@ -54,8 +54,8 @@
             </div>
         </div>
         <div class="flex flex-row items-center mt-5 gap-2">
-            <div><img src="{{ $story->user->avatar }}" class="h-10 w-10 rounded-[50%]" alt="PD"></div>
-            <p class="font-bold">{{ $story->user->name }}</p>
+            <div><img src="{{ isset($story->user->avatar) ? $story->user->avatar : "" }}" class="h-10 w-10 rounded-[50%]" alt="PD"></div>
+            <p class="font-bold">{{ isset($story->user->name) ? $story->user->name : "" }}</p>
         </div>
     </button>
 </div>

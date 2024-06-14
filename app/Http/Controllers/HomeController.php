@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Story;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -14,11 +15,12 @@ class HomeController extends Controller
         $vip_user = User::query()->orderBy("balance", "DESC")->limit(15)->get();
         $hot_user = User::query()->orderBy("price", "DESC")->limit(15)->get();
         $games = Game::all();
-
-        return view('welcome', [
+        $stories = Story::where('status', 'open')->orderBy('created_at', 'desc')->take(10)->get();
+        return view('home', [
             'vip_user' => $vip_user,
             'hot_user' => $hot_user,
-            'games' => $games
+            'games' => $games,
+            'stories' => $stories
         ]);
     }
 
