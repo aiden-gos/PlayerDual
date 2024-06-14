@@ -8,7 +8,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="pb-5 flex flex-col justify-between w-full">
-
                     <form method="post" action="{{ route('profile.gallery') }}" class="space-y-6"
                         enctype="multipart/form-data">
                         @csrf
@@ -20,7 +19,6 @@
                         <input id="upload" type="file" class="filepond" name="upload" data-allow-reorder="true"
                             data-max-file-size="20MB" accept="image/png, image/jpeg, image/gif, video/mp4">
                         <div id="chooser" class=""></div>
-                        <a class="dropbox-saver"></a>
 
                         <div id="file-info"></div>
                     </form>

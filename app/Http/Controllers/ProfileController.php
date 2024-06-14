@@ -124,6 +124,7 @@ class ProfileController extends Controller
      */
     public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
     {
+        Log::debug($request->file('upload')->guessExtension());
         if ($request->hasFile('upload')) {
             if (in_array($request->file('upload')->guessExtension(), ['jpg', 'png', 'gif'])) {
                 $uploaded = Cloudinary::upload($request->file('upload')->getRealPath());

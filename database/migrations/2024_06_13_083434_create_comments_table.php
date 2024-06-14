@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stories', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('video_link')->nullable();
-            $table->text('content')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->string('status')->default('open');
-            $table->integer('view')->default(0);
-            $table->integer('like')->default(0);
+            $table->unsignedBigInteger('story_id');
+            $table->text('content');
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stories');
+        Schema::dropIfExists('comments');
     }
 };

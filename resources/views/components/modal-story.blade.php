@@ -29,7 +29,18 @@
             document.body.classList.remove('overflow-y-hidden');
         }
     })"
-    x-on:open-modal.window="if ($event.detail.name == '{{ $name }}') { show = true; story = $event.detail.story }"
+    x-on:open-modal.window="if ($event.detail.name == '{{ $name }}') {
+            show = true;
+            story = $event.detail.story;
+            fetch(`/stories/view/${story.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
+            renderComment(story.id);
+    }"
     x-on:close.stop="show = false"
     x-on:keydown.escape.window="show = false"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"

@@ -1,17 +1,18 @@
 <div class="flex flex-col w-52 h-80  mb-24">
     <button class="story" href="" x-data=""
-        x-on:click.prevent="$dispatch('open-modal',{name : 'story-detail', story: {
-                        id: '{{ $story->id }}',
-                        video_link: '{{ $story->video_link }}',
-                        view: '{{ $story->view }}',
-                        content: '{{ $story->content }}',
+        x-on:click.prevent='$dispatch("open-modal",{name : "story-detail", story: {
+                        id: "{{ $story->id }}",
+                        video_link: "{{ $story->video_link }}",
+                        view: "{{ $story->view }}",
+                        content: "{{ $story->content }}",
                         like: {{ $story->like }},
+                        is_liked_by_user: "{{ $story->is_liked_by_user }}",
                         user: {
-                            id: '{{ $story->user->id }}',
-                            name: '{{ $story->user->name }}',
-                            avatar: '{{ $story->user->avatar }}'
+                            id: "{{ $story->user->id }}",
+                            name: "{{ $story->user->name }}",
+                            avatar: "{{ $story->user->avatar }}"
                         },
-                    }})">
+                    }})'>
         <input type="hidden" value="{{ $story->id }}">
         <div class="box-item">
             <div>
