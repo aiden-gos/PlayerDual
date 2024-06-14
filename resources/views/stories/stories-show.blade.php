@@ -22,35 +22,36 @@
                 </svg>
             </button>
             <div class="h-full flex items-end">
-                {{-- unlike --}}
-                <button x-show="!story.is_liked_by_user"
-                    @click="like(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like += 1; "
-                    id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
-                    <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
-                        viewBox="0 0 544.582 544.582" xml:space="preserve">
-                        <g>
-                            <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
-                        C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
-                        c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
-                        </g>
-                    </svg>
-                </button>
-                {{-- like --}}
-                <button x-show="story.is_liked_by_user"
-                    @click="unlike(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like -= 1;"
-                    id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
-                    <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
-                        viewBox="0 0 544.582 544.582" xml:space="preserve">
-                        <g>
-                            <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
-                        C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
-                        c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
-                        </g>
-                    </svg>
-                </button>
-
+                @auth
+                    {{-- unlike --}}
+                    <button x-show="!story.is_liked_by_user"
+                        @click="like(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like += 1; "
+                        id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
+                        <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+                            viewBox="0 0 544.582 544.582" xml:space="preserve">
+                            <g>
+                                <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                            C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                            c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                            </g>
+                        </svg>
+                    </button>
+                    {{-- like --}}
+                    <button x-show="story.is_liked_by_user"
+                        @click="unlike(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like -= 1;"
+                        id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px] bg-red-300">
+                        <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+                            viewBox="0 0 544.582 544.582" xml:space="preserve">
+                            <g>
+                                <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                            C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                            c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                            </g>
+                        </svg>
+                    </button>
+                @endauth
             </div>
         </div>
         <div class="flex flex-col w-[400px] bg-gray-100 p-5">
