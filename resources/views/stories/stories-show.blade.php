@@ -26,7 +26,7 @@
                     {{-- unlike --}}
                     <button x-show="!story.is_liked_by_user"
                         @click="like(story.id); story.is_liked_by_user = !story.is_liked_by_user; story.like += 1; "
-                        id="like-btn" class="bg-red-300 p-2 rounded-full mb-24 ml-[-20px]">
+                        id="like-btn" class="bg-gray-300 p-2 rounded-full mb-24 ml-[-20px]">
                         <svg fill="#57534e" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                             viewBox="0 0 544.582 544.582" xml:space="preserve">
