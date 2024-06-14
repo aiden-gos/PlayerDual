@@ -149,12 +149,14 @@
                     response.data.forEach(e => {
                         $('#comment').append(`
                         <div class="py-2">
-                            <div class="flex flex-row gap-2">
+                            <div id="comment--${e.id}" class="flex flex-row gap-2">
                                 <img src="${e?.user?.avatar}" alt="profile" class="w-8 h-8 rounded-full">
                                 <div class="flex items-start flex-col">
                                     <div class="flex flex-row gap-20">
                                     <p class="text-sm font-bold">${e?.user?.name}</p>
-                                      ${ id == e?.user?.id ? `<div class="text-xs text-red-600 mt-1">Delete</div>` : "" }
+                                      ${ id == e?.user?.id ? `
+                                            <button @click="deleteComment(${e.id});" class="text-xs text-red-600 mt-1">Delete</button>
+                                      ` : "" }
                                     </div>
                                     <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
                                     <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>
@@ -176,13 +178,13 @@
                 var id = '{{ isset(Auth::user()->id) ? Auth::user()->id : 'null' }}';
 
                 $('#comment').append(`
-                        <div class="py-2">
+                        <div id="comment--${e.id}"  class="py-2">
                             <div class="flex flex-row gap-2">
                                 <img src="{{ isset(Auth::user()->avatar) ? Auth::user()->avatar : '' }}" alt="profile" class="w-8 h-8 rounded-full">
                                 <div class="flex items-start flex-col">
                                     <div class="flex flex-row gap-20">
                                         <p class="text-sm font-bold">{{ isset(Auth::user()->name) ? Auth::user()->name : '' }}</p>
-                                        <div class="text-xs text-red-600 mt-1">Delete</div>
+                                        <button @click="deleteComment(${e.id});" class="text-xs text-red-600 mt-1">Delete</button>
                                     </div>
                                     <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
                                     <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>
@@ -192,6 +194,14 @@
                     `);
                 $('#comment').scrollTop($('#comment').prop('scrollHeight'));
                 $('#comment-count').text(parseInt($('#comment-count').text()) + 1);
+            });
+        }
+
+        function deleteComment(id) {
+            console.log(id);
+            axios.delete('/comment/' + id).then((response) => {
+                $("#comment--" + id).remove();
+                $('#comment-count').text(parseInt($('#comment-count').text()) - 1);
             });
         }
     </script>
