@@ -41,7 +41,7 @@
             });
             renderComment(story.id);
     }"
-    x-on:close.stop="show = false"
+    x-on:close.stop="show = false; $('#source_video').attr('src', '');"
     x-on:keydown.escape.window="show = false"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
