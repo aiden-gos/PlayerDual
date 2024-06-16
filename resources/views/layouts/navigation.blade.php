@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white shadow-md shadow-gray-950/10 backdrop-blur-3xl z-[100]">
+<nav x-data="{ open: false }" class="bg-white/90 shadow-md shadow-gray-950/10 backdrop-blur-3xl z-[100]">
     <!-- Primary Navigation Menu -->
     <div class=" ">
         <div class="flex justify-between h-16">
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="hidden sm:-my-px sm:ml-5 sm:flex">
-                    <x-nav-link :href="route('stories')">
+                    <x-nav-link :href="route('stories')" :active="request()->routeIs('stories')">
                         <div class="bg-neutral-300 rounded-full w-12 h-12 flex justify-center items-center">
                             <svg fill="#000000" height="25" width="25" version="1.1" id="Capa_1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

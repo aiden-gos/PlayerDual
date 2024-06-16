@@ -16,7 +16,7 @@ class HomeController extends Controller
         $hot_user = User::query()->orderBy("price", "DESC")->limit(15)->get();
         $games = Game::all();
         $stories = Story::where('status', 'open')->orderBy('created_at', 'desc')->take(10)->get();
-        return view('home', [
+        return view('2home', [
             'vip_user' => $vip_user,
             'hot_user' => $hot_user,
             'games' => $games,
@@ -52,6 +52,21 @@ class HomeController extends Controller
         }
 
         $reslut = $user->limit(20)->get();
+        return response()->json($reslut, 200);
+    }
+
+    public function filterGame(Request $request)
+    {
+        $user = User::query();
+
+        if (!empty($request->route("game"))) {
+            $gameId = $request->route("game");
+            $user->whereHas('games', function ($query) use ($gameId) {
+                $query->where('game_id', $gameId);
+            });
+        }
+
+        $reslut = $user->paginate(20);
         return response()->json($reslut, 200);
     }
 }
