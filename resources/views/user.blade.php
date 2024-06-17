@@ -68,15 +68,15 @@
                     <div class="flex flex-row gap-2">
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Followers</div>
-                            <div class="flex flex-col text-[14px] text-orange-600 items-center">57 follows</div>
+                            <div class="flex flex-col text-[14px] text-orange-600 items-center">{{$user->follower_count}} follows</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Total Hire</div>
-                            <div class="flex flex-col text-[14px] text-orange-600 items-center">2394 h</div>
+                            <div class="flex flex-col text-[14px] text-orange-600 items-center">{{$user->total_rental_hours}} h</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Percent Complete</div>
-                            <div class="flex flex-col text-[14px] text-orange-600 items-center">96.22%</div>
+                            <div class="flex flex-col text-[14px] text-orange-600 items-center">{{$user->completed_orders_percentage}}%</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Devices</div>
@@ -85,11 +85,11 @@
                     </div>
 
                     <div class="flex flex-row gap-2 flex-wrap py-5">
-                        <div class="bg-black/70 text-white p-2 rounded-md">Order</div>
-                        <div class="bg-black/70 text-white p-2 rounded-md">OrderOrder</div>
-                        <div class="bg-black/70 text-white p-2 rounded-md">OrderOrder</div>
-                        <div class="bg-black/70 text-white p-2 rounded-md">Order</div>
-                        <div class="bg-black/70 text-white p-2 rounded-md">OrderOrderOrderOrder</div>
+                        @forelse ($user->games as $item)
+                        <div class="bg-black/70 text-white p-2 rounded-md">{{$item->name}}</div>
+                        @empty
+
+                        @endforelse
                     </div>
                 </div>
 
