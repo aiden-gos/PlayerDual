@@ -48,7 +48,7 @@ class UserCrudController extends CrudController
         CRUD::column('price');
         CRUD::column('sex');
         CRUD::column('role_id');
-        CRUD::column('avatar');
+        CRUD::column('avatar')->type('image');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
