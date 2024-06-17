@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 
@@ -41,6 +42,9 @@ class User extends Authenticatable
         'remember_token'
     ];
 
+    protected $with = ['games'];
+    protected $appends = ['follower_count', 'total_rental_hours', 'completed_orders_percentage'];
+
     /**
      * The attributes that should be cast.
      *
@@ -71,12 +75,32 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Game::class);
     }
-    public function ordering()
+    public function ordered()
     {
         return $this->belongsToMany(User::class, 'orders', 'ordering_user_id', 'ordered_user_id');
     }
-    public function ordered()
+    public function ordering()
     {
         return $this->belongsToMany(User::class, 'orders', 'ordered_user_id', 'ordering_user_id');
+    }
+    public function getFollowerCountAttribute()
+    {
+        return $this->followers()->count();
+    }
+    public function getTotalRentalHoursAttribute()
+    {
+        return $this->ordered()->sum('duration');
+    }
+    public function getCompletedOrdersPercentageAttribute()
+    {
+        $totalOrders = $this->ordered()->count();
+
+        $completedOrders = $this->ordered()->where('orders.status', 'completed')->count();
+
+        if ($totalOrders === 0) {
+            return 0;
+        }
+
+        return ($completedOrders / $totalOrders) * 100;
     }
 }
