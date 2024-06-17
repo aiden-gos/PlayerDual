@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\RoleRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class UserCrudController
+ * Class RoleCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class UserCrudController extends CrudController
+class RoleCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class UserCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\User::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
-        CRUD::setEntityNameStrings('user', 'users');
+        CRUD::setModel(\App\Models\Role::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/role');
+        CRUD::setEntityNameStrings('role', 'roles');
     }
 
     /**
@@ -40,15 +40,6 @@ class UserCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('name');
-        CRUD::column('email');
-        // CRUD::column('password');
-        CRUD::column('status');
-        // CRUD::column('balance');
-        CRUD::column('country');
-        CRUD::column('price');
-        CRUD::column('sex');
-        CRUD::column('role_id');
-        CRUD::column('avatar');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -65,18 +56,9 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
+        CRUD::setValidation(RoleRequest::class);
 
         CRUD::field('name');
-        CRUD::field('email');
-        // CRUD::field('password');
-        CRUD::field('status');
-        // CRUD::field('balance');
-        CRUD::field('country');
-        CRUD::field('price');
-        CRUD::field('sex');
-        CRUD::field('role_id');
-        CRUD::field('avatar');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

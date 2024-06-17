@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\OrderRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class UserCrudController
+ * Class OrderCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class UserCrudController extends CrudController
+class OrderCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class UserCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\User::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
-        CRUD::setEntityNameStrings('user', 'users');
+        CRUD::setModel(\App\Models\Order::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/order');
+        CRUD::setEntityNameStrings('order', 'orders');
     }
 
     /**
@@ -39,16 +39,15 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name');
-        CRUD::column('email');
-        // CRUD::column('password');
+        CRUD::column('ordering_user_id');
+        CRUD::column('ordered_user_id');
+        CRUD::column('message');
         CRUD::column('status');
-        // CRUD::column('balance');
-        CRUD::column('country');
         CRUD::column('price');
-        CRUD::column('sex');
-        CRUD::column('role_id');
-        CRUD::column('avatar');
+        CRUD::column('duration');
+        CRUD::column('total_price');
+        CRUD::column('start_at');
+        CRUD::column('end_at');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -65,18 +64,17 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
+        CRUD::setValidation(OrderRequest::class);
 
-        CRUD::field('name');
-        CRUD::field('email');
-        // CRUD::field('password');
+        // CRUD::field('ordering_user_id');
+        // CRUD::field('ordered_user_id');
+        CRUD::field('message');
         CRUD::field('status');
-        // CRUD::field('balance');
-        CRUD::field('country');
         CRUD::field('price');
-        CRUD::field('sex');
-        CRUD::field('role_id');
-        CRUD::field('avatar');
+        CRUD::field('duration');
+        CRUD::field('total_price');
+        CRUD::field('start_at');
+        CRUD::field('end_at');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    use CrudTrait;
     use HasFactory;
 
     protected $fillable = [
@@ -20,4 +22,14 @@ class Order extends Model
         'start_at',
         'end_at'
     ];
+
+    public function ordering_user()
+    {
+        return $this->belongsTo(User::class, 'ordering_user_id');
+    }
+
+    public function ordered_user()
+    {
+        return $this->belongsTo(User::class, 'ordered_user_id');
+    }
 }
