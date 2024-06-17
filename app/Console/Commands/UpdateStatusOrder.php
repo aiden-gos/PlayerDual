@@ -30,8 +30,8 @@ class UpdateStatusOrder extends Command
     public function handle()
     {
         $orders = Order::where('status', 'accepted')
-        ->whereRaw('end_at <= NOW()')
-        ->get();
+            ->whereRaw('end_at <= NOW()')
+            ->get();
         // Update status to 'completed'
         foreach ($orders as $order) {
             $order->update(['status' => 'completed']);
@@ -39,27 +39,27 @@ class UpdateStatusOrder extends Command
         }
 
         $orders = Order::where('status', 'pre-ordered')
-        ->whereRaw('start_at <= NOW()')
-        ->get();
-        // Update status to 'completed'
+            ->whereRaw('start_at <= NOW()')
+            ->get();
+        // Update status to 'accepted'
         foreach ($orders as $order) {
             $order->update(['status' => 'accepted']);
             Log::info('Order ' . $order->id . ' has been accepted(from pre-ordered)');
         }
 
         $orders = Order::where('status', 'pending')
-        ->whereRaw('DATE_ADD(updated_at, INTERVAL 5 MINUTE) <= NOW()')
-        ->get();
-        // Update status to 'completed'
+            ->whereRaw('DATE_ADD(updated_at, INTERVAL 10 MINUTE) <= NOW()')
+            ->get();
+        // Update status to 'rejected'
         foreach ($orders as $order) {
             $order->update(['status' => 'rejected']);
             Log::info('Order ' . $order->id . ' has been rejected');
         }
 
         $orders = Order::where('status', 'pre-ordering')
-        ->whereRaw('DATE_ADD(updated_at, INTERVAL 5 MINUTE) <= NOW()')
-        ->get();
-        // Update status to 'completed'
+            ->whereRaw('DATE_ADD(updated_at, INTERVAL 10 MINUTE) <= NOW()')
+            ->get();
+        // Update status to 'rejected'
         foreach ($orders as $order) {
             $order->update(['status' => 'rejected']);
             Log::info('Order ' . $order->id . ' has been rejected');

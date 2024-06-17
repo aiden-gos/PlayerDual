@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Notifications\ActionNotify;
 use App\Notifications\RentNotify;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PreOrderController extends Controller
@@ -49,6 +50,7 @@ class PreOrderController extends Controller
 
     public function acceptRent(Request $request)
     {
+        DB::beginTransaction();
         try {
 
             $id = $request->input('id');
@@ -74,9 +76,13 @@ class PreOrderController extends Controller
             $user = User::find(["id" => $order->ordering_user_id])->first();
 
             $user->update(['balance' => $user->balance - $order->total_price]);
+            User::find(["id" => $order->ordered_user_id])->first()
+                ->update(['balance' => $user->balance + $order->total_price]);
 
             event(new EventActionNotify($order->ordering_user_id . '-pre-order-request', ['order' => $order]));
+            DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th);
         }
         return redirect()->back();
@@ -84,6 +90,7 @@ class PreOrderController extends Controller
 
     public function rejectRent(Request $request)
     {
+        DB::beginTransaction();
         try {
             $id = $request->input('id');
             $order = Order::find(['id' => $id])->first();
@@ -93,7 +100,10 @@ class PreOrderController extends Controller
             ]);
 
             event(new EventActionNotify($order->ordering_user_id . '-pre-order-request', ['order' => $order]));
+
+            DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th);
         }
         return redirect()->back();
@@ -101,16 +111,30 @@ class PreOrderController extends Controller
 
     public function endRent(Request $request)
     {
+        DB::beginTransaction();
         try {
             $id = $request->input('id');
             $order = Order::find(['id' => $id])->first();
+
+            if ($order && $order->start_at < date('Y-m-d H:i:s', strtotime("+30 minutes"))) {
+                return redirect()->back();
+            }
 
             $order->update([
                 'status' => 'completed'
             ]);
 
+            $user = User::find(["id" => $order->ordered_user_id])->first();
+
+            $user->update(['balance' => $user->balance - $order->total_price]);
+            User::find(["id" => $order->ordering_user_id])->first()
+                ->update(['balance' => $user->balance + $order->total_price]);
+
             event(new EventActionNotify($order->ordered_user_id . '-pre-order-request', ['order' => $order]));
+
+            DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th);
         }
         return redirect()->back();
