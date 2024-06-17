@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="flex flex-row items-center mt-5 gap-2">
-            <div><img src="{{ isset($story->user->avatar) ? $story->user->avatar : "" }}" class="h-10 w-10 rounded-[50%]" alt="PD"></div>
+            <div><img src="{{ isset($story->user->avatar) ? $story->user->avatar : "" }}" class="h-10 w-10 rounded-full" alt="PD"></div>
             <p class="font-bold">{{ isset($story->user->name) ? $story->user->name : "" }}</p>
         </div>
     </button>

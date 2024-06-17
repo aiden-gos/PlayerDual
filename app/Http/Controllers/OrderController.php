@@ -20,11 +20,11 @@ class OrderController extends Controller
         $durationTime = $request->input('time');
         $msg = $request->input('msg');
 
-        $user_ordered = User::find(['id'=>$user_id])->first();
+        $user_ordered = User::find(['id' => $user_id])->first();
 
         $cost = $user_ordered->price * $durationTime;
 
-        if(self::checkUserBalance($request, $user_ordered, $cost)){
+        if (self::checkUserBalance($request, $user_ordered, $cost)) {
             try {
                 $order = Order::create([
                     'ordering_user_id' => $request->user()->id,
@@ -41,7 +41,7 @@ class OrderController extends Controller
                 //Realtime notification
 
                 event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
-                event(new EventActionNotify($user_ordered->id.'-rent', ['order' => $order, 'user' => $request->user()]));
+                event(new EventActionNotify($user_ordered->id . '-rent', ['order' => $order, 'user' => $request->user()]));
             } catch (\Throwable $th) {
                 Log::error($th);
             }
@@ -54,7 +54,7 @@ class OrderController extends Controller
         $user_id = $request->input('user_id');
         $durationTime = $request->input('time');
 
-        $user_ordered = User::find(['id'=>$user_id])->first();
+        $user_ordered = User::find(['id' => $user_id])->first();
 
         try {
             $order = Order::create([
@@ -71,7 +71,7 @@ class OrderController extends Controller
             //Realtime notification
 
             event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
-            event(new EventActionNotify($user_ordered->id.'-rent', ['order' => $order, 'user' => $request->user()]));
+            event(new EventActionNotify($user_ordered->id . '-rent', ['order' => $order, 'user' => $request->user()]));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -84,20 +84,32 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $id = $request->input('id');
-            $order = Order::find(['id'=>$id])->first();
-
+            $order = Order::find(['id' => $id])->first();
             $order->update([
-                'status'=> 'accepted',
+                'status' => 'accepted',
                 'start_at' => now(),
                 'end_at' => now()->addHours($order->duration)
             ]);
+
+            $orderRJ = Order::where('ordered_user_id', $order->ordered_user_id)
+                ->where('orders.status', 'pending');
+
+            $orderRJ->update([
+                'status' => 'rejected'
+            ]);
+
+
+
+            foreach ($orderRJ->get() as $order) {
+                event(new EventActionNotify($order->ordering_user_id . '-rent-request', ['order' => $order]));
+            }
 
             $user = User::find(["id" => $order->ordering_user_id])->first();
 
             $user->update(['balance' => $user->balance - $order->total_price]);
             DB::commit();
 
-            event(new EventActionNotify($order->ordering_user_id.'-rent-request', ['order' => $order]));
+            event(new EventActionNotify($order->ordering_user_id . '-rent-request', ['order' => $order]));
         } catch (\Throwable $th) {
             DB::rollback();
             Log::error($th);
@@ -109,14 +121,13 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            $order = Order::find(['id'=>$id])->first();
+            $order = Order::find(['id' => $id])->first();
 
             $order->update([
-                'status'=> 'rejected'
+                'status' => 'rejected'
             ]);
 
-            event(new EventActionNotify($order->ordering_user_id.'-rent-request', ['order' => $order]));
-
+            event(new EventActionNotify($order->ordering_user_id . '-rent-request', ['order' => $order]));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -127,15 +138,14 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            $order = Order::find(['id'=>$id])->first();
+            $order = Order::find(['id' => $id])->first();
 
             $order->update([
-                'status'=> 'completed',
+                'status' => 'completed',
                 'end_at' => now()
             ]);
 
-            event(new EventActionNotify($order->ordered_user_id.'-rent-request', ['order' => $order]));
-
+            event(new EventActionNotify($order->ordered_user_id . '-rent-request', ['order' => $order]));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -145,10 +155,9 @@ class OrderController extends Controller
     private function checkUserBalance(Request $request, $user_ordered, $cost)
     {
 
-        if($request->user()->balance >= $cost){
+        if ($request->user()->balance >= $cost) {
             return true;
         }
         return false;
     }
-
 }

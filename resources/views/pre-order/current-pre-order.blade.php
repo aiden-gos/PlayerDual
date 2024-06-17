@@ -32,7 +32,7 @@
     <div class="backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
         @if($renting && !$rented)
             <div class="pt-2">
-                <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
+                <img id="avatar-rent" class="rounded-full" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
             </div>
             <div class="flex flex-row gap-5 justify-between w-full">
                 <div>
@@ -56,7 +56,7 @@
 
         @if($rented && !$renting)
         <div class="pt-2">
-            <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$rented->avatar}}" alt="ps" class="avt-1-15 avt-img">
+            <img id="avatar-rent" class="rounded-full" width="70" height="70" src="{{$rented->avatar}}" alt="ps" class="avt-1-15 avt-img">
         </div>
         <div class="flex flex-row gap-5">
             <div>

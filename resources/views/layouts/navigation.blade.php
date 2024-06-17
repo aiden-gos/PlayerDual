@@ -145,7 +145,7 @@
                                     class="inline-flex items-center px-3 py-2 text-sm font-mdium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                                     {{-- <div>{{ Auth::user()->name }}</div> --}}
                                     <div class="ml-1">
-                                        <img class="rounded-[50%] object-cover w-10 h-10"
+                                        <img class="rounded-full object-cover w-10 h-10"
                                             src="{{ Auth::user()->avatar }}" />
                                     </div>
                                     <div class="ml-1">

@@ -36,14 +36,13 @@
     <div class="backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
         @if($renting && !$rented)
             <div class="pt-2">
-                <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
+                <img id="avatar-rent" class="rounded-full" width="70" height="70" src="{{$renting->avatar ?? ""}}" alt="ps" class="avt-1-15 avt-img">
             </div>
             <div class="flex flex-row gap-5">
                 <div>
                     <div id='name-rent' class="font-bold">{{$renting->name}}</div>
                     <div id='cost-rent'>${{$renting->total_price}}</div>
                     <div i='time-rent'>{{$renting->duration}} hour</div>
-
                 </div>
                 <div id="countdown" class="w-20 text-center content-center">00:00:00</div>
                 <div class="flex justify-center items-center">
@@ -60,7 +59,7 @@
 
         @if($rented && !$renting)
         <div class="pt-2">
-            <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$rented->avatar}}" alt="ps" class="avt-1-15 avt-img">
+            <img id="avatar-rent" class="rounded-full" width="70" height="70" src="{{$rented->avatar}}" alt="ps" class="avt-1-15 avt-img">
         </div>
         <div class="flex flex-row gap-5">
             <div>
@@ -74,7 +73,7 @@
 
         @if($renting && $rented)
             <div class="pt-2">
-                <img id="avatar-rent" class="rounded-[50%]" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
+                <img id="avatar-rent" class="rounded-full" width="70" height="70" src="{{$renting->avatar}}" alt="ps" class="avt-1-15 avt-img">
             </div>
             <div class="flex flex-row gap-5">
                 <div>

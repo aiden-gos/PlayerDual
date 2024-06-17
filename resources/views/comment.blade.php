@@ -1,6 +1,6 @@
 <div class='w-full flex flex-row gap-2 p-5'>
     <a href="/user/{{ $item->author->id }}">
-        <div class="pt-2"><img class="rounded-[50%]" width="50" height="50" src="{{ $item->author->avatar }}"
+        <div class="pt-2"><img class="rounded-full" width="50" height="50" src="{{ $item->author->avatar }}"
                 class="avt-1-15 avt-img" alt="PD"></div>
     </a>
     <div class="flex flex-row justify-between w-full p-2 items-center">

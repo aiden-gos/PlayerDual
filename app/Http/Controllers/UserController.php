@@ -40,18 +40,21 @@ class UserController extends Controller
                 ->where('followed_user_id', $id)
                 ->first();
 
-            $orderConflict = Order::where('status', '<>', 'completed')->where('status', '<>', 'rejected')->where(function ($query) use ($request, $user) {
+            $orderConflict = Order::where('status', '=', 'accepted')->where(function ($query) use ($request, $user) {
                 $query->where('ordering_user_id', $request->user()->id)
                     ->orWhere('ordered_user_id', $request->user()->id)
                     ->orWhere('ordering_user_id', $user->id)
                     ->orWhere('ordered_user_id', $user->id);
+            })->orWhere(function ($query) use ($request, $user) {
+                $query->where('ordering_user_id', $request->user()->id)
+                    ->where('status', '=', 'pending');
             })
-                ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
                 ->first();
 
             $userStatus = Order::where('status', '<>', 'completed')
                 ->where('status', '<>', 'rejected')
                 ->where('status', '<>', 'pre-ordering')
+                ->where('status', '<>', 'pending')
                 ->where(function ($query) use ($request, $user) {
                     $query->where('ordering_user_id', $user->id)
                         ->orWhere('ordered_user_id', $user->id);
@@ -62,10 +65,13 @@ class UserController extends Controller
             $preOrderStatus = Order::where(function ($query) use ($request, $user) {
                 $query->where('ordering_user_id', $request->user()->id)->where('status', '=', 'accepted')
                     ->orWhere('ordered_user_id', $request->user()->id)->where('status', '=', 'accepted')
-                    ->orWhere('ordering_user_id', $user->id)->where('status', '=', 'pending')
-                    ->orWhere('ordered_user_id', $user->id)->where('status', '=', 'pending')
-                    ->orWhere('ordering_user_id', $user->id)->where('status', '=', 'pre-ordering')
-                    ->orWhere('ordered_user_id', $user->id)->where('status', '=', 'pre-ordering')
+
+                    ->orWhere('ordering_user_id', $request->user()->id)->where('status', '=', 'pending')
+                    ->orWhere('ordered_user_id', $request->user()->id)->where('status', '=', 'pending')
+
+                    ->orWhere('ordering_user_id', $request->user()->id)->where('status', '=', 'pre-ordering')
+                    ->orWhere('ordered_user_id', $request->user()->id)->where('status', '=', 'pre-ordering')
+
                     ->orWhere('ordering_user_id', $user->id)->where('status', '=', 'pre-ordered')
                     ->orWhere('ordered_user_id', $user->id)->where('status', '=', 'pre-ordered');
             })
