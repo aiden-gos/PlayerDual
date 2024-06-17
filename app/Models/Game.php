@@ -13,6 +13,7 @@ class Game extends Model
 
     protected $fillable = [
         'name',
+        'img'
     ];
 
     public function users()

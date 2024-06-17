@@ -40,6 +40,7 @@ class GameCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('name');
+        CRUD::column('img')->type('image');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -59,6 +60,8 @@ class GameCrudController extends CrudController
         CRUD::setValidation(GameRequest::class);
 
         CRUD::field('name');
+        CRUD::field('img');
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

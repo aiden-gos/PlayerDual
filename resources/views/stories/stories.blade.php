@@ -17,13 +17,13 @@
             @foreach ($top_stories as $story)
                 <button class="story" href="" x-data=""
                     x-on:click.prevent='$dispatch("open-modal",{name : "story-detail", story: {
-                        id: "{{$story->id}}",
-                        video_link: "{{$story->video_link}}",
-                        view: "{{$story->view}}",
-                        content: "{{$story->content}}",
+                        id: "{{$story->id ?? ""}}",
+                        video_link: "{{$story->video_link  ?? ""}}",
+                        view: "{{$story->view  ?? ""}}",
+                        content: "{{$story->content  ?? ""}}",
                         like: {{$story->like}},
-                        is_liked_by_user: "{{$story->is_liked_by_user}}",
-                        comment_count: "{{$story->comment_count}}",
+                        is_liked_by_user: "{{$story->is_liked_by_user  ?? ""}}",
+                        comment_count: "{{$story->comment_count  ?? ""}}",
                         user: {
                             id: "{{isset($story->user->id) ? $story->user->id : ''}}",
                             name: "{{isset($story->user->name) ? $story->user->name : ''}}",
@@ -32,9 +32,9 @@
                     }})'>
                     <input type="hidden" value="{{ $story->id }}">
                     <div class="flex flex-row gap-4">
-                        <img src="{{ $story->user->avatar }}" alt="profile" class="w-12 h-12 rounded-full">
+                        <img src="{{ $story->user->avatar ?? "" }}" alt="profile" class="w-12 h-12 rounded-full">
                         <div class="flex items-center">
-                            <p class="text-sm font-bold text-start">{{ $story->user->name }}</p>
+                            <p class="text-sm font-bold text-start">{{ $story->user->name ?? "" }}</p>
                         </div>
                     </div>
                 </button>

@@ -8,7 +8,7 @@
                     <button id="{{ $item->id }}" name="{{ $item->name }}"
                         class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
                         <img class="w-8 h-8 rounded-md"
-                            src="https://kenh14cdn.com/thumb_w/660/2020/4/4/photo-1-1586012486485599767055.jpg"
+                            src="{{$item->img}}"
                             alt="">
                         <div> {{ $item->name }} </div>
                     </button>
@@ -61,9 +61,9 @@
                                         </div>
                                     </div>
                                     <div class="p-2 flex flex-row gap-2 items-center">
-                                        <img class="h-8 w-8 rounded-full" src="{{ $story->user->avatar }}"
+                                        <img class="h-8 w-8 rounded-full" src="{{ isset($story->user->avatar) ? $story->user->avatar : "" }}"
                                             alt="">
-                                        <span class="text-xs">{{ $story->user->name }}</span>
+                                        <span class="text-xs">{{ isset($story->user->name) ? $story->user->name : "" }}</span>
                                     </div>
                                 </button>
                             @endforeach
