@@ -20,7 +20,7 @@
                     <div class="flex flex-row justify-between py-2">
                         <div class="flex flex-row gap-5 items-center">
                             <div class="w-5">#${index + 01}</div>
-                            <img class="rounded-[50%]" src="${element.avatar}" alt="" height="50" width="50">
+                            <img class="rounded-full" src="${element.avatar}" alt="" height="50" width="50">
                             <div>${element.name}</div>
                         </div>
                         <div>$${element.income}</div>

@@ -174,7 +174,7 @@
                         <div class="flex flex-row justify-between px-[10%] py-2">
                             <div class="flex flex-row gap-5 items-center">
                                 <div class="w-5">#{{ $loop->iteration }}</div>
-                                <img class="rounded-[50%]" src="{{ $ele->avatar }}" alt="" height="50"
+                                <img class="rounded-full" src="{{ $ele->avatar }}" alt="" height="50"
                                     width="50">
                                 <div>{{ $ele->name }}</div>
                             </div>

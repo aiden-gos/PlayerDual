@@ -18,7 +18,7 @@
         <br><hr><br>
         <div class="flex flex-row gap-5 items-center">
             <div class="pt-2">
-                <img id="avatar-pre-order" class="rounded-[50%]" width="100" height="100" class="avt-1-15 avt-img">
+                <img id="avatar-pre-order" class="rounded-full" width="100" height="100" class="avt-1-15 avt-img">
             </div>
             <div>
                 <div>

@@ -20,7 +20,7 @@
                     style="background-image: url('https://images.unsplash.com/photo-1577655197620-704858b270ac?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&q=144')">
                 <div class="bg-gray-900 bg-opacity-50 flex items-start justify- h-full">
                     <div class="max-w-xl flex flex-row gap-2 p-2">
-                        <img src="https://res.cloudinary.com/dsicdcjye/image/upload/v1716969657/yf5ogadlqfygscsnmsco.jpg" class="w-8 h-8 rounded-[50%]">
+                        <img src="https://res.cloudinary.com/dsicdcjye/image/upload/v1716969657/yf5ogadlqfygscsnmsco.jpg" class="w-8 h-8 rounded-full">
                         <p class="mt-2 text-gray-400">Player name</p>
                     </div>
                 </div>
