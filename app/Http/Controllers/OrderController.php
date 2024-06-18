@@ -20,6 +20,10 @@ class OrderController extends Controller
         $durationTime = $request->input('time');
         $msg = $request->input('msg');
 
+        if (empty($user_id) || empty($durationTime)) {
+            return redirect()->back();
+        }
+
         $user_ordered = User::find(['id' => $user_id])->first();
 
         $cost = $user_ordered->price * $durationTime;
@@ -54,6 +58,10 @@ class OrderController extends Controller
         $user_id = $request->input('user_id');
         $durationTime = $request->input('time');
 
+        if (empty($user_id) || empty($durationTime)) {
+            return redirect()->back();
+        }
+
         $user_ordered = User::find(['id' => $user_id])->first();
 
         try {
@@ -66,12 +74,6 @@ class OrderController extends Controller
                 'total_price' => 0,
                 'message' => 'off'
             ]);
-
-            $user_ordered->notify(new ActionNotify([$request->user()->name . " rent you now"]));
-            //Realtime notification
-
-            event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
-            event(new EventActionNotify($user_ordered->id . '-rent', ['order' => $order, 'user' => $request->user()]));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -84,32 +86,35 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $id = $request->input('id');
-            $order = Order::find(['id' => $id])->first();
-            $order->update([
-                'status' => 'accepted',
-                'start_at' => now(),
-                'end_at' => now()->addHours($order->duration)
-            ]);
+            if (!empty($id)) {
 
-            $orderRJ = Order::where('ordered_user_id', $order->ordered_user_id)
-                ->where('orders.status', 'pending');
+                $order = Order::find(['id' => $id])->first();
+                $order->update([
+                    'status' => 'accepted',
+                    'start_at' => now(),
+                    'end_at' => now()->addHours($order->duration)
+                ]);
 
-            $orderRJ->update([
-                'status' => 'rejected'
-            ]);
+                $orderRJ = Order::where('ordered_user_id', $order->ordered_user_id)
+                    ->where('orders.status', 'pending');
 
+                $orderRJ->update([
+                    'status' => 'rejected'
+                ]);
 
+                foreach ($orderRJ->get() as $order) {
+                    event(new EventActionNotify($order->ordering_user_id . '-rent-request', ['order' => $order]));
+                }
 
-            foreach ($orderRJ->get() as $order) {
+                $user = User::find(["id" => $order->ordering_user_id])->first();
+                $user->update(['balance' => $user->balance - $order->total_price]);
+
+                $user_ordered = User::find(["id" => $order->ordered_user_id])->first();
+                $user_ordered->update(['balance' => $user_ordered->balance + $order->total_price]);
+
+                DB::commit();
                 event(new EventActionNotify($order->ordering_user_id . '-rent-request', ['order' => $order]));
             }
-
-            $user = User::find(["id" => $order->ordering_user_id])->first();
-
-            $user->update(['balance' => $user->balance - $order->total_price]);
-            DB::commit();
-
-            event(new EventActionNotify($order->ordering_user_id . '-rent-request', ['order' => $order]));
         } catch (\Throwable $th) {
             DB::rollback();
             Log::error($th);
@@ -121,8 +126,8 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            $order = Order::find(['id' => $id])->first();
 
+            $order = Order::find(['id' => $id])->first();
             $order->update([
                 'status' => 'rejected'
             ]);
@@ -138,14 +143,17 @@ class OrderController extends Controller
     {
         try {
             $id = $request->input('id');
-            $order = Order::find(['id' => $id])->first();
+            if (!empty($id)) {
 
-            $order->update([
-                'status' => 'completed',
-                'end_at' => now()
-            ]);
+                $order = Order::find(['id' => $id])->first();
 
-            event(new EventActionNotify($order->ordered_user_id . '-rent-request', ['order' => $order]));
+                $order->update([
+                    'status' => 'completed',
+                    'end_at' => now()
+                ]);
+
+                event(new EventActionNotify($order->ordered_user_id . '-rent-request', ['order' => $order]));
+            }
         } catch (\Throwable $th) {
             Log::error($th);
         }
