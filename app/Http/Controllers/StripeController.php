@@ -13,7 +13,7 @@ class StripeController extends Controller
     public function paymentMethod(Request $request)
     {
         $stripeCustomer = $request->user()->createOrGetStripeCustomer();
-        return $request->user()->redirectToBillingPortal( route('profile.payment'));
+        return $request->user()->redirectToBillingPortal(route('profile.payment'));
     }
 
     public function checkout(Request $request)
@@ -21,24 +21,25 @@ class StripeController extends Controller
         $money = $request->input('money') * 100;
         $paymentMethod = $request->user()->defaultPaymentMethod();
 
-        if(empty($paymentMethod)){
+        if (empty($paymentMethod)) {
             // return Redirect::route("profile.edit")->with('status', 'checkout-fail-1');
-            return $request->user()->redirectToBillingPortal( route('profile.payment'));
-        }else if($money <= 0) {
+            $request->user()->createOrGetStripeCustomer();
+            return $request->user()->redirectToBillingPortal(route('profile.payment'));
+        } else if ($money <= 0) {
             // return Redirect::route("profile.edit")->with('status', 'checkout-fail-2');
-            return $request->user()->redirectToBillingPortal( route('profile.payment'));
+            return $request->user()->redirectToBillingPortal(route('profile.payment'));
         }
 
         $user =  $request->user();
         try {
             $user->invoiceFor('Checkout', $money);
         } catch (\Throwable $th) {
-            return $request->user()->redirectToBillingPortal( route('profile.payment'));
+            return $request->user()->redirectToBillingPortal(route('profile.payment'));
             $strip = new StripeClient();
             $strip->invoces->voidInvoice('id', []);
         }
 
-        $user->update(['balance'=> ($user->balance + ($money/100))]);
+        $user->update(['balance' => ($user->balance + ($money / 100))]);
         return Redirect::route("profile.edit")->with('status', 'checkout-ok');
     }
 
@@ -50,13 +51,15 @@ class StripeController extends Controller
 
         try {
             $event = Webhook::constructEvent(
-                $payload, $sig_header, env('STRIPE_WEBHOOK_SECRET')
+                $payload,
+                $sig_header,
+                env('STRIPE_WEBHOOK_SECRET')
             );
-        } catch(\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             // Invalid payload
             http_response_code(400);
             exit();
-        } catch(\Stripe\Exception\SignatureVerificationException $e) {
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
             http_response_code(400);
             exit();
