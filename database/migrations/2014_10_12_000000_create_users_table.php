@@ -25,9 +25,8 @@ return new class extends Migration
             $table->boolean('sex')->nullable();
             $table->string('avatar')->nullable()->default(env("DEFAULT_IMAGE"));
             $table->double('price')->default(0);
-            $table->string('card_number')->nullable();
-            $table->string('card_expire')->nullable();
-            $table->string('card_cvv')->nullable();
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
             $table->rememberToken();
             $table->timestamps();

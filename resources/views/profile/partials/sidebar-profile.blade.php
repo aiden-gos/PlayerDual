@@ -1,4 +1,4 @@
-<div id="side-bar" class="bg-white fixed h-screen w-48 shadow flex flex-col gap-4 p-4 pt-20">
+<div id="side-bar" class="bg-gray-100 fixed h-screen w-60 shadow flex flex-col gap-4 p-4 pt-20">
     <div class="text-xl">
         {{ __('Profile setting') }}
     </div>

@@ -32,42 +32,6 @@
             @endif
         </div>
     </form>
-    <div>
-        Balance: ${{Auth::user()->balance}}
-        <form method="post" action="{{ route('payment.checkout') }}" class="mt-6 space-y-6">
-            Type the number
-            <x-text-input type="number" name="money"/>
-            <x-primary-button>{{ __('Checkout') }}</x-primary-button>
-            @if (session('status') === 'checkout-ok')
-            <p
-                x-data="{ show: true }"
-                x-show="show"
-                x-transition
-                x-init="setTimeout(() => show = false, 2000)"
-                class="text-sm text-gray-600"
-            >{{ __('Checkout Success.') }}</p>
-            @endif
-
-            @if (session('status') === 'checkout-fail-1')
-            <p
-                x-data="{ show: true }"
-                x-show="show"
-                x-transition
-                x-init="setTimeout(() => show = false, 2000)"
-                class="text-sm text-gray-600"
-            >{{ __('Please add payment method.') }}</p>
-            @endif
-            @if (session('status') === 'checkout-fail-2')
-            <p
-                x-data="{ show: true }"
-                x-show="show"
-                x-transition
-                x-init="setTimeout(() => show = false, 2000)"
-                class="text-sm text-gray-600"
-            >{{ __('Input > 0.') }}</p>
-            @endif
-        <form>
-    </div>
 </div>
 </section>
 
@@ -75,8 +39,10 @@
 import * as FilePond from "{{Vite::asset('node_modules/filepond/dist/filepond.esm.js')}}";
 import FilePondPluginFilePoster from "{{Vite::asset('node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js')}}";
 import FilePondPluginImageEditor from "{{Vite::asset('node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js')}}";
+// import FilePondPluginImagePreview from "{{ Vite::asset('/node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js') }}";
 
 FilePond.registerPlugin(
+    // FilePondPluginImagePreview,
     FilePondPluginImageEditor,
     FilePondPluginFilePoster
 );

@@ -106,7 +106,7 @@
                 result.forEach(e => {
                     script += `<a href="/user/${e.id}" class="rounded-xl border mt-5">
                             <div>
-                                <img class="rounded-t-xl" src="${e.avatar}">
+                                <img class="rounded-t-xl h-[160px] w-full" src="${e.avatar ?? ""}">
                                 <div class="w-full flex justify-end">
                                     <span
                                         class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">$ ${e.price}/h</span>
@@ -116,7 +116,7 @@
                                 <span
                                     class="text-lg font-bold whitespace-nowrap">${e.name}</span>
                                 <br>
-                                <span class="text-gray-400">title user player</span>
+                                <span class="text-gray-400">${e.title ?? ""}</span>
                                 <div class="mt-5 flex flex-row justify-between">
                                     <div>game</div>
                                     <div class="flex flex-row items-center">
@@ -125,7 +125,7 @@
                                             <path fill="currentColor"
                                                 d="M10 1.36l1.45 4.46h4.69l-3.79 2.75 1.45 4.46-3.79-2.75-3.79 2.75 1.45-4.46-3.79-2.75h4.69z" />
                                         </svg>
-                                        4.9 (420)
+                                    ${e.average_rating ?? "0"} (${e.count_rating ?? "0"})
                                     </div>
                                 </div>
                             </div>
