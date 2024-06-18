@@ -76,8 +76,7 @@
                                 viewBox="0 0 39.75 39.75" xml:space="preserve">
                                 <g>
                                     <g>
-                                        <path
-                                            d="M17.673,21.639v10.663h-6.361c-0.275,0-0.5,0.226-0.5,0.5v5.75c0,0.273,0.225,0.5,0.5,0.5h17.125
+                                        <path d="M17.673,21.639v10.663h-6.361c-0.275,0-0.5,0.226-0.5,0.5v5.75c0,0.273,0.225,0.5,0.5,0.5h17.125
                                             c0.274,0,0.5-0.227,0.5-0.5v-5.75c0-0.274-0.226-0.5-0.5-0.5h-6.359V21.639c9.924-0.938,17.672-8.104,17.672-16.784
                                             c0-0.276-0.236-0.5-0.516-0.5h-4.313c0.127-1.08,0.201-2.125,0.201-3.158c0-0.276-0.231-0.5-0.511-0.5H5.125
                                             c-0.276,0-0.5,0.224-0.5,0.5c0,1.029,0.076,2.074,0.203,3.158H0.5c-0.276,0-0.5,0.224-0.5,0.5
@@ -145,8 +144,7 @@
                                     class="inline-flex items-center px-3 py-2 text-sm font-mdium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                                     {{-- <div>{{ Auth::user()->name }}</div> --}}
                                     <div class="ml-1">
-                                        <img class="rounded-full object-cover w-10 h-10"
-                                            src="{{ Auth::user()->avatar }}" />
+                                        <img class="rounded-full object-cover w-10 h-10" src="{{ Auth::user()->avatar }}" />
                                     </div>
                                     <div class="ml-1">
                                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -183,6 +181,23 @@
                                         </path>
                                     </svg>
                                     {{ __('Profile Setting') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link class="flex flex-row items-center gap-2 border-b" :href="route('following.list')">
+                                    <svg fill="#000000" height="28" width="28" version="1.1" id="Capa_1"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        viewBox="0 0 219.15 219.15" xml:space="preserve">
+                                        <g>
+                                            <path d="M109.575,0C49.156,0,0.001,49.155,0.001,109.574c0,60.42,49.154,109.576,109.573,109.576
+                                           c60.42,0,109.574-49.156,109.574-109.576C219.149,49.155,169.995,0,109.575,0z M109.575,204.15
+                                           c-52.148,0-94.573-42.427-94.573-94.576C15.001,57.426,57.427,15,109.575,15c52.148,0,94.574,42.426,94.574,94.574
+                                           C204.149,161.724,161.723,204.15,109.575,204.15z" />
+                                            <path
+                                                d="M166.112,108.111h-52.051V51.249c0-4.142-3.357-7.5-7.5-7.5c-4.142,0-7.5,3.358-7.5,7.5v64.362c0,4.142,3.358,7.5,7.5,7.5
+                                           h59.551c4.143,0,7.5-3.358,7.5-7.5C173.612,111.469,170.254,108.111,166.112,108.111z" />
+                                        </g>
+                                    </svg>
+                                    {{ __('History') }}
                                 </x-dropdown-link>
 
                                 <!-- Authentication -->
@@ -279,6 +294,10 @@
                     <div class="mt-3 space-y-1">
                         <x-responsive-nav-link :href="route('profile.edit')">
                             {{ __('Profile Setting') }}
+                        </x-responsive-nav-link>
+
+                        <x-responsive-nav-link :href="route('following.list')">
+                            {{ __('History') }}
                         </x-responsive-nav-link>
 
                         <!-- Authentication -->

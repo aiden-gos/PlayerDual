@@ -17,12 +17,12 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['string', 'max:255'],
-            'country'=> ['string', 'max:255'],
-            'sex'=> ['boolean'],
+            'country' => ['string', 'max:255'],
+            'sex' => ['boolean'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'card_number' => ['regex:/^\d{16}$/'],
-            'card_expire' => ['regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/'],
-            'card_cvv' => ['regex:/^\d{3,4}$/'],
+            'title' => ['string', 'max:255'],
+            'description' => ['string'],
+            'price' => ['numeric', 'min:0', 'max:100'],
         ];
     }
 }

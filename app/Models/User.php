@@ -31,7 +31,9 @@ class User extends Authenticatable
         'price',
         'sex',
         'role_id',
-        'avatar'
+        'avatar',
+        'title',
+        'description',
     ];
 
     /**
@@ -45,7 +47,7 @@ class User extends Authenticatable
     ];
 
     protected $with = ['games'];
-    protected $appends = ['follower_count', 'total_rental_hours', 'completed_orders_percentage'];
+    protected $appends = ['follower_count', 'total_rental_hours', 'completed_orders_percentage', 'average_rating', 'count_rating'];
 
     /**
      * The attributes that should be cast.
@@ -65,34 +67,52 @@ class User extends Authenticatable
     {
         return $this->hasMany(Gallery::class);
     }
+
     public function following()
     {
         return $this->belongsToMany(User::class, 'follows', 'following_user_id', 'followed_user_id');
     }
+
     public function followers()
     {
         return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'following_user_id');
     }
+
     public function games()
     {
         return $this->belongsToMany(Game::class);
     }
-    public function ordered()
+
+    public function ordering()
     {
         return $this->belongsToMany(User::class, 'orders', 'ordering_user_id', 'ordered_user_id');
     }
-    public function ordering()
+
+    public function ordered()
     {
         return $this->belongsToMany(User::class, 'orders', 'ordered_user_id', 'ordering_user_id');
     }
+
+    public function donating()
+    {
+        return $this->hasMany(Donate::class, 'donating_user_id');
+    }
+
+    public function donated()
+    {
+        return $this->hasMany(Donate::class, 'donated_user_id');
+    }
+
     public function getFollowerCountAttribute()
     {
         return $this->followers()->count();
     }
+
     public function getTotalRentalHoursAttribute()
     {
         return $this->ordered()->sum('duration');
     }
+
     public function getCompletedOrdersPercentageAttribute()
     {
         $totalOrders = $this->ordered()->count();
@@ -104,5 +124,20 @@ class User extends Authenticatable
         }
 
         return ($completedOrders / $totalOrders) * 100;
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return number_format($this->rates()->avg('star'), 1);
+    }
+
+    public function getCountRatingAttribute()
+    {
+        return $this->rates()->count();
     }
 }

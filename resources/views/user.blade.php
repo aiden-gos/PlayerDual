@@ -134,39 +134,14 @@
                     </div>
                     {{-- End Gallery --}}
 
-                    "Mình nhận chơi các game sau (Chơi được sever NA / OC / EU / Korea / Japan / PBE):" <br><br>
+                    {!! nl2br($user->description) !!}
 
-                    - LOL / ĐTCL (TFT) <br><br>
-
-                    - VALORANT<br><br>
-
-                    - NARAKA<br><br>
-
-                    🌸 Game giải trí, sinh tồn, kinh dị, bla bla:<br><br>
-
-                    - Pal World, Goose Goose Duck (zịt), Business Tour (cờ tỷ phú), Scrible it (vẽ), Agrou (ma sói),
-                    Among us, Deceit, Prop and Seek, Phasmophobia, Pummel Party, Raft, Fall Guys, Dead by Daylight, Sons
-                    Of The Forest, Green Hell, Let 4 Dead 2, Human Fall Flat, Secret Neighbor, Gartic Phone, Boo Men,
-                    Inside the Backrooms ...
-                    <br><br>
-                    (Mình có thể Down game trên Steam, Epic,.. theo yêu cầu nếu được hướng dẫn chơi ạ)<br><br>
-
-                    - Ngoài ra mình còn nhận stream phim trên Netflix và mở nhạc trong Discord nữa nhoo<br><br>
-
-                    __________________________________<br>
-                    <br>
-                    Cảm ơn mọi người đã đến đây, have a nice day 💜
                     <br><br>
                     <hr>
-                    <br><br>
-                    <iframe class="w-full" height="500"
-                        src="https://www.youtube.com/embed/womd8BFIbDY?si=gJnPguPRhBoU0CQD" title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             </div>
 
+            @if( count($top_donate) > 0)
             <div class="p-4 sm:p-8 bg-white sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
                 <div class="w-full md:px-[20%]">
                     <h1 class="text-2xl font-bold">Top donate</h1> <br>
@@ -183,6 +158,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
 
             @include('rating')
 

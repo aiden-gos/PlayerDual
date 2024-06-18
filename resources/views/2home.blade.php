@@ -7,9 +7,7 @@
                 @foreach ($games as $item)
                     <button id="{{ $item->id }}" name="{{ $item->name }}"
                         class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
-                        <img class="w-8 h-8 rounded-md"
-                            src="{{$item->img}}"
-                            alt="">
+                        <img class="w-8 h-8 rounded-md" src="{{ $item->img }}" alt="">
                         <div> {{ $item->name }} </div>
                     </button>
                 @endforeach
@@ -61,9 +59,11 @@
                                         </div>
                                     </div>
                                     <div class="p-2 flex flex-row gap-2 items-center">
-                                        <img class="h-8 w-8 rounded-full" src="{{ isset($story->user->avatar) ? $story->user->avatar : "" }}"
+                                        <img class="h-8 w-8 rounded-full"
+                                            src="{{ isset($story->user->avatar) ? $story->user->avatar : '' }}"
                                             alt="">
-                                        <span class="text-xs">{{ isset($story->user->name) ? $story->user->name : "" }}</span>
+                                        <span
+                                            class="text-xs">{{ isset($story->user->name) ? $story->user->name : '' }}</span>
                                     </div>
                                 </button>
                             @endforeach
@@ -96,7 +96,7 @@
                                     @foreach ($vip_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl" src="{{ $item->avatar }}">
+                                                <img class="rounded-t-xl h-[160px] w-full" src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
                                                         class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ $item->price }}/h</span>
@@ -104,9 +104,9 @@
                                             </div>
                                             <div class="p-2 overflow-hidden truncate">
                                                 <span
-                                                    class="text-lg font-bold whitespace-nowrap">{{ $item->name }}</span>
+                                                    class="text-lg font-bold whitespace-nowrap">{{ $item->name ?? '' }}</span>
                                                 <br>
-                                                <span class="text-gray-400">title user player</span>
+                                                <span class="text-gray-400">{{ $item->title ?? '' }}</span>
                                                 <div class="mt-5 flex flex-row justify-between">
                                                     <div>game</div>
                                                     <div class="flex flex-row items-center">
@@ -115,7 +115,8 @@
                                                             <path fill="currentColor"
                                                                 d="M10 1.36l1.45 4.46h4.69l-3.79 2.75 1.45 4.46-3.79-2.75-3.79 2.75 1.45-4.46-3.79-2.75h4.69z" />
                                                         </svg>
-                                                        4.9 (420)
+                                                        {{ $item->average_rating ?? '0' }}
+                                                        ({{ $item->count_rating ?? '0' }})
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,9 +132,9 @@
                                 <div
                                     class="w-full grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
                                     @foreach ($hot_user as $item)
-                                        <div class="rounded-xl border mt-5">
+                                        <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl" src="{{ $item->avatar }}">
+                                                <img class="rounded-t-xl h-[160px] w-full" src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
                                                         class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ $item->price }}/h</span>
@@ -141,9 +142,9 @@
                                             </div>
                                             <div class="p-2 overflow-hidden truncate">
                                                 <span
-                                                    class="text-lg font-bold whitespace-nowrap">{{ $item->name }}</span>
+                                                    class="text-lg font-bold whitespace-nowrap">{{ $item->name ?? '' }}</span>
                                                 <br>
-                                                <span class="text-gray-400">title user player</span>
+                                                <span class="text-gray-400">{{ $item->title ?? '' }}</span>
                                                 <div class="mt-5 flex flex-row justify-between">
                                                     <div>game</div>
                                                     <div class="flex flex-row items-center">
@@ -152,11 +153,12 @@
                                                             <path fill="currentColor"
                                                                 d="M10 1.36l1.45 4.46h4.69l-3.79 2.75 1.45 4.46-3.79-2.75-3.79 2.75 1.45-4.46-3.79-2.75h4.69z" />
                                                         </svg>
-                                                        4.9 (420)
+                                                        {{ $item->average_rating ?? '0' }}
+                                                        ({{ $item->count_rating ?? '0' }})
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     @endforeach
                                 </div>
                             </div>
@@ -181,7 +183,7 @@
                 $('#name-game').text(name);
 
                 $.ajax({
-                    url: "{{ route('home.game',"") }}/"+ game,
+                    url: "{{ route('home.game', '') }}/" + game,
                     type: 'GET',
 
                     success: function(result) {
