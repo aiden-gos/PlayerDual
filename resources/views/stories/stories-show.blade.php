@@ -1,7 +1,25 @@
 <x-modal-story name="story-detail" focusable>
     <div class="flex flex-row h-[900px] gap-10">
         <div class="flex flex-row items-center">
-            <button>
+            <button
+                @click="
+                    axios.get(`/stories/next`).then((data)=>{
+                        story = {
+                            id: data.data.id,
+                            video_link: data.data.video_link,
+                            content: data.data.content,
+                            is_liked_by_user: data.data.is_liked_by_user,
+                            like: data.data.like,
+                            comment_count: data.data.comment_count,
+                            view: data.data.view,
+                            user: {
+                                id: data.data.user.id,
+                                name: data.data.user.name,
+                                avatar: data.data.user.avatar,
+                            },
+                        };
+                        renderComment(data.data.id);
+                    });">
                 <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                         d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -12,14 +30,32 @@
                 $el.load();
                 $el.play();
             })
-                $watch('show', value => {
+            $watch('show', value => {
                 if (!value) {
-                   $el.pause();
+                    $el.pause();
                 }
             });">
                 <source type="video/mp4" :src="story.video_link">
             </video>
-            <button>
+            <button
+                @click="
+                    axios.get(`/stories/next`).then((data)=>{
+                        story = {
+                            id: data.data.id,
+                            video_link: data.data.video_link,
+                            content: data.data.content,
+                            is_liked_by_user: data.data.is_liked_by_user,
+                            like: data.data.like,
+                            comment_count: data.data.comment_count,
+                            view: data.data.view,
+                            user: {
+                                id: data.data.user.id,
+                                name: data.data.user.name,
+                                avatar: data.data.user.avatar,
+                            },
+                        };
+                        renderComment(data.data.id);
+                    });">
                 <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                         d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -36,9 +72,10 @@
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                             viewBox="0 0 544.582 544.582" xml:space="preserve">
                             <g>
-                                <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
-                            C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
-                            c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                                <path
+                                    d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                                        C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                                        c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
                             </g>
                         </svg>
                     </button>
@@ -50,9 +87,10 @@
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
                             viewBox="0 0 544.582 544.582" xml:space="preserve">
                             <g>
-                                <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
-                            C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
-                            c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                                <path
+                                    d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
+                                        C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                                        c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
                             </g>
                         </svg>
                     </button>
@@ -160,8 +198,8 @@
                                     <div class="flex flex-row gap-20">
                                     <p class="text-sm font-bold">${e?.user?.name}</p>
                                       ${ id == e?.user?.id ? `
-                                            <button @click="deleteComment(${e.id});" class="text-xs text-red-600 mt-1">Delete</button>
-                                      ` : "" }
+                                                        <button @click="deleteComment(${e.id});" class="text-xs text-red-600 mt-1">Delete</button>
+                                                  ` : "" }
                                     </div>
                                     <p class="text-xs text-stone-600"><span>${new Date(e?.created_at).toLocaleString()}</span></p>
                                     <p class="py-2 text-[14px] text-stone-600">${e?.content}</p>

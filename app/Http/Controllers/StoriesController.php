@@ -56,6 +56,7 @@ class StoriesController extends Controller
             $story->update([
                 "view" => $story->view + 1
             ]);
+            return response()->json($story);
         } catch (\Exception $e) {
             Log::error($e);
         }
@@ -137,5 +138,11 @@ class StoriesController extends Controller
             Log::error($th);
             return redirect()->back();
         }
+    }
+
+    public function nextStory()
+    {
+        $story = Story::inRandomOrder()->first();
+        return response()->json($story);
     }
 }
