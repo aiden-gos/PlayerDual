@@ -40,7 +40,7 @@ class StripeController extends Controller
         }
 
         $user->update(['balance' => ($user->balance + ($money / 100))]);
-        return Redirect::route("profile.edit")->with('status', 'checkout-ok');
+        return Redirect::route("home")->with('status', 'checkout-ok');
     }
 
     public function handleWebhook(Request $request)

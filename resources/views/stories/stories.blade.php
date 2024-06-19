@@ -41,7 +41,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class=" overflow-hidden  sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <div class="flex flex-row flex-wrap gap-5">
+                    <div class="flex flex-row flex-wrap justify-center gap-5">
                         @foreach ($stories as $story)
                             @include('stories.story-card')
                         @endforeach
