@@ -38,7 +38,6 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.outcome', 1) }}')
                             .then(response => {
-                                console.log(response.data);
                                 outcome1 = response.data;
                             });
                     }">
@@ -59,7 +58,6 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.outcome', 7) }}')
                             .then(response => {
-                                console.log(response.data);
                                 outcome2 = response.data;
                             });
                     }">
@@ -80,7 +78,6 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.outcome', 30) }}')
                             .then(response => {
-                                console.log(response.data);
                                 outcome3 = response.data;
                             });
                     }">
@@ -100,8 +97,7 @@
                 <div x-show="parentTab === 'income_top'"
                     x-on:open-modal.window.once="() => {
                     axios.get('{{ route('rank.income', 1) }}')
-                        .then(response => {
-                            console.log(response.data);
+                        .then(response =>
                             income1 = response.data;
                         });
                 }">
@@ -124,7 +120,6 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.income', 7) }}')
                             .then(response => {
-                                console.log(response.data);
                                 income2 = response.data;
                             });
                     }">
@@ -145,7 +140,6 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.income', 30) }}')
                             .then(response => {
-                                console.log(response.data);
                                 income3 = response.data;
                             });
                     }">
