@@ -3,7 +3,7 @@
     <x-modal name="up-story-form" focusable>
         <style>
             label.error {
-                color: red
+                color: red;
             }
         </style>
         <form id="story" method="post" action="{{ route('stories.up') }}" class="p-6  flex flex-row gap-10"
@@ -38,10 +38,9 @@
                 </div>
             </div>
 
-            <div class="w-full flex items-center">
-                <input class="w-full" id="upload" type="file" class="filepond" name="upload"
-                    data-allow-reorder="true" data-max-file-size="20MB" accept="video/mp4">
-                <div id='update-err' class="text-red-500"></div>
+            <div class="w-full flex flex-col justify-center items-center">
+                <input type="file" class="w-full py-20" id="upload" name="upload"  accept="video/mp4"
+                    data-max-file-size="20MB">
             </div>
         </form>
     </x-modal>
@@ -55,17 +54,7 @@
                     content: {
                         required: true,
                     },
-                    update: {
-                        required: true,
-                        extension: "mp4"
-                    },
                 },
-                messages: {
-                    ok: {
-                        required: "input type is required",
-                        extension: "select valied input file format (mp4)"
-                    }
-                }
             });
         });
 
@@ -80,17 +69,22 @@
         import FilePondPluginFilePoster from "{{ Vite::asset('node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js') }}";
         import FilePondPluginFileValidateSize from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.esm.js') }}";
         import FilePondPluginImageExifOrientation from "{{ Vite::asset('node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.esm.js') }}";
+        import FilePondPluginFileValidateType from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.esm.js') }}";
+
 
         FilePond.registerPlugin(
             FilePondPluginMediaPreview,
             FilePondPluginFilePoster,
             FilePondPluginImageExifOrientation,
-            FilePondPluginFileValidateSize
+            FilePondPluginFileValidateSize,
+            FilePondPluginFileValidateType
         );
 
         FilePond.create(document.querySelector('input[name=upload]'), {
             storeAsFile: true,
             allowReorder: true,
+            required:true,
+
         });
     </script>
 @endauth
