@@ -89,7 +89,6 @@
 
             var channel = pusher.subscribe('{{ Auth::user()->id }}-rent-request');
             channel.bind("App\\Events\\EventActionNotify", function(data) {
-                console.log(data.message.order);
                 if (data.message.order.status == 'rejected') {
                     $('#cancel-form').empty();
                     $('#cancel-form').append("The request had been rejected");

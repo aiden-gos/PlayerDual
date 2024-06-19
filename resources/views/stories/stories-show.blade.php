@@ -203,7 +203,6 @@
         }
 
         function deleteComment(id) {
-            console.log(id);
             axios.delete('/comment/' + id).then((response) => {
                 $("#comment--" + id).remove();
                 $('#comment-count').text(parseInt($('#comment-count').text()) - 1);

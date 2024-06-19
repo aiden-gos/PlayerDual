@@ -62,7 +62,6 @@
 <script>
     options = {
         success: function(files) {
-            console.log(files[0].link);
             $.ajax({
                 url: "{{ route('profile.gallery.dropbox') }}",
                 type: 'POST',

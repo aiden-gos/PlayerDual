@@ -61,7 +61,6 @@
 
     var channel = pusher.subscribe('{{Auth::user()->id}}-rent');
     channel.bind("App\\Events\\EventActionNotify", function(data) {
-        console.log(data.message);
         var order = data.message.order;
         var user = data.message.user;
         $('#accept-id').val(order.id);

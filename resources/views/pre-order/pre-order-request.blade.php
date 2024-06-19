@@ -62,9 +62,7 @@
     channel.bind("App\\Events\\EventActionNotify", function(data) {
 
         var preOrder = data.message.preOrder;
-        console.log(preOrder.total_price);
         var user = data.message.user;
-        console.log(user.name);
 
         $('#accept-id-pre-order').val(preOrder.id);
         $('#reject-id-pre-order').val(preOrder.id);
