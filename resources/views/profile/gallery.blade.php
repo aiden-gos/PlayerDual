@@ -71,11 +71,19 @@
                     "link": files[0].link
                 }
             });
+            try {
+                Dropbox.close();
+            } catch (error) {
 
-            Dropbox.cancel();
+            }
+
         },
         cancel: function() {
-            Dropbox.cancel();
+            try {
+                Dropbox.close();
+            } catch (error) {
+
+            }
         },
         linkType: "direct", // or "direct"
         multiselect: false, // or true
@@ -85,7 +93,6 @@
 
     var button = Dropbox.createChooseButton(options);
     document.getElementById("chooser").appendChild(button);
-    Dropbox.choose(options);
 </script>
 
 <script type="module">
