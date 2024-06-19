@@ -32,12 +32,11 @@
     x-on:open-modal.window="if ($event.detail.name == '{{ $name }}') {
             show = true;
             story = $event.detail.story;
-            fetch(`/stories/view/${story.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
+            axios.get(`/stories/view/${story.id}`).then((data)=>{
+                story.is_liked_by_user = data.data.is_liked_by_user;
+                story.like = data.data.like;
+                story.comment_count = data.data.comment_count;
+                story.view = data.data.view;
             });
             renderComment(story.id);
     }"

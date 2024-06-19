@@ -38,6 +38,7 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.outcome', 1) }}')
                             .then(response => {
+
                                 outcome1 = response.data;
                             });
                     }">
@@ -58,6 +59,7 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.outcome', 7) }}')
                             .then(response => {
+
                                 outcome2 = response.data;
                             });
                     }">
@@ -78,6 +80,7 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.outcome', 30) }}')
                             .then(response => {
+
                                 outcome3 = response.data;
                             });
                     }">
@@ -97,7 +100,7 @@
                 <div x-show="parentTab === 'income_top'"
                     x-on:open-modal.window.once="() => {
                     axios.get('{{ route('rank.income', 1) }}')
-                        .then(response =>
+                        .then(response => {
                             income1 = response.data;
                         });
                 }">
@@ -120,6 +123,7 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.income', 7) }}')
                             .then(response => {
+
                                 income2 = response.data;
                             });
                     }">
@@ -140,6 +144,7 @@
                         x-on:open-modal.window.once="() => {
                         axios.get('{{ route('rank.income', 30) }}')
                             .then(response => {
+
                                 income3 = response.data;
                             });
                     }">

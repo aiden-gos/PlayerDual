@@ -3,11 +3,7 @@
         x-on:click.prevent='$dispatch("open-modal",{name : "story-detail", story: {
                         id: "{{ $story->id }}",
                         video_link: "{{ $story->video_link }}",
-                        view: "{{ $story->view }}",
                         content: "{{ $story->content }}",
-                        like: {{ $story->like }},
-                        is_liked_by_user: "{{ $story->is_liked_by_user }}",
-                        comment_count: "{{ $story->comment_count }}",
                         user: {
                             id: "{{ isset($story->user->id) ? $story->user->id : ""}}",
                             name: "{{ isset($story->user->name) ? $story->user->name : ""}}",
