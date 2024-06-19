@@ -19,12 +19,17 @@ class UserController extends Controller
         $id = $request->route('id');
         $user = User::where('id', $id)->first();
         $gallery = Gallery::where('user_id', $id)->take(5)->get();
-        $top_donate = User::select('users.*', DB::raw('SUM(donates.price) as donate_price'))
-            ->leftJoin('donates', function ($join) {
-                $join->on('users.id', '=', 'donates.donating_user_id');
-            })
+
+        $donatesSubquery = DB::table('donates')
+            ->select('donating_user_id as user_id', DB::raw('SUM(price) as total'))
+            ->where('donated_user_id', $id)
+            ->groupBy('donating_user_id');
+
+        $top_donate = DB::table('users')
+            ->select('users.*', DB::raw('IFNULL(d.total, 0) as donate_price'))
+            ->leftJoinSub($donatesSubquery, 'd', 'users.id', '=', 'd.user_id')
             ->groupBy('users.id')
-            ->havingRaw('SUM(donates.price) > 0')
+            ->havingRaw('donate_price > 0')
             ->orderBy('donate_price', 'desc')
             ->take(10)
             ->get();

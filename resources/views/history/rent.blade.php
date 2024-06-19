@@ -50,7 +50,7 @@
                                             class="bg-white border-b">
                                             <td scope="row"
                                                 class=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex flex-row gap-2 items-center">
-                                                <img src="{{ $item->ordered_user->avatar ?? '' }}" class="w-12 h-12 rounded-full">
+                                                <img src="{{ $item->ordered_user->avatar ?? '' }}" class="w-12 h-12 object-cover rounded-full">
                                                 {{ $item->ordered_user->name ?? "" }}
                                             </th>
                                             <td class="px-6 py-4 ">

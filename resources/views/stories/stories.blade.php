@@ -49,7 +49,11 @@
                         @foreach ($stories as $story)
                             @include('stories.story-card')
                         @endforeach
+
                         @include('stories.stories-up')
+                    </div>
+                    <div class="py-5 px-20">
+                        {{ $stories->links() }}
                     </div>
                 </div>
             </div>

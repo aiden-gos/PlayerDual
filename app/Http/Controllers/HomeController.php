@@ -16,7 +16,7 @@ class HomeController extends Controller
         $hot_user = User::query()->orderBy("price", "DESC")->limit(15)->get();
         $games = Game::all();
         $stories = Story::where('status', 'open')->orderBy('created_at', 'desc')->take(10)->get();
-        return view('2home', [
+        return view('home', [
             'vip_user' => $vip_user,
             'hot_user' => $hot_user,
             'games' => $games,

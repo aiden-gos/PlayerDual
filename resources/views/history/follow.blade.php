@@ -28,7 +28,7 @@
                         @forelse ($follow as $item)
                             <div class="py-1  flex flex-row w-full justify-between">
                                 <div class="flex flex-row gap-2">
-                                    <img src="{{ $item->avatar ?? '' }}" class="w-12 h-12 rounded-full">
+                                    <img src="{{ $item->avatar ?? '' }}" class="w-12 h-12 object-cover rounded-full">
                                     <div class="flex items-start justify-center flex-col">
                                         <p class="font-bold">{{ $item->name ?? '' }}</p>
                                         @if (!empty($item->title))
@@ -40,7 +40,7 @@
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="{{ $item->id ?? '' }}">
-                                    <x-primary-button class="ml-3">
+                                    <x-primary-button class="ml-3 flex flex-nowrap">
                                         <svg version="1.1" width="20" height="20"
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -58,8 +58,8 @@
                                                     </g>
                                                 </g>
                                             </g>
-                                        </svg> &nbsp;
-                                        {{ __('Unfollow') }}
+                                        </svg>
+                                        <div class="max-sm:hidden">{{ __('Unfollow') }}</div>
                                     </x-primary-button>
                                 </form>
                             </div>

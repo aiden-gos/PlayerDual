@@ -24,7 +24,7 @@
                                 @csrf
                                 @method('delete')
                                 <input type="hidden" name="id" value="{{ $user->id }}">
-                                <x-primary-button class="ml-3">
+                                <x-primary-button class="ml-3 flex flex-nowrap">
                                     <svg version="1.1" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 256 256"
                                         enable-background="new 0 0 256 256" xml:space="preserve">
@@ -41,8 +41,8 @@
                                                 </g>
                                             </g>
                                         </g>
-                                    </svg> &nbsp;
-                                    {{ __('Unfollow') }}
+                                    </svg>
+                                    <div> {{ __('Unfollow') }}</div>
                                 </x-primary-button>
                             </form>
                         @else
@@ -68,15 +68,18 @@
                     <div class="flex flex-row gap-2">
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Followers</div>
-                            <div class="flex flex-col text-[14px] text-orange-600 items-center">{{$user->follower_count}} follows</div>
+                            <div class="flex flex-col text-[14px] text-orange-600 items-center">
+                                {{ $user->follower_count }} follows</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Total Hire</div>
-                            <div class="flex flex-col text-[14px] text-orange-600 items-center">{{$user->total_rental_hours}} h</div>
+                            <div class="flex flex-col text-[14px] text-orange-600 items-center">
+                                {{ $user->total_rental_hours }} h</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Percent Complete</div>
-                            <div class="flex flex-col text-[14px] text-orange-600 items-center">{{$user->completed_orders_percentage}}%</div>
+                            <div class="flex flex-col text-[14px] text-orange-600 items-center">
+                                {{ $user->completed_orders_percentage }}%</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Devices</div>
@@ -86,9 +89,8 @@
 
                     <div class="flex flex-row gap-2 flex-wrap py-5">
                         @forelse ($user->games as $item)
-                        <div class="bg-black/70 text-white p-2 rounded-md">{{$item->name}}</div>
+                            <div class="bg-black/70 text-white p-2 rounded-md">{{ $item->name }}</div>
                         @empty
-
                         @endforelse
                     </div>
                 </div>
@@ -141,23 +143,23 @@
                 </div>
             </div>
 
-            @if( count($top_donate) > 0)
-            <div class="p-4 sm:p-8 bg-white sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
-                <div class="w-full md:px-[20%]">
-                    <h1 class="text-2xl font-bold">Top donate</h1> <br>
-                    @foreach ($top_donate as $ele)
-                        <div class="flex flex-row justify-between px-[10%] py-2">
-                            <div class="flex flex-row gap-5 items-center">
-                                <div class="w-5">#{{ $loop->iteration }}</div>
-                                <img class="rounded-full" src="{{ $ele->avatar }}" alt="" height="50"
-                                    width="50">
-                                <div>{{ $ele->name }}</div>
+            @if (count($top_donate) > 0)
+                <div class="p-4 sm:p-8 bg-white sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
+                    <div class="w-full md:px-[20%]">
+                        <h1 class="text-2xl font-bold">Top donate</h1> <br>
+                        @foreach ($top_donate as $ele)
+                            <div class="flex flex-row justify-between px-[10%] py-2">
+                                <div class="flex flex-row gap-5 items-center">
+                                    <div class="w-5">#{{ $loop->iteration }}</div>
+                                    <img class="rounded-full object-cover h-12 w-12" src="{{ $ele->avatar }}"
+                                        alt="">
+                                    <div>{{ $ele->name }}</div>
+                                </div>
+                                <div>$ {{ $ele->donate_price }}</div>
                             </div>
-                            <div>$ {{ $ele->donate_price }}</div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
             @endif
 
             @include('rating')

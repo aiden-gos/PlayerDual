@@ -48,7 +48,7 @@
             <hr>
 
         @empty
-            Not found rate
+            {{-- Not found rate --}}
         @endforelse
         @if(isset($rate[0]))
         <div class="py-10 px-40 ">

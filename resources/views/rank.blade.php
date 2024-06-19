@@ -46,7 +46,7 @@
                             <div class="flex flex-row justify-between py-2">
                                 <div class="flex flex-row gap-5 items-center">
                                     <div class="w-5" x-text="'#' + (index+1)"></div>
-                                    <img class="rounded-full" :src="item.avatar" alt="User Avatar" width="50">
+                                    <img class="rounded-full object-cover h-12 w-12" :src="item.avatar" alt="User Avatar">
                                     <div x-text="item.name"></div>
                                 </div>
                                 <div x-text="'$' + item.price_all"></div>
@@ -67,7 +67,7 @@
                             <div class="flex flex-row justify-between py-2">
                                 <div class="flex flex-row gap-5 items-center">
                                     <div class="w-5" x-text="'#' + (index+1)"></div>
-                                    <img class="rounded-full" :src="item.avatar" alt="User Avatar" width="50">
+                                    <img class="rounded-full object-cover h-12 w-12" :src="item.avatar" alt="User Avatar">
                                     <div x-text="item.name"></div>
                                 </div>
                                 <div x-text="'$' + item.price_all"></div>
@@ -88,7 +88,7 @@
                             <div class="flex flex-row justify-between py-2">
                                 <div class="flex flex-row gap-5 items-center">
                                     <div class="w-5" x-text="'#' + (index+1)"></div>
-                                    <img class="rounded-full" :src="item.avatar" alt="User Avatar" width="50">
+                                    <img class="rounded-full object-cover h-12 w-12" :src="item.avatar" alt="User Avatar">
                                     <div x-text="item.name"></div>
                                 </div>
                                 <div x-text="'$' + item.price_all"></div>
@@ -111,7 +111,7 @@
                             <div class="flex flex-row justify-between py-2">
                                 <div class="flex flex-row gap-5 items-center">
                                     <div class="w-5" x-text="'#' + (index+1)"></div>
-                                    <img class="rounded-full" :src="item.avatar" alt="User Avatar" width="50">
+                                    <img class="rounded-full object-cover h-12 w-12" :src="item.avatar" alt="User Avatar">
                                     <div x-text="item.name"></div>
                                 </div>
                                 <div x-text="'$' + item.price_all"></div>
@@ -132,7 +132,7 @@
                             <div class="flex flex-row justify-between py-2">
                                 <div class="flex flex-row gap-5 items-center">
                                     <div class="w-5" x-text="'#' + (index+1)"></div>
-                                    <img class="rounded-full" :src="item.avatar" alt="User Avatar" width="50">
+                                    <img class="rounded-full object-cover h-12 w-12" :src="item.avatar" alt="User Avatar">
                                     <div x-text="item.name"></div>
                                 </div>
                                 <div x-text="'$' + item.price_all"></div>
@@ -153,7 +153,7 @@
                             <div class="flex flex-row justify-between py-2">
                                 <div class="flex flex-row gap-5 items-center">
                                     <div class="w-5" x-text="'#' + (index+1)"></div>
-                                    <img class="rounded-full" :src="item.avatar" alt="User Avatar" width="50">
+                                    <img class="rounded-full object-cover h-12 w-12" :src="item.avatar" alt="User Avatar">
                                     <div x-text="item.name"></div>
                                 </div>
                                 <div x-text="'$' + item.price_all"></div>
@@ -198,7 +198,7 @@
                     <div class="flex flex-row justify-between py-2">
                         <div class="flex flex-row gap-5 items-center">
                             <div class="w-5">#${index + 01}</div>
-                            <img class="rounded-full" src="${element.avatar}" alt="" height="50" width="50">
+                            <img class="rounded-full" src="${element.avatar}" alt="" height="50">
                             <div>${element.name}</div>
                         </div>
                         <div>$${element.amount_price}</div>
