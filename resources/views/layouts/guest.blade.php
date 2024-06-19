@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <style>#contain{background-image: url('{{Vite::asset('resources/images/hero-bg.jpg')}}'); background-repeat: no-repeat; background-size: cover;}</style>
+    {{-- <style>#contain{background-image: url('{{Vite::asset('resources/images/hero-bg.jpg')}}'); background-repeat: no-repeat; background-size: cover;}</style> --}}
     <body class="font-sans text-gray-900 antialiased">
         <div id="contain" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>

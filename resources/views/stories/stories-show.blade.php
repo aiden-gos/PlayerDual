@@ -62,7 +62,7 @@
         <div class="flex flex-col w-[400px] bg-gray-100 p-5">
             <div class="flex flex-row gap-4 justify-between">
                 <div class="flex flex-row gap-2">
-                    <img :src="story?.user?.avatar" alt="profile" class="w-12 h-12 rounded-full">
+                    <img :src="story?.user?.avatar" alt="profile" class="w-12 h-12 object-cover rounded-full">
                     <div class="flex items-center">
                         <p class="text-sm font-bold" x-text="story?.user?.name"></p>
                     </div>
