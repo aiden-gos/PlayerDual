@@ -29,7 +29,7 @@
             <video autoplay loop height="900" width="400" controls x-init="$watch('story.video_link', () => {
                 $el.load();
                 $el.play();
-            })
+            });
             $watch('show', value => {
                 if (!value) {
                     $el.pause();
