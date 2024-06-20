@@ -97,7 +97,7 @@
 
                 <div class="w-full">
                     <div class="flex flex-col items-start gap-2">
-                        <div class=" text-2xl text-red-600">${{ $user->price }}/h</div>
+                        <div class=" text-2xl text-red-600">{{ $user->price == 0 ? "Disable Rent" : '$'.$user->price.'/h' }}</div>
                         @include('rent')
                         @include('pre-order')
                         @include('donate')

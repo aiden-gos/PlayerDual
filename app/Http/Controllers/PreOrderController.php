@@ -124,25 +124,28 @@ class PreOrderController extends Controller
         DB::beginTransaction();
         try {
             $id = $request->input('id');
+
             if (!empty($id)) {
+                $order = Order::find(['id' => $id, 'status' => 'accepted'])->first();
 
-                $order = Order::find(['id' => $id])->first();
+                if ($request->user()->id == $order->ordered_user_id) {
+                    $order->update([
+                        'status' => 'rejected'
+                    ]);
 
-                if ($order && $order->start_at < date('Y-m-d H:i:s', strtotime("+30 minutes"))) {
-                    return redirect()->back();
+                    $user = User::find(["id" => $order->ordered_user_id])->first();
+                    $user->update(['balance' => $user->balance - $order->total_price]);
+
+                    $user_ordering = User::find(["id" => $order->ordering_user_id])->first();
+                    $user_ordering->update(['balance' => $user_ordering->balance + $order->total_price]);
+                } else {
+                    $order->update([
+                        'status' => 'completed'
+                    ]);
                 }
 
-                $order->update([
-                    'status' => 'completed'
-                ]);
-
-                $user = User::find(["id" => $order->ordered_user_id])->first();
-                $user->update(['balance' => $user->balance - $order->total_price]);
-
-                $user_ordering = User::find(["id" => $order->ordering_user_id])->first();
-                $user_ordering->update(['balance' => $user_ordering->balance + $order->total_price]);
-
                 event(new EventActionNotify($order->ordered_user_id . '-pre-order-request', ['order' => $order]));
+                event(new EventActionNotify($order->ordering_user_id . '-pre-order-request', ['order' => $order]));
 
                 DB::commit();
             }

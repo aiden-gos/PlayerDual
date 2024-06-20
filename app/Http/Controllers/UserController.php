@@ -43,7 +43,7 @@ class UserController extends Controller
         try {
             $follow = Follow::where('following_user_id', $request->user()->id)
                 ->where('followed_user_id', $id)
-                ->first();
+                ->exists();
 
             $orderConflict = Order::where('status', '=', 'accepted')->where(function ($query) use ($request, $user) {
                 $query->where('ordering_user_id', $request->user()->id)
@@ -54,7 +54,7 @@ class UserController extends Controller
                 $query->where('ordering_user_id', $request->user()->id)
                     ->where('status', '=', 'pending');
             })
-                ->first();
+                ->exists();
 
             $userStatus = Order::where('status', '<>', 'completed')
                 ->where('status', '<>', 'rejected')
@@ -65,7 +65,7 @@ class UserController extends Controller
                         ->orWhere('ordered_user_id', $user->id);
                 })
                 ->whereRaw('DATE_ADD(updated_at, INTERVAL duration HOUR) > NOW()')
-                ->first();
+                ->exists();
 
             $preOrderStatus = Order::where(function ($query) use ($request, $user) {
                 $query->where('ordering_user_id', $request->user()->id)->where('status', '=', 'accepted')
@@ -80,7 +80,7 @@ class UserController extends Controller
                     ->orWhere('ordering_user_id', $user->id)->where('status', '=', 'pre-ordered')
                     ->orWhere('ordered_user_id', $user->id)->where('status', '=', 'pre-ordered');
             })
-                ->first();
+                ->exists();
 
             //Get Rate
             $rate = Rate::where('user_id', $user->id)
@@ -88,13 +88,15 @@ class UserController extends Controller
                 ->paginate(10);
 
             //ShowRate
-            $orderExits = Order::where('ordering_user_id', $request->user()->id)
+            $orderCount = Order::where('ordering_user_id', $request->user()->id)
                 ->where('ordered_user_id', $user->id)
-                ->exists();
-            $rateExits = Rate::where('user_id', $user->id)
+                ->count();
+
+            $rateCount = Rate::where('user_id', $user->id)
                 ->where('author_id', $request->user()->id)
-                ->exists();
-            $showRate = $orderExits && !$rateExits && isset($request->user()->id) && $request->user()->id != $user->id;
+                ->count();
+
+            $showRate = $orderCount > 0 && $rateCount < $orderCount && isset($request->user()->id) && $request->user()->id != $user->id;
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -102,9 +104,9 @@ class UserController extends Controller
         return view('user', [
             'user' => $user,
             'follow' => $follow,
-            'orderConflict' => $orderConflict,
+            'orderConflict' => $orderConflict || $user->price == 0,
             'userStatus' => $userStatus,
-            'preOrderStatus' => $preOrderStatus,
+            'preOrderStatus' => $preOrderStatus || $user->price == 0,
             'rate' => $rate,
             'showRate' => $showRate,
             'gallery' => $gallery,
