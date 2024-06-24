@@ -6,9 +6,9 @@
         Pre-order
 </button>
 @else
-<button x-data=""
+{{-- <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
-    class="bg-red-200 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button>
+    class="bg-red-200 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button> --}}
 @endif
 
 <x-modal name="Pre-order-form" focusable>
@@ -39,7 +39,7 @@
                 <x-input-label for="name" :value="__('Balance')" />
             </div>
             <div class="w-full">
-                <div>${{Auth::user()->balance}}</div>
+                <div>${{number_format(Auth::user()->balance)}}</div>
             </div>
         </div>
         <hr>

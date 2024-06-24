@@ -4,6 +4,11 @@
             <h2 class="text-xl font-bold w-full text-center">Game list</h2>
             <hr>
             <div class="flex flex-col justify-center items-start w-full">
+                <button id="all" name="ALL PLAYERS"
+                    class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
+                    <img class="w-8 h-8 rounded-md" src="https://image.winudf.com/v2/image1/Y29tLmJsYWNrb2Nlbi5hbGxpbm9uZV9uZXdnYW1lc19zY3JlZW5fMF8xNjgxMzQ4ODQ2XzA2Mw/screen-0.jpg?fakeurl=1&type=.jpg" alt="">
+                    <div> All </div>
+                </button>
                 @foreach ($games as $item)
                     <button id="{{ $item->id }}" name="{{ $item->name }}"
                         class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
@@ -96,10 +101,11 @@
                                     @foreach ($vip_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-[160px] w-full" src="{{ $item->avatar ?? '' }}">
+                                                <img class="rounded-t-xl h-[160px] w-full"
+                                                    src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
-                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ $item->price }}/h</span>
+                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ number_format($item->price) }}/h</span>
                                                 </div>
                                             </div>
                                             <div class="p-2 overflow-hidden truncate">
@@ -134,10 +140,11 @@
                                     @foreach ($hot_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-[160px] w-full" src="{{ $item->avatar ?? '' }}">
+                                                <img class="rounded-t-xl h-[160px] w-full"
+                                                    src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
-                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ $item->price }}/h</span>
+                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ number_format($item->price) }}/h</span>
                                                 </div>
                                             </div>
                                             <div class="p-2 overflow-hidden truncate">
@@ -174,22 +181,29 @@
         $(document).ready(function() {
             $(".filter-game").click(function() {
                 $(".filter-game").removeClass('bg-rose-400 hover:bg-rose-400');
-                $(this).addClass('bg-rose-400 hover:bg-rose-400');
-                $('#home').hide();
-                var game = $(this).attr('id')
-                var name = $(this).attr('name');
-                var img = $(this).children('img').attr('src');
+                if ($(this).hasClass('active')) {
+                    $('#home').show();
+                    $(".game-container").addClass('hidden');
+                    $(this).removeClass('active');
+                } else {
 
-                $('#name-game').text(name);
+                    $(this).addClass('bg-rose-400 hover:bg-rose-400 active');
+                    $('#home').hide();
+                    var game = $(this).attr('id')
+                    var name = $(this).attr('name');
+                    var img = $(this).children('img').attr('src');
 
-                $.ajax({
-                    url: "{{ route('home.game', '') }}/" + game,
-                    type: 'GET',
+                    $('#name-game').text(name);
 
-                    success: function(result) {
-                        handleSuccessAjaxFilterGame(result);
-                    }
-                });
+                    $.ajax({
+                        url: "{{ route('home.game', '') }}/" + game,
+                        type: 'GET',
+
+                        success: function(result) {
+                            handleSuccessAjaxFilterGame(result);
+                        }
+                    });
+                }
             })
 
             function handleSuccessAjaxFilterGame(result) {

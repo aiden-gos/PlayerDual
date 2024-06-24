@@ -1,3 +1,4 @@
+@if(count($rate) > 0)
 <div id="rating" class="p-4 sm:p-8 bg-white sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
     <div class="w-full md:px-[20%]">
         <h1 class="text-2xl font-bold">Rating</h1> <br>
@@ -48,7 +49,7 @@
             <hr>
 
         @empty
-            {{-- Not found rate --}}
+            <div class="w-full text-center">Not found rate</div>
         @endforelse
         @if(isset($rate[0]))
         <div class="py-10 px-40 ">
@@ -57,4 +58,4 @@
         @endif
     </div>
 </div>
-<script></script>
+@endif

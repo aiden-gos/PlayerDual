@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\Story;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeService
 {
@@ -16,8 +17,8 @@ class HomeService
 
     public function index()
     {
-        $vip_user = User::query()->orderBy("balance", "DESC")->limit(15)->get();
-        $hot_user = User::query()->orderBy("price", "DESC")->limit(15)->get();
+        $vip_user = self::getVipUsers();
+        $hot_user = self::getHotUsers();
         $games = Game::all();
         $stories = Story::where('status', 'open')->orderBy('created_at', 'desc')->take(10)->get();
         return view('home', [
@@ -28,12 +29,44 @@ class HomeService
         ]);
     }
 
+    private function getHotUsers()
+    {
+        $hotUsers = User::query()
+            ->join('orders', 'users.id', '=', 'orders.ordered_user_id')
+            ->selectRaw('users.*, count(orders.id) as order_count')
+            ->where('orders.created_at', '>', now()->subDays(15))
+            ->orderBy('order_count', 'DESC')
+            ->groupBy('users.id')
+            ->limit(15)
+            ->get();
+
+        return $hotUsers;
+    }
+
+    private function getVipUsers()
+    {
+        $ordersSubquery = DB::table('orders')
+            ->select('ordered_user_id as user_id', DB::raw('SUM(total_price) as total'))
+            ->where('created_at', '>=', now()->subDays(15))
+            ->groupBy('ordered_user_id');
+
+        $vipUsers = DB::table('users')
+            ->select('users.*', DB::raw('(IFNULL(o.total, 0)) as price_all'))
+            ->leftJoinSub($ordersSubquery, 'o', 'users.id', '=', 'o.user_id')
+            ->groupBy('users.id')
+            ->havingRaw('price_all > 0')
+            ->orderBy('price_all', 'desc')
+            ->take(10)
+            ->get();
+
+        return $vipUsers;
+    }
+
     public function search(Request $request)
     {
         $user = User::query();
 
         if (!empty($request->query("name"))) {
-
             $user->where('name', 'like', '%' . $request->query('name') . '%');
         }
         if ($request->query("sex") == "1" || $request->query("sex") == "0") {
@@ -63,7 +96,7 @@ class HomeService
     {
         $user = User::query();
 
-        if (!empty($request->route("game"))) {
+        if (!empty($request->route("game")) && $request->route("game") != 'all') {
             $gameId = $request->route("game");
             $user->whereHas('games', function ($query) use ($gameId) {
                 $query->where('game_id', $gameId);

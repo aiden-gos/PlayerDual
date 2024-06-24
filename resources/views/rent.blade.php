@@ -12,9 +12,9 @@
 
 </button>
 @else
-<button x-data=""
+{{-- <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Rent-form')"
-    class="bg-red-300 text-white w-full py-3 rounded-md max-w-64" disabled>Rent</button>
+    class="bg-red-300 text-white w-full py-3 rounded-md max-w-64" disabled>Rent</button> --}}
 @endif
 
 <x-modal name="Rent-form" focusable>
@@ -55,7 +55,7 @@
                 <x-input-label for="name" :value="__('Balance')" />
             </div>
             <div class="w-full">
-                <div>${{Auth::user()->balance}}</div>
+                <div>${{number_format(Auth::user()->balance)}}</div>
             </div>
         </div>
         <hr>

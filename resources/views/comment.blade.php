@@ -12,12 +12,6 @@
                 <div class="flex flex-row gap-5">
                     <button id="update-rate" class="text-yellow-600">Update</button>
                     <input type="hidden" id="id" value="{{ $item->id }}">
-                    <form method="post" action="{{ route('rate.create') }}/{{ $item->id }}">
-                        @csrf
-                        @method('delete')
-                        <input type="hidden" name="id">
-                        <button class="text-red-600">Delete</button>
-                    </form>
                 </div>
             @endif
         </a>

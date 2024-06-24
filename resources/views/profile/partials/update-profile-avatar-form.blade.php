@@ -39,7 +39,7 @@
 import * as FilePond from "{{Vite::asset('node_modules/filepond/dist/filepond.esm.js')}}";
 import FilePondPluginFilePoster from "{{Vite::asset('node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js')}}";
 import FilePondPluginImageEditor from "{{Vite::asset('node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js')}}";
-// import FilePondPluginImagePreview from "{{ Vite::asset('/node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js') }}";
+// import FilePondPluginImagePreview from "{{ Vite::asset('node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js') }}";
 
 FilePond.registerPlugin(
     // FilePondPluginImagePreview,

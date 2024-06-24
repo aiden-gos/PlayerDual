@@ -164,4 +164,40 @@ class OrderService
         }
         return false;
     }
+
+    public function requestOrder(Request $request)
+    {
+        $renting = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'accepted')
+            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented = Order::select(['orders.*', 'users.id', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'accepted')
+            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->first();
+
+        $renting_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'pending')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'pending')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->get();
+
+        return response()->json([
+            'renting' => $renting,
+            'rented' => $rented,
+            'renting_pending' => $renting_pending,
+            'rented_pending' => $rented_pending
+        ]);
+    }
 }

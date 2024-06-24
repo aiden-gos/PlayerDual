@@ -47,7 +47,7 @@
                         </div>
                         <div class="px-5 py-3">
                             <h3 class="text-gray-700 uppercase">{{$user->name}}</h3>
-                            <span class="text-gray-500 mt-2">${{$user->price}}/h</span>
+                            <span class="text-gray-500 mt-2">${{number_format($item->price)}}/h</span>
                         </div>
                     </div>
                 @endforeach
@@ -63,7 +63,7 @@
                     </div>
                     <div class="px-5 py-3">
                         <h3 class="text-gray-700 uppercase">{{$user->name}}</h3>
-                        <span class="text-gray-500 mt-2">${{$user->price}}/h</span>
+                        <span class="text-gray-500 mt-2">${{number_format($item->price)}}/h</span>
                     </div>
                 </div>
             @endforeach

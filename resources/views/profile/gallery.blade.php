@@ -3,7 +3,6 @@
     <x-slot name="header">
         @include('profile.partials.sidebar-profile')
     </x-slot>
-    @vite(['resources/css/galleryupload.css'])
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
@@ -99,7 +98,7 @@
     import FilePondPluginFilePoster from "{{ Vite::asset('node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js') }}";
     import FilePondPluginImageEditor from "{{ Vite::asset('node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js') }}";
     import FilePondPluginFileValidateSize from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.esm.js') }}";
-    import FilePondPluginImagePreview from "{{ Vite::asset('/node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js') }}";
+    import FilePondPluginImagePreview from "{{ Vite::asset('node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js') }}";
     import FilePondPluginImageExifOrientation from "{{ Vite::asset('node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.esm.js') }}";
 
     FilePond.registerPlugin(

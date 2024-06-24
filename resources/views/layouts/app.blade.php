@@ -26,12 +26,13 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-white">
         <div id="header" class="fixed w-full shadow z-50">
             @include('layouts.navigation')
         </div>
 
-        <div x-data="{ open: false }" id="content" class="flex flex-row w-full">
+        <div x-data="{ open: false, requestOpen: false }" @click.away="open = false, requestOpen = false" id="content"
+            class="flex flex-row w-full">
 
             @if (isset($header))
                 <button @click="open = !open; $('#mobile-sidebar').removeClass('hidden');"
@@ -44,9 +45,7 @@
                 </button>
 
                 <div style="flex: 0 0 240px;" class="max-md:hidden">
-
                     {{ $header }}
-
                 </div>
 
                 <div id='mobile-sidebar' x-show="open" x-transition:enter="transform transition ease-out duration-300"
@@ -60,20 +59,27 @@
                 </div>
             @endif
 
+            <button @click="requestOpen = !requestOpen; $('#request-sidebar').removeClass('hidden');"
+                class="rounded-l-xl fixed top-[50%] right-0 bg-rose-500 z-30 ">
+                <span class="text-white ">Request</span>
+            </button>
+
+            <div id='request-sidebar' x-show="requestOpen"
+                x-transition:enter="transform transition ease-out duration-300"
+                x-transition:enter-start="translate-x-[240px]" x-transition:enter-end="translate-x-0"
+                x-transition:leave="transform transition ease-in duration-200" x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-[240px]" class="z-30 hidden fixed right-0">
+                <div class="bg-gray-100 h-screen w-[344px] shadow flex flex-col gap-4 p-4 pt-20">
+                    @include('layouts.request')
+                </div>
+            </div>
+
             <!-- Page Content -->
-            <main @click="open = false" style="flex: 1 1 auto;" id="main" class="w-full pt-12">
+            <main @click="open = false, requestOpen = false" style="flex: 1 1 auto;" id="main"
+                class="w-full pt-12">
                 {{ $slot }}
             </main>
         </div>
     </div>
 </body>
-<script type="module">
-    // $(document).ready(function() {
-    //     try {
-    //         var sidePlacement = $('#side-bar').position().left + $('#side-bar').width();
-    //         $('#main').css('padding-left',sidePlacement+30);
-    //     } catch (error) {}
-    // });
-</script>
-
 </html>

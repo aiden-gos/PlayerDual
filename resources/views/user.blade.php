@@ -79,7 +79,7 @@
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Percent Complete</div>
                             <div class="flex flex-col text-[14px] text-orange-600 items-center">
-                                {{ $user->completed_orders_percentage }}%</div>
+                                {{number_format($user->completed_orders_percentage,2) }}%</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Devices</div>
@@ -135,9 +135,11 @@
                         @endforeach
                     </div>
                     {{-- End Gallery --}}
-
+                    @if($user->description)
                     {!! nl2br($user->description) !!}
-
+                    @else
+                    <div class="w-full text-center">No description</div>
+                    @endif
                     <br><br>
                     <hr>
                 </div>

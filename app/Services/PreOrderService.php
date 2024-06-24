@@ -163,4 +163,38 @@ class PreOrderService
         }
         return false;
     }
+
+    public function requestPreOrder(Request $request)
+    {
+        $renting = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordered')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordered')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->first();
+
+        $renting_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordering')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordering')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->get();
+
+        return response()->json([
+            'renting' => $renting,
+            'rented' => $rented,
+            'renting_pending' => $renting_pending,
+            'rented_pending' => $rented_pending
+        ]);
+    }
 }

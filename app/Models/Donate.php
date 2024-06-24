@@ -18,12 +18,12 @@ class Donate extends Model
 
     protected $with = ['donating_user', 'donated_user'];
 
-    public function donating_user()
+    public function donatingUser()
     {
         return $this->belongsTo(User::class, 'donating_user_id');
     }
 
-    public function donated_user()
+    public function donatedUser()
     {
         return $this->belongsTo(User::class, 'donated_user_id');
     }

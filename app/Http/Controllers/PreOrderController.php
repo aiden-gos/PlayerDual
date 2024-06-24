@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Services\PreOrderService;
 use Illuminate\Http\Request;
 
@@ -42,5 +43,10 @@ class PreOrderController extends Controller
         $id = $request->input('id');
 
         $this->rentService->endRent($request, $id);
+    }
+
+    public function requestPreOrder(Request $request)
+    {
+        return $this->rentService->requestPreOrder($request);
     }
 }
