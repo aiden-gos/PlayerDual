@@ -6,7 +6,9 @@
             <div class="flex flex-col justify-center items-start w-full">
                 <button id="all" name="ALL PLAYERS"
                     class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
-                    <img class="w-8 h-8 rounded-md" src="https://image.winudf.com/v2/image1/Y29tLmJsYWNrb2Nlbi5hbGxpbm9uZV9uZXdnYW1lc19zY3JlZW5fMF8xNjgxMzQ4ODQ2XzA2Mw/screen-0.jpg?fakeurl=1&type=.jpg" alt="">
+                    <img class="w-8 h-8 rounded-md"
+                        src="https://image.winudf.com/v2/image1/Y29tLmJsYWNrb2Nlbi5hbGxpbm9uZV9uZXdnYW1lc19zY3JlZW5fMF8xNjgxMzQ4ODQ2XzA2Mw/screen-0.jpg?fakeurl=1&type=.jpg"
+                        alt="">
                     <div> All </div>
                 </button>
                 @foreach ($games as $item)
@@ -112,9 +114,20 @@
                                                 <span
                                                     class="text-lg font-bold whitespace-nowrap">{{ $item->name ?? '' }}</span>
                                                 <br>
-                                                <span class="text-gray-400">{{ $item->title ?? '' }}</span>
+                                                <div class="text-gray-400 h-5">{{ $item->title ?? '' }}</div>
                                                 <div class="mt-5 flex flex-row justify-between">
-                                                    <div>game</div>
+                                                    <div class="flex flex-row items-center gap-1">
+                                                        @foreach ($item->games as $index => $game)
+                                                            @if ($index < 3)
+                                                                <img class="w-5 h-5 rounded-full"
+                                                                    src="{{ $game->img ?? '' }}" alt="">
+                                                            @endif
+                                                            @if ($index >= 3 && $index == count($item->games) - 1)
+                                                                <span
+                                                                    class="text-xs">+{{ count($item->games) - 3 }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                     <div class="flex flex-row items-center">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             class="h-6 w-6 text-yellow-500">
@@ -151,9 +164,20 @@
                                                 <span
                                                     class="text-lg font-bold whitespace-nowrap">{{ $item->name ?? '' }}</span>
                                                 <br>
-                                                <span class="text-gray-400">{{ $item->title ?? '' }}</span>
+                                                <div class="text-gray-400 h-5">{{ $item->title ?? '' }}</div>
                                                 <div class="mt-5 flex flex-row justify-between">
-                                                    <div>game</div>
+                                                    <div class="flex flex-row items-center gap-1">
+                                                        @foreach ($item->games as $index => $game)
+                                                            @if ($index < 3)
+                                                                <img class="w-5 h-5 rounded-full"
+                                                                    src="{{ $game->img ?? '' }}" alt="">
+                                                            @endif
+                                                            @if ($index >= 3 && $index == count($item->games) - 1)
+                                                                <span
+                                                                    class="text-xs">+{{ count($item->games) - 3 }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                     <div class="flex flex-row items-center">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             class="h-6 w-6 text-yellow-500">
@@ -229,16 +253,25 @@
                                 <span
                                     class="text-lg font-bold whitespace-nowrap">${e.name}</span>
                                 <br>
-                                <span class="text-gray-400">title user player</span>
+                                <div class="text-gray-400 h-5">${e.title ?? ""}</div>
                                 <div class="mt-5 flex flex-row justify-between">
-                                    <div>game</div>
-                                    <div class="flex flex-row items-center">
+                                 <div class="flex flex-row items-center gap-1">`;
+                        e.games.forEach((game, index) => {
+                            if (index < 3) {
+                                script += `<img class="w-5 h-5 rounded-full" src="${game.img}" alt="">`;
+                            }
+                            if (index >= 3 && index == e.games.length - 1) {
+                                script += `<span class="text-xs">+${e.games.length - 3}</span>`;
+                            }
+                        });
+
+                        script += `</div><div class="flex flex-row items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                             class="h-6 w-6 text-yellow-500">
                                             <path fill="currentColor"
                                                 d="M10 1.36l1.45 4.46h4.69l-3.79 2.75 1.45 4.46-3.79-2.75-3.79 2.75 1.45-4.46-3.79-2.75h4.69z" />
                                         </svg>
-                                        4.9 (420)
+                                        ${e.average_rating ?? "0"} (${e.count_rating ?? "0"})
                                     </div>
                                 </div>
                             </div>

@@ -23,6 +23,8 @@ class ProfileUpdateRequest extends FormRequest
             'title' => ['string', 'max:255'],
             'description' => ['string'],
             'price' => ['numeric', 'min:0', 'max:100'],
+            'games' => ['array'],
+            'games.*' => ['exists:games,id'],
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Story;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeService
 {
@@ -31,15 +32,12 @@ class HomeService
 
     private function getHotUsers()
     {
-        $hotUsers = User::query()
-            ->join('orders', 'users.id', '=', 'orders.ordered_user_id')
-            ->selectRaw('users.*, count(orders.id) as order_count')
-            ->where('orders.created_at', '>', now()->subDays(15))
-            ->orderBy('order_count', 'DESC')
-            ->groupBy('users.id')
+        $hotUsers = User::with(['games'])->withCount(['ordering' => function ($query) {
+            $query->where('orders.created_at', '>', now()->subDays(15));
+        }])
+            ->orderBy('ordering_count', 'DESC')
             ->limit(15)
             ->get();
-
         return $hotUsers;
     }
 
@@ -50,11 +48,12 @@ class HomeService
             ->where('created_at', '>=', now()->subDays(15))
             ->groupBy('ordered_user_id');
 
-        $vipUsers = DB::table('users')
+        $vipUsers = User::with(['games']) // Correctly use `with` for Eloquent models
             ->select('users.*', DB::raw('(IFNULL(o.total, 0)) as price_all'))
-            ->leftJoinSub($ordersSubquery, 'o', 'users.id', '=', 'o.user_id')
+            ->leftJoinSub($ordersSubquery, 'o', function ($join) {
+                $join->on('users.id', '=', 'o.user_id');
+            })
             ->groupBy('users.id')
-            ->havingRaw('price_all > 0')
             ->orderBy('price_all', 'desc')
             ->take(10)
             ->get();

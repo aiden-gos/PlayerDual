@@ -164,16 +164,22 @@ class UserService
 
     private function isShowRateForm($request, $user)
     {
-        $orderCount = Order::where('ordering_user_id', $request->user()->id)
-            ->where('ordered_user_id', $user->id)
-            ->count();
+        $showRate = false;
 
-        $rateCount = Rate::where('user_id', $user->id)
-            ->where('author_id', $request->user()->id)
-            ->count();
+        try {
+            $orderCount = Order::where('ordering_user_id', $request->user()->id)
+                ->where('ordered_user_id', $user->id)
+                ->count();
 
-        $showRate = $orderCount > 0 && $rateCount < $orderCount &&
-            isset($request->user()->id) && $request->user()->id != $user->id;
+            $rateCount = Rate::where('user_id', $user->id)
+                ->where('author_id', $request->user()->id)
+                ->count();
+
+            $showRate = $orderCount > 0 && $rateCount < $orderCount &&
+                isset($request->user()->id) && $request->user()->id != $user->id;
+        } catch (\Throwable $th) {
+            Log::debug($th);
+        }
 
         return $showRate;
     }

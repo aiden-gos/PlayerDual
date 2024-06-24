@@ -79,7 +79,7 @@
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Percent Complete</div>
                             <div class="flex flex-col text-[14px] text-orange-600 items-center">
-                                {{number_format($user->completed_orders_percentage,2) }}%</div>
+                                {{number_format($user->completed_orders_percentage,0) }}%</div>
                         </div>
                         <div class="w-full flex flex-col gap-2 items-center">
                             <div class="flex flex-col items-center text-md text-nowrap">Devices</div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Gallery;
+use App\Models\Game;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,8 +20,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $games =  Game::all();
+
         return view('profile.edit', [
             'user' => $request->user(),
+            'games' => $games
         ]);
     }
 
@@ -75,12 +79,13 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
-
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+
+        $request->user()->games()->sync($request->input('games'));
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
