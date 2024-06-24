@@ -3,11 +3,9 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 
@@ -34,6 +32,8 @@ class User extends Authenticatable
         'avatar',
         'title',
         'description',
+        'micro',
+        'camera',
     ];
 
     /**

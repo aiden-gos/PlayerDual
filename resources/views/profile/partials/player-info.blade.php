@@ -34,6 +34,13 @@
                 required autofocus autocomplete="price" />
             <x-input-error class="mt-2" :messages="$errors->get('price')" />
         </div>
+
+        <div>
+            <x-input-label for="device" :value="__('Device')" />
+            <input type='checkbox' name='micro' id="micro" {{$user->micro ? 'checked' : ""}} value='true'> <label for="micro">Micro</label> <br>
+            <input type='checkbox' name='camera' id="camera" {{$user->camera ? 'checked' : ""}} value='true'> <label for="camera">Camera</label>
+        </div>
+
         <div>
             <x-input-label :value="__('Game')" />
             @php

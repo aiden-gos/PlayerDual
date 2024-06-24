@@ -82,7 +82,8 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
-
+        $request->user()->micro = $request->has('micro') ? 1 : 0;
+        $request->user()->camera = $request->has('camera') ? 1 : 0;
         $request->user()->save();
 
         $request->user()->games()->sync($request->input('games'));

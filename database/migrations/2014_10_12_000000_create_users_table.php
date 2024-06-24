@@ -27,6 +27,8 @@ return new class extends Migration
             $table->double('price')->default(0);
             $table->string('title')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('micro')->nullable();
+            $table->boolean('camera')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
             $table->rememberToken();
             $table->timestamps();
