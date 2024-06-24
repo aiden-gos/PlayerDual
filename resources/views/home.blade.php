@@ -34,7 +34,7 @@
                         </div>
                         {{-- Pan  --}}
                         <div
-                            class="overflow-x-auto flex flex-row gap-3"style="-ms-overflow-style: none; scrollbar-width: none;">
+                            class="overflow-auto flex flex-row gap-3" style="-ms-overflow-style: none; scrollbar-width: none;">
                             @foreach ($stories as $story)
                                 <button class="flex flex-col border rounded-xl story" href=""
                                     x-data=""
@@ -53,9 +53,9 @@
                                     },
                                 }})'>
                                     <div>
-                                        <video class="max-w-[130px] object-cover rounded-t-xl"
+                                        <video class="min-w-48 h-60 rounded-t-xl object-cover"
                                             src="{{ $story->video_link }}" alt=""></video>
-                                        <div class="text-white mt-[-20px] flex w-full justify-end text-sm">
+                                        <div class="text-white mt-[-20px] flex w-full justify-end text-sm px-2">
                                             <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -78,7 +78,9 @@
 
                         {{-- Filter game  --}}
                         <div class="mt-5 hidden game-container w-full">
+
                             <h1 id="name-game" class="text-xl text-rose-500 font-bold"></h1>
+
                             <div
                                 class="filter-game-container w-full grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
                             </div>

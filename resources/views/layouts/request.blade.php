@@ -1,27 +1,23 @@
 <div class="flex flex-col min-h-[700px]">
-    <!-- Parent Tabs (Top Tabs) -->
-    <div class="flex flex-row ">
-        <!-- VIP Top Parent Tab -->
-        <div
-            class="py-2 px-4 bg-gray-100  text-gray-900 inline-flex border-b-2 border-rose-500 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none w-full flex justify-center">
-            Request
-        </div>
-    </div>
-
-    <!-- Content -->
-    <div id="request" class="p-2 overflow-auto h-3/4">
-
-    </div>
-
     <div class="flex flex-row w-full">
-        <!-- VIP Top Parent Tab -->
         <div
-            class="py-2 px-4 bg-gray-100  text-gray-900 inline-flex border-b-2 border-rose-500 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none w-full flex justify-center">
+            class="py-2 px-4 bg-gray-100 border text-gray-900 inline-flex border-b-2 border-rose-500 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none w-full flex justify-center">
             Current order
         </div>
     </div>
-    <div id="current-order">
+    <div id="current-order" class="mb-10 p-2 overflow-auto text-center text-gray-500 ">
+        No order
+    </div>
 
+    <div class="flex flex-row ">
+        <div
+            class="py-2 px-4 bg-gray-100 border text-gray-900 inline-flex border-b-2 border-rose-500 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none w-full flex justify-center">
+            Request
+        </div>
+    </div>
+    <a href="/rent/listRequest" class="text-rose-500 w-full text-end">view all</a>
+    <div id="request" class="p-2 overflow-auto text-center text-gray-500 ">
+        No request
     </div>
 
 </div>
@@ -48,16 +44,22 @@
                     });
                 }
 
-                if (data.renting) {
+                if (data.renting && !data.rented) {
                     currentOrderRender(data.renting.id, data.renting.ordered_user.avatar,
                         data.renting.ordered_user.name, data.renting.total_price,
                         data.renting.duration);
                 }
 
-                if (data.rented) {
+                if (data.rented && !data.renting) {
                     currentOrderedRender(data.rented.id, data.rented.ordering_user.avatar,
                         data.rented.ordering_user.name, data.rented.total_price,
                         data.rented.duration);
+                }
+
+                if (data.renting && data.rented) {
+                    currentOrderRender(data.renting.id, data.renting.ordered_user.avatar,
+                        data.renting.ordered_user.name, data.renting.total_price,
+                        data.renting.duration);
                 }
             }
         });
@@ -98,6 +100,7 @@
     }
 
     function requestRenderRenting(id, avatar, name, total_price, duration) {
+        $('#request').empty();
         $('#request').append(`
                         <div class="flex flex-col items-start gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
 
@@ -126,6 +129,7 @@
     }
 
     function requestRenderRented(id, avatar, name, total_price, duration) {
+        $('#request').empty();
         $('#request').append(`
                         <div class="flex flex-col items-start gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
 
@@ -164,6 +168,7 @@
     }
 
     function currentOrderRender(id, avatar, name, total_price, duration) {
+        $('#current-order').empty();
         $('#current-order').append(`
                         <div class="flex flex-col gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 mt-1">
 
@@ -192,6 +197,7 @@
     }
 
     function currentOrderedRender(id, avatar, name, total_price, duration) {
+        $('#current-order').empty();
         $('#current-order').append(`
                         <div class="flex flex-col gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 mt-1">
 
@@ -213,6 +219,7 @@
     //Pre-order
 
     function requestRenderRentingPreOrder(id, avatar, name, total_price, duration) {
+        $('#request').empty();
         $('#request').append(`
                 <div class="flex flex-row items-center gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
                     <div class="flex flex-row gap-5">
@@ -242,6 +249,7 @@
     }
 
     function requestRenderRentedPreOrder(id, avatar, name, total_price, duration) {
+        $('#request').empty();
         $('#request').append(`
                         <div class="flex flex-row items-center gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
                         <div class="pt-2">
@@ -277,6 +285,7 @@
     }
 
     function currentPreOrderRender(id, avatar, name, total_price, duration) {
+        $('#current-order').empty();
         $('#current-order').append(`
                         <div class="flex flex-col gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 mt-1">
                     <div class="flex flex-row gap-5 justify-start w-full">
@@ -307,6 +316,7 @@
     }
 
     function currentPreOrderedRender(id, avatar, name, total_price, duration) {
+        $('#current-order').empty();
         $('#current-order').append(`
                         <div class="flex flex-col gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 mt-1">
                     <div class="flex flex-row gap-5">

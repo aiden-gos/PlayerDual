@@ -41,7 +41,7 @@
         <form method="post" action="{{ route('rent.accept') }}">
             @csrf
             <input id="reject-id" type="hidden" name="id">
-            <x-primary-button class="ml-3">
+            <x-primary-button class="ml-3 bg-green-500">
                 {{ __('Accept') }}
             </x-primary-button>
         </form>

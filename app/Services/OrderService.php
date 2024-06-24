@@ -46,7 +46,10 @@ class OrderService
                 //Realtime notification
 
                 event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
-                event(new EventActionNotify($user_ordered->id . '-rent', ['order' => $order, 'user' => $request->user()]));
+                event(new EventActionNotify($user_ordered->id . '-rent', [
+                    'order' => $order,
+                    'user' => $request->user()
+                ]));
             } catch (\Throwable $th) {
                 Log::error($th);
             }
@@ -83,10 +86,10 @@ class OrderService
     public function acceptRent(Request $request)
     {
         DB::beginTransaction();
+
         try {
             $id = $request->input('id');
             if (!empty($id)) {
-
                 $order = Order::find(['id' => $id])->first();
                 $order->update([
                     'status' => 'accepted',
@@ -140,7 +143,6 @@ class OrderService
     {
         try {
             if (!empty($id)) {
-
                 $order = Order::find(['id' => $id])->first();
 
                 $order->update([

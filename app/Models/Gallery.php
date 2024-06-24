@@ -9,17 +9,17 @@ class Gallery extends Model
 {
     const TYPE_IMAGE = "image";
     const TYPE_VIDEO = "video";
-    
+
     use HasFactory;
 
-       /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
         'type',
-        'link', 
+        'link',
         'user_id'
     ];
 

@@ -130,16 +130,27 @@ class ProfileController extends Controller
      */
     public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
     {
-        Log::debug($request->file('upload')->guessExtension());
         if ($request->hasFile('upload')) {
-            if (in_array($request->file('upload')->guessExtension(), ['jpg', 'png', 'gif'])) {
+            if (in_array(
+                $request->file('upload')->guessExtension(),
+                ['jpg', 'png', 'gif']
+            )) {
                 $uploaded = Cloudinary::upload($request->file('upload')->getRealPath());
                 $uploadedFileUrl = $uploaded->getSecurePath();
-                Gallery::create(['type' => 'image', 'link' => $uploadedFileUrl, 'user_id' => $request->user()->id]);
-            } else if (in_array($request->file('upload')->guessExtension(), ['mp4', 'wmv', 'avi'])) {
+                Gallery::create([
+                    'type' => 'image', 'link' => $uploadedFileUrl,
+                    'user_id' => $request->user()->id
+                ]);
+            } elseif (in_array(
+                $request->file('upload')->guessExtension(),
+                ['mp4', 'wmv', 'avi']
+            )) {
                 $uploaded = Cloudinary::uploadVideo($request->file('upload')->getRealPath());
                 $uploadedFileUrl = $uploaded->getSecurePath();
-                Gallery::create(['type' => 'video', 'link' => $uploadedFileUrl, 'user_id' => $request->user()->id]);
+                Gallery::create([
+                    'type' => 'video', 'link' => $uploadedFileUrl,
+                    'user_id' => $request->user()->id
+                ]);
             }
         }
         return Redirect::route('profile.gallery');
@@ -149,9 +160,15 @@ class ProfileController extends Controller
     {
         $link = $request->input('link');
 
-        if (in_array(array_reverse(explode('.', $link))[0], ['jpg', 'png', 'gif'])) {
+        if (in_array(
+            array_reverse(explode('.', $link))[0],
+            ['jpg', 'png', 'gif']
+        )) {
             Gallery::create(['type' => 'image', 'link' => $link, 'user_id' => $request->user()->id]);
-        } else if (in_array(array_reverse(explode('.', $link))[0], ['mp4', 'wmv', 'avi'])) {
+        } elseif (in_array(
+            array_reverse(explode('.', $link))[0],
+            ['mp4', 'wmv', 'avi']
+        )) {
             Gallery::create(['type' => 'video', 'link' => $link, 'user_id' => $request->user()->id]);
         }
     }

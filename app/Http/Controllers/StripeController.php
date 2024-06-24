@@ -25,7 +25,7 @@ class StripeController extends Controller
             // return Redirect::route("profile.edit")->with('status', 'checkout-fail-1');
             $request->user()->createOrGetStripeCustomer();
             return $request->user()->redirectToBillingPortal(route('profile.payment'));
-        } else if ($money <= 0) {
+        } elseif ($money <= 0) {
             // return Redirect::route("profile.edit")->with('status', 'checkout-fail-2');
             return $request->user()->redirectToBillingPortal(route('profile.payment'));
         }

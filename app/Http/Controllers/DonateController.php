@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
-
 class DonateController extends Controller
 {
     public function donate(Request $request)
@@ -21,7 +20,7 @@ class DonateController extends Controller
         $user_id = $request->input('user_id');
         $msg = $request->input('msg');
 
-        if($request->user()->balance >= $money && $money > 0){
+        if ($request->user()->balance >= $money && $money > 0) {
             try {
                 DB::beginTransaction();
                 $request->user()->update(['balance' => ($request->user()->balance - $money)]);
@@ -35,10 +34,10 @@ class DonateController extends Controller
                     'price' => $money
                 ]);
                 //Save to database
-                $re_user->notify(new ActionNotify([$request->user()->name . " donated $" .$money]));
-                $request->user()->notify(new ActionNotify(["Donated $" .$money . " for " . $re_user->name]));
+                $re_user->notify(new ActionNotify([$request->user()->name . " donated $" . $money]));
+                $request->user()->notify(new ActionNotify(["Donated $" . $money . " for " . $re_user->name]));
                 //Realtime notification
-                event(new EventActionNotify($re_user->id, $request->user()->name . " donated $" .$money ));
+                event(new EventActionNotify($re_user->id, $request->user()->name . " donated $" . $money));
                 // event(new EventActionNotify($request->user()->id, "Donated $" .$money . " for " . $re_user->name ));
 
                 DB::commit();
@@ -46,8 +45,8 @@ class DonateController extends Controller
                 DB::rollBack();
                 Log::error($e);
             }
-        return Redirect::back();
-        }
 
+            return Redirect::back();
+        }
     }
 }

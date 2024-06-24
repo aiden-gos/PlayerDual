@@ -1,6 +1,6 @@
 <x-modal-story name="story-detail" focusable>
-    <div class="flex flex-row h-[900px] gap-10">
-        <div class="flex flex-row items-center">
+    <div class="flex flex-col sm:flex-row sm:h-[800px] max-h-[1140px] gap-10 pt-2">
+        <div class="flex flex-row items-center max-sm:justify-center">
             <button
                 @click="
                     axios.get(`/stories/next`).then((data)=>{
@@ -26,7 +26,7 @@
                         clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <video autoplay loop height="900" width="400" controls x-init="$watch('story.video_link', () => {
+            <video autoplay loop class="sm:h-[700px] sm:w-[400px] w-[200px]" controls x-init="$watch('story.video_link', () => {
                 $el.load();
                 $el.play();
             });
@@ -97,7 +97,7 @@
                 @endauth
             </div>
         </div>
-        <div class="flex flex-col w-[400px] bg-gray-100 p-5">
+        <div class="flex flex-col w-[400px] max-sm:w-fit bg-gray-100 p-5">
             <div class="flex flex-row gap-4 justify-between">
                 <div class="flex flex-row gap-2">
                     <img :src="story?.user?.avatar" alt="profile" class="w-12 h-12 object-cover rounded-full">
@@ -191,7 +191,7 @@
 
                     response.data.forEach(e => {
                         $('#comment').append(`
-                        <div class="py-2">
+                        <div class="py-2 ">
                             <div id="comment--${e.id}" class="flex flex-row gap-2">
                                 <img src="${e?.user?.avatar}" alt="profile" class="w-8 h-8 rounded-full">
                                 <div class="flex items-start flex-col">

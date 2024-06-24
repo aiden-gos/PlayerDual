@@ -19,7 +19,7 @@ Deploy: https://trongphan5301.click/
     sail exec laravel php artisan db:seed
     sail exec laravel npm run build
     ```
-2. Schedule task(test)
+2. Schedule task
    ```
    sail exec laravel php artisan schedule:work
    ```

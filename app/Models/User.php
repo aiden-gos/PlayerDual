@@ -47,7 +47,10 @@ class User extends Authenticatable
     ];
 
     protected $with = ['games'];
-    protected $appends = ['follower_count', 'total_rental_hours', 'completed_orders_percentage', 'average_rating', 'count_rating'];
+    protected $appends = [
+        'follower_count', 'total_rental_hours',
+        'completed_orders_percentage', 'average_rating', 'count_rating'
+    ];
 
     /**
      * The attributes that should be cast.

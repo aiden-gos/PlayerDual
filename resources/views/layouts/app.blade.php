@@ -75,8 +75,8 @@
             </div>
 
             <!-- Page Content -->
-            <main @click="open = false, requestOpen = false" style="flex: 1 1 auto;" id="main"
-                class="w-full pt-12">
+            <main @click="open = false, requestOpen = false" style="flex: 1 1 auto; -ms-overflow-style: none; scrollbar-width: none;" id="main"
+                class="w-full pt-12 overflow-x-hidden">
                 {{ $slot }}
             </main>
         </div>

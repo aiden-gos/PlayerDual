@@ -13,7 +13,6 @@ use Illuminate\Queue\SerializesModels;
 class EventActionNotify implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
     public $message;
     public $channel;
     /**
@@ -21,7 +20,7 @@ class EventActionNotify implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($channel,$message)
+    public function __construct($channel, $message)
     {
         $this->message = $message;
         $this->channel = $channel;

@@ -46,7 +46,10 @@ class PreOrderService
                 //Realtime notification
 
                 event(new EventActionNotify($user_ordered->id, $request->user()->name . " pre-order you now"));
-                event(new EventActionNotify($user_ordered->id . '-pre-order', ['preOrder' => $order, 'user' => $request->user()]));
+                event(new EventActionNotify($user_ordered->id . '-pre-order', [
+                    'preOrder' => $order,
+                    'user' => $request->user()
+                ]));
             } catch (\Throwable $th) {
                 Log::error($th);
             }
@@ -57,17 +60,22 @@ class PreOrderService
     public function acceptRent(Request $request, $id)
     {
         DB::beginTransaction();
-        try {
 
-            if (empty($id))
+        try {
+            if (empty($id)) {
                 return redirect()->back();
+            }
 
             $order = Order::find(['id' => $id])->first();
-            $currentOrder = Order::where('ordered_user_id', $order->ordered_user_id)->where('status', 'accepted')->first();
+            $currentOrder = Order::where('ordered_user_id', $order->ordered_user_id)
+                ->where('status', 'accepted')->first();
             $order->update([
                 'status' => 'pre-ordered',
                 'start_at' => $currentOrder->end_at,
-                'end_at' => date('Y-m-d H:i:s', strtotime($currentOrder->end_at . ' + ' . $order->duration . ' hours'))
+                'end_at' => date(
+                    'Y-m-d H:i:s',
+                    strtotime($currentOrder->end_at . ' + ' . $order->duration . ' hours')
+                )
             ]);
 
             $orderRJ = Order::where('ordered_user_id', $order->ordered_user_id)
@@ -101,7 +109,6 @@ class PreOrderService
         DB::beginTransaction();
         try {
             if (!empty($id)) {
-
                 $order = Order::find(['id' => $id])->first();
 
                 $order->update([
@@ -116,14 +123,15 @@ class PreOrderService
             DB::rollBack();
             Log::error($th);
         }
+
         return redirect()->back();
     }
 
     public function endRent(Request $request, $id)
     {
         DB::beginTransaction();
-        try {
 
+        try {
             if (!empty($id)) {
                 $order = Order::find(['id' => $id, 'status' => 'accepted'])->first();
 

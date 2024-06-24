@@ -32,7 +32,11 @@ class UserController extends Controller
 
     public function donateHistory(Request $request)
     {
-        $donate = User::where('id', $request->user()->id)->first()->donating()->orderBy("created_at", "DESC")->paginate(8);
+        $donate = User::where('id', $request->user()->id)
+            ->first()->donating()
+            ->orderBy("created_at", "DESC")
+            ->paginate(8);
+
         return view('history.donate', [
             'donate' => $donate,
         ]);

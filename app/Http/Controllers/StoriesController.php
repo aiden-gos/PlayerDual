@@ -17,8 +17,9 @@ class StoriesController extends Controller
     {
         $stories_query = Story::where('status', 'open');
 
-        if (isset($request->user()->id))
+        if (isset($request->user()->id)) {
             $stories_query->orderByRaw("user_id = ? DESC", $request->user()->id);
+        }
 
         $stories_query->orderBy("created_at", "DESC");
 
@@ -89,7 +90,9 @@ class StoriesController extends Controller
             $story = Story::find(['id' => $id])->first();
 
             $like = Like::where('story_id', $id)->where('user_id', $request->user()->id);
-            if ($like) $like->delete();
+            if ($like) {
+                $like->delete();
+            }
 
             $story->update([
                 "like" => Like::where('story_id', $id)->count()

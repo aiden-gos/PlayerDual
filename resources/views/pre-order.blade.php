@@ -79,8 +79,8 @@
             <div class="w-full">
                 <x-input-label for="" :value="__('Cost')" />
             </div>
-            <div class="w-full flex flex-col">
-                <input id="costPreOrder" name="cost" type="number" readonly="readonly"  class="border-0"/>
+            <div class="w-full flex flex-row items-center">
+                $<input id="costPreOrder" name="cost" type="number" readonly="readonly"  class="border-0 p-0"/>
             </div>
         </div>
 
