@@ -200,4 +200,9 @@ class OrderService
             'rented_pending' => $rented_pending
         ]);
     }
+
+    public function listRequest(Request $request)
+    {
+        return view('request.request-order');
+    }
 }

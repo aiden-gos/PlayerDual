@@ -51,7 +51,7 @@
                 if (data.renting) {
                     currentOrderRender(data.renting.id, data.renting.ordered_user.avatar,
                         data.renting.ordered_user.name, data.renting.total_price,
-                        data.duration);
+                        data.renting.duration);
                 }
 
                 if (data.rented) {
@@ -68,29 +68,28 @@
             url: '{{ route('pre-order.request') }}',
             type: 'GET',
             success: function(data) {
-
                 if (data.renting_pending) {
-                    requestRenderRenting(data.renting_pending.id, data.renting_pending.ordered_user.avatar,
+                    requestRenderRentingPreOrder(data.renting_pending.id, data.renting_pending.ordered_user.avatar,
                         data.renting_pending.ordered_user.name, data.renting_pending.total_price,
                         data.renting_pending.duration);
                 }
 
                 if (data.rented_pending.length > 0) {
                     data.rented_pending.forEach(element => {
-                        requestRenderRented(element.id, element.ordering_user.avatar,
+                        requestRenderRentedPreOrder(element.id, element.ordering_user.avatar,
                             element.ordering_user.name, element.total_price,
                             element.duration);
                     });
                 }
 
                 if (data.renting) {
-                    currentOrderRender(data.renting.id, data.renting.ordered_user.avatar,
+                    currentPreOrderRender(data.renting.id, data.renting.ordered_user.avatar,
                         data.renting.ordered_user.name, data.renting.total_price,
-                        data.duration);
+                        data.renting.duration);
                 }
 
                 if (data.rented) {
-                    currentOrderedRender(data.rented.id, data.rented.ordering_user.avatar,
+                    currentPreOrderedRender(data.rented.id, data.rented.ordering_user.avatar,
                         data.rented.ordering_user.name, data.rented.total_price,
                         data.rented.duration);
                 }
@@ -207,6 +206,132 @@
                                     <div i='time-rent'>${duration} hour</div>
                                 </div>
                             </div>
+                        </div>
+                    `);
+    }
+
+    //Pre-order
+
+    function requestRenderRentingPreOrder(id, avatar, name, total_price, duration) {
+        $('#request').append(`
+                <div class="flex flex-row items-center gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
+                    <div class="flex flex-row gap-5">
+                        <div class="pt-2">
+                            <img id="avatar-rent" class="rounded-full w-16 h-16"
+                                src="${avatar}" alt="ps" class="avt-1-15 avt-img">
+                        </div>
+
+                        <div>
+                            <div id='name-rent' class="font-bold">${name}</div>
+                            <div id='cost-rent'>$ ${total_price}</div>
+                            <div i='time-rent'>${duration} hour</div>
+                        </div>
+                    </div>
+
+                    <div id="cancel-form" class="flex justify-center items-center">
+                            <form method="post" action="{{ route('pre-order.end') }}">
+                                @csrf
+                                <input id="end-id" type="hidden" name="id" value="${id}">
+                                <button class="text-white bg-red-500 px-1 rounded-md">
+                                    {{ __('Cancel') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    `);
+    }
+
+    function requestRenderRentedPreOrder(id, avatar, name, total_price, duration) {
+        $('#request').append(`
+                        <div class="flex flex-row items-center gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
+                        <div class="pt-2">
+                            <img id="avatar-rent" class="rounded-full w-16 h-16"
+                                src="${avatar}" alt="ps">
+                        </div>
+                        <div class="flex flex-row gap-5">
+                            <div>
+                                <div id='name-rent' class="font-bold">${name}</div>
+                                <div id='cost-rent'>$ ${total_price}</div>
+                                <div i='time-rent'>${duration} hour</div>
+                            </div>
+
+                            <div class="flex justify-center items-center">
+                                <form method="post" action="{{ route('pre-order.reject') }}">
+                                    @csrf
+                                    <input id="accept-id" type="hidden" name="id" value="${id}">
+                                    <button x-on:click="$dispatch('close')" class="text-white bg-red-500 px-1 rounded-md">
+                                        {{ __('Reject') }}
+                                        </button>
+                                </form>
+
+                                <form method="post" action="{{ route('pre-order.accept') }}">
+                                    @csrf
+                                    <input id="reject-id" type="hidden" name="id" value="${id}">
+                                    <button class="text-white bg-green-500 px-1 rounded-md">
+                                        {{ __('Accept') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div></div>
+        `);
+    }
+
+    function currentPreOrderRender(id, avatar, name, total_price, duration) {
+        $('#current-order').append(`
+                        <div class="flex flex-col gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 mt-1">
+                    <div class="flex flex-row gap-5 justify-start w-full">
+
+                        <div class="pt-2">
+                            <img id="avatar-rent" class="rounded-full w-16 h-16" src="${avatar}"
+                            alt="ps" class="avt-1-15 avt-img">
+                        </div>
+                        <div>
+                            <div class="font-bold">Pre-order</div>
+                            <div id='name-rent' class="font-bold">${name}</div>
+                            <div id='cost-rent'>$ ${total_price}</div>
+                            <div id='time-rent'>${duration} hour</div>
+                        </div>
+
+                    </div>
+                        <div id="cancel-form" class="flex justify-center items-center">
+                            <form method="post" action="{{ route('pre-order.end') }}">
+                                @csrf
+                                <input id="end-id" type="hidden" name="id" value="${id}">
+                                <button class="text-white bg-red-500 px-1 rounded-md">
+                                    {{ __('Cancel') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    `);
+    }
+
+    function currentPreOrderedRender(id, avatar, name, total_price, duration) {
+        $('#current-order').append(`
+                        <div class="flex flex-col gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 mt-1">
+                    <div class="flex flex-row gap-5">
+                           <div class="pt-2">
+                        <img id="avatar-rent" class="rounded-full w-16 h-16" src="${avatar}"
+                            alt="ps" class="avt-1-15 avt-img">
+                    </div>
+
+                        <div>
+                            <div class="font-bold">Pre-order</div>
+                            <div id='name-rent' class="font-bold">${name}</div>
+                            <div id='cost-rent'>$ ${total_price}</div>
+                            <div id='time-rent'>${duration} hour</div>
+                        </div></div>
+
+                        <div class="flex justify-center items-center">
+                            <form method="post" action="{{ route('pre-order.end') }}">
+                                @csrf
+                                <input id="end-id" type="hidden" name="id" value="${id}">
+                                <button class="text-white bg-red-500 px-1 rounded-md">
+                                    {{ __('Cancel') }}
+                                </button>
+                            </form>
+                        </div>
+
                         </div>
                     `);
     }

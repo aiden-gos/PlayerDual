@@ -21,7 +21,14 @@ class HomeService
         $vip_user = self::getVipUsers();
         $hot_user = self::getHotUsers();
         $games = Game::all();
-        $stories = Story::where('status', 'open')->orderBy('created_at', 'desc')->take(10)->get();
+        $stories = Story::where('status', 'open')
+            ->withCount(['likes' => function ($query) {
+                $query->where('created_at', '>=', now()->subDays(15));
+            }])
+            ->orderByDesc('likes_count')
+            ->limit(10)
+            ->get();
+
         return view('home', [
             'vip_user' => $vip_user,
             'hot_user' => $hot_user,

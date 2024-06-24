@@ -3,7 +3,7 @@
         <div class="mx-auto sm:px-6 lg:px-8 space-y-6 flex flex-col">
 
             <div class="p-4 sm:p-8 bg-white  sm:rounded-lg w-full flex flex-row gap-10 max-md:flex-col">
-                <div class="w-full flex flex-col md:items-end">
+                <div class="w-full flex flex-col md:items-end sm:border-r sm:pr-5">
                     <div class="flex flex-col items-center gap-5">
                         <img class="rounded-xl" src="{{ $user->avatar }}" width="250" height="250">
                         @if ($userStatus)
@@ -15,7 +15,7 @@
                     </div>
                 </div>
 
-                <div class="w-full flex flex-col gap-10">
+                <div class="w-full flex flex-col gap-5 sm:border-r sm:pr-5">
                     <div class="flex flex-row justify-between ">
                         <div class="text-2xl font-bold">{{ $user->name }}</div>
 
@@ -55,8 +55,8 @@
                                         viewBox="0 0 544.582 544.582" xml:space="preserve">
                                         <g>
                                             <path d="M448.069,57.839c-72.675-23.562-150.781,15.759-175.721,87.898C247.41,73.522,169.303,34.277,96.628,57.839
-                   C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
-                   c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
+                                            C23.111,81.784-16.975,160.885,6.894,234.708c22.95,70.38,235.773,258.876,263.006,258.876
+                                            c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z" />
                                         </g>
                                     </svg> &nbsp;
                                     {{ __('Follow') }}
@@ -86,8 +86,8 @@
                             <div class="flex flex-col text-[14px] text-orange-600 items-center">OK</div>
                         </div>
                     </div>
-
-                    <div class="flex flex-row gap-2 flex-wrap py-5">
+                    <hr>
+                    <div class="flex flex-row gap-2 flex-wrap justify-center py-5">
                         @forelse ($user->games as $item)
                             <div class="bg-black/70 text-white p-2 rounded-md">{{ $item->name }}</div>
                         @empty

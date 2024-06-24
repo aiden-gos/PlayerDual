@@ -1,19 +1,19 @@
 @auth
     <?php
-    $renting_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-        ->where('ordering_user_id', Auth::user()->id)
-        ->where('orders.status', 'pending')
-        ->join('users', 'ordered_user_id', 'users.id')
-        ->first();
+    // $renting_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //     ->where('ordering_user_id', Auth::user()->id)
+    //     ->where('orders.status', 'pending')
+    //     ->join('users', 'ordered_user_id', 'users.id')
+    //     ->first();
 
-    $rented_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-        ->where('ordered_user_id', Auth::user()->id)
-        ->where('orders.status', 'pending')
-        ->join('users', 'ordering_user_id', 'users.id')
-        ->get();
+    // $rented_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //     ->where('ordered_user_id', Auth::user()->id)
+    //     ->where('orders.status', 'pending')
+    //     ->join('users', 'ordering_user_id', 'users.id')
+    //     ->get();
     ?>
 
-    @if ($renting_pending || $rented_pending)
+    {{-- @if ($renting_pending || $rented_pending)
         <div class="">
             <div class="gap-5 flex flex-col items-end justify-end overflow-auto max-h-[450px]">
                 @if ($renting_pending)
@@ -97,5 +97,5 @@
                 }
             });
         </script>
-    @endif
+    @endif --}}
 @endauth

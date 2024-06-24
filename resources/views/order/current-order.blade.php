@@ -1,36 +1,36 @@
 @auth
 <?php
-    $renting = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-            ->where('ordering_user_id',Auth::user()->id)
-            ->where('orders.status', 'accepted')
-            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
-            ->join('users','ordered_user_id','users.id')
-            ->first();
+    // $renting = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //         ->where('ordering_user_id',Auth::user()->id)
+    //         ->where('orders.status', 'accepted')
+    //         ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+    //         ->join('users','ordered_user_id','users.id')
+    //         ->first();
 
-    $rented = App\Models\Order::select(['orders.*', 'users.id', 'users.name', 'users.avatar'])
-            ->where('ordered_user_id',Auth::user()->id)
-            ->where('orders.status', 'accepted')
-            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
-            ->join('users','ordering_user_id','users.id')
-            ->first();
+    // $rented = App\Models\Order::select(['orders.*', 'users.id', 'users.name', 'users.avatar'])
+    //         ->where('ordered_user_id',Auth::user()->id)
+    //         ->where('orders.status', 'accepted')
+    //         ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+    //         ->join('users','ordering_user_id','users.id')
+    //         ->first();
 
-    $time = 0;
-    $duration = 0;
+    // $time = 0;
+    // $duration = 0;
 
-    if($renting){
-        $time = $renting->start_at;
-        $duration = $renting->duration;
-    }else if($rented){
-        $time = $rented->start_at;
-        $duration = $rented->duration;
-    }
+    // if($renting){
+    //     $time = $renting->start_at;
+    //     $duration = $renting->duration;
+    // }else if($rented){
+    //     $time = $rented->start_at;
+    //     $duration = $rented->duration;
+    // }
 
-    $time = strtotime($time.' +'. $duration .' hour');
-    $currentTime = time();
-    $remainingTime = $time - $currentTime;
+    // $time = strtotime($time.' +'. $duration .' hour');
+    // $currentTime = time();
+    // $remainingTime = $time - $currentTime;
 
 ?>
-
+{{--
 @if($renting || $rented)
 <div class="">
     <div class="backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
@@ -119,7 +119,7 @@ function startTimer(duration, display) {
     }, 1000);
 }
 </script>
-@endif
+@endif --}}
 
 {{-- Listening End Rent event --}}
 <script type="module">

@@ -54,4 +54,9 @@ class OrderController extends Controller
     {
         return $this->rentService->requestOrder($request);
     }
+
+    public function listRequest(Request $request)
+    {
+        return $this->rentService->listRequest($request);
+    }
 }

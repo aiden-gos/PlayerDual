@@ -60,7 +60,7 @@
             @endif
 
             <button @click="requestOpen = !requestOpen; $('#request-sidebar').removeClass('hidden');"
-                class="rounded-l-xl fixed top-[50%] right-0 bg-rose-500 z-30 ">
+                class="rounded-t-xl p-1 fixed top-[50%] right-0 bg-rose-500 z-30 -rotate-90 mr-[-20px]">
                 <span class="text-white ">Request</span>
             </button>
 

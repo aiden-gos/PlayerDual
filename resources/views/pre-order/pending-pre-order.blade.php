@@ -1,20 +1,20 @@
 @auth
     <?php
-    $renting_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-        ->where('ordering_user_id', Auth::user()->id)
-        ->where('orders.status', 'pre-ordering')
-        ->join('users', 'ordered_user_id', 'users.id')
-        ->first();
+    // $renting_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //     ->where('ordering_user_id', Auth::user()->id)
+    //     ->where('orders.status', 'pre-ordering')
+    //     ->join('users', 'ordered_user_id', 'users.id')
+    //     ->first();
 
-    $rented_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-        ->where('ordered_user_id', Auth::user()->id)
-        ->where('orders.status', 'pre-ordering')
-        ->join('users', 'ordering_user_id', 'users.id')
-        ->get();
+    // $rented_pending = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //     ->where('ordered_user_id', Auth::user()->id)
+    //     ->where('orders.status', 'pre-ordering')
+    //     ->join('users', 'ordering_user_id', 'users.id')
+    //     ->get();
     ?>
 
-    @if ($renting_pending || $rented_pending)
-        <div class="">
+    {{-- @if ($renting_pending || $rented_pending) --}}
+        {{-- <div class="">
             <div class="gap-5 flex flex-col items-end justify-end overflow-auto max-h-[450px]">
                 @if ($renting_pending)
                 <div class="flex flex-row items-center gap-5 backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 ">
@@ -76,7 +76,7 @@
                     @endforeach
                 @endif
             </div>
-        </div>
+        </div> --}}
         <script type="module">
             const key = "{{ env('VITE_PUSHER_APP_KEY') }}";
             const cluster = "{{ env('VITE_PUSHER_APP_CLUSTER') }}";
@@ -96,5 +96,5 @@
                 }
             });
         </script>
-    @endif
+    {{-- @endif --}}
 @endauth
