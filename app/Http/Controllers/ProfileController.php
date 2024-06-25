@@ -3,24 +3,69 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Gallery;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request): View
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Display the user's change password form.
+     */
+    public function changePassword(Request $request): View
+    {
+        return view('profile.password', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Display the user's accout form.
+     */
+    public function account(Request $request): View
+    {
+        return view('profile.account', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Display the user's accout form.
+     */
+    public function payment(Request $request): View
+    {
+        return view('profile.payment', [
+            'user' => $request->user(),
+            'payment_method' => $request->user()->paymentMethods(),
+            'intent' => $request->user()->createSetupIntent()
+        ]);
+    }
+
+    /**
+     * Display the user's accout form.
+     */
+    public function gallery(Request $request): View
+    {
+        $gallery = Gallery::where('user_id', $request->user()->id)->get();
+
+        return view('profile.gallery', [
+            'user' => $request->user(),
+            'gallery' => $gallery
         ]);
     }
 
@@ -37,7 +82,72 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function updatePayment(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
+
+        $request->user()->save();
+
+        return Redirect::route('profile.payment')->with('status', 'payment-updated');
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function updateAvatar(ProfileUpdateRequest $request): RedirectResponse
+    {
+        if ($request->hasFile('avatar')) {
+            if (!empty($request->user()->avatar)) {
+                try {
+                    $public_id =  explode('.', explode('/', $request->user()->avatar)[7])[0];
+                    Cloudinary::destroy($public_id);
+                } catch (\Throwable $th) {
+                    Log::error("Error detroy old avatar");
+                }
+            }
+            $uploaded = Cloudinary::upload($request->file('avatar')->getRealPath());
+            $uploadedFileUrl = $uploaded->getSecurePath();
+            Log::debug($uploadedFileUrl);
+        }
+        $request->user()->update(['avatar' => $uploadedFileUrl]);
+        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+    }
+
+    /**
+     *
+     */
+    public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
+    {
+        Log::debug($request->file('upload')->guessExtension());
+        if ($request->hasFile('upload')) {
+            if (in_array($request->file('upload')->guessExtension(), ['jpg', 'png', 'gif'])) {
+                $uploaded = Cloudinary::upload($request->file('upload')->getRealPath());
+                $uploadedFileUrl = $uploaded->getSecurePath();
+                Gallery::create(['type' => 'image', 'link' => $uploadedFileUrl, 'user_id' => $request->user()->id]);
+            } else if (in_array($request->file('upload')->guessExtension(), ['mp4', 'wmv', 'avi'])) {
+                $uploaded = Cloudinary::uploadVideo($request->file('upload')->getRealPath());
+                $uploadedFileUrl = $uploaded->getSecurePath();
+                Gallery::create(['type' => 'video', 'link' => $uploadedFileUrl, 'user_id' => $request->user()->id]);
+            }
+        }
+        return Redirect::route('profile.gallery');
+    }
+
+    public function uploadDropbox(Request $request)
+    {
+        $link = $request->input('link');
+
+        if (in_array(array_reverse(explode('.', $link))[0], ['jpg', 'png', 'gif'])) {
+            Gallery::create(['type' => 'image', 'link' => $link, 'user_id' => $request->user()->id]);
+        } else if (in_array(array_reverse(explode('.', $link))[0], ['mp4', 'wmv', 'avi'])) {
+            Gallery::create(['type' => 'video', 'link' => $link, 'user_id' => $request->user()->id]);
+        }
     }
 
     /**
@@ -45,7 +155,7 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validate([
+        $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current-password'],
         ]);
 
