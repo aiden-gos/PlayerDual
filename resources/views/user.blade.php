@@ -149,6 +149,15 @@
                     <div class="flex flex-col items-start gap-2">
                         <div class=" text-2xl text-red-600">
                             {{ $user->price == 0 ? 'Disable Rent' : '$' . $user->price . '/h' }}</div>
+                        <div class="flex flex-row">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                class="h-6 w-6 text-yellow-500">
+                                <path fill="currentColor"
+                                    d="M10 1.36l1.45 4.46h4.69l-3.79 2.75 1.45 4.46-3.79-2.75-3.79 2.75 1.45-4.46-3.79-2.75h4.69z" />
+                            </svg>
+                            {{ $user->average_rating ?? '0' }}
+                            ({{ $user->count_rating ?? '0' }})
+                        </div>
                         @include('rent')
                         @include('pre-order')
                         @include('donate')

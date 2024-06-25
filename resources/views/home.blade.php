@@ -105,7 +105,7 @@
                                     @foreach ($vip_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-[160px] w-full"
+                                                <img class="rounded-t-xl h-40 w-full"
                                                     src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
@@ -155,7 +155,7 @@
                                     @foreach ($hot_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-[160px] w-full"
+                                                <img class="rounded-t-xl h-40 w-full"
                                                     src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
@@ -245,7 +245,7 @@
                     result.data.forEach(e => {
                         script += `<a href="/user/${e.id}" class="rounded-xl border mt-5">
                             <div>
-                                <img class="rounded-t-xl" src="${e.avatar}">
+                                <img class="rounded-t-xl h-40 w-full object-cover" src="${e.avatar}">
                                 <div class="w-full flex justify-end">
                                     <span
                                         class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">$ ${e.price}/h</span>

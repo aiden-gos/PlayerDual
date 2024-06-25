@@ -22,6 +22,11 @@ class UserService
     {
         $id = $request->route('id');
         $user = User::where('id', $id)->first();
+
+        if ($user == null) {
+            return abort('404');
+        }
+
         $gallery = Gallery::where('user_id', $id)->take(5)->get();
         $top_donate = self::getTopDonate($id);
 

@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Donate;
+use App\Models\Game;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +26,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
-            StoriesSeeder::class
+            StoriesSeeder::class,
+            GameSeeder::class,
+            DonateSeeder::class,
+            UserGame::class,
+            UserRate::class,
         ]);
     }
 }

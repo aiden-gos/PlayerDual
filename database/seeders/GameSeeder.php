@@ -15,19 +15,19 @@ class GameSeeder extends Seeder
     public function run()
     {
         $games = [
-            'League of Legends' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__f364f2e0-34ce-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'PUBG Mobile' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__c5802ad0-33e2-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'PUBG PC' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__53121480-33e3-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Arena of Valor' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__3b5dac30-34d0-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Wild Rift' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__3b5dac30-34d0-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Free Fire' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__99a18050-34d5-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Valorant' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__39932230-34cc-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Naraka Bladepoint' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__5dd9f670-34d4-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'CSGO' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__f79153d0-33e4-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Dota 2' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__40daec90-33e5-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Call of Duty' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__e671c440-34d4-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'GTA V' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__38084d60-34d5-11ed-838c-b120e70abb59__game_avatars.jpg',
-            'Other' => 'https://playerduo.net/api/upload-service/game_avatars/715867c6-698f-411a-b4f9-1e9093130b60__d8d57300-37bc-11ed-838c-b120e70abb59__game_avatars.jpg'
+            'League of Legends' => 'https://upanh.vn-z.vn/images/2018/11/10/lol.jpg',
+            'PUBG Mobile' => 'https://c4.wallpaperflare.com/wallpaper/320/205/156/pubg-mobile-wallpaper-preview.jpg',
+            'PUBG PC' => 'https://images.ctfassets.net/vfkpgemp7ek3/1104843306/ef4338ea8a96a113ff97e85f13e2e9c5/pubg-mobile-hits-3-billion-lifetime-revenue.jpg',
+            'Arena of Valor' => 'https://images.fpt.shop/unsafe/filters:quality(5)/fptshop.com.vn/uploads/images/tin-tuc/182805/Originals/arena-of-valor-3.jpg',
+            'Wild Rift' => 'https://i.pinimg.com/originals/c1/0f/8e/c10f8e5f43ac7cd0059a0aa33c54d47a.jpg',
+            'Free Fire' => 'https://cdn.tgdd.vn/Files/2023/08/31/1545294/code-free-fire-1-310823-210041.jpg',
+            'Valorant' => 'https://m.media-amazon.com/images/M/MV5BNmNhM2NjMTgtNmIyZC00ZmVjLTk4YWItZmZjNGY2NThiNDhkXkEyXkFqcGdeQXVyODU4MDU1NjU@._V1_FMjpg_UX1000_.jpg',
+            'Naraka Bladepoint' => 'https://didongviet.vn/dchannel/wp-content/uploads/2023/07/gioi-thieu-naraka-bladepoint-didongviet.jpg',
+            'CSGO' => 'https://phongvu.vn/cong-nghe/wp-content/uploads/2018/09/csgo-free.jpg',
+            'Dota 2' => 'https://cdn.akamai.steamstatic.com/apps/dota2/images/dota2_social.jpg',
+            'Call of Duty' => 'https://wallpapers.com/images/featured/call-of-duty-pictures-7lrqnchbx478ucgg.jpg',
+            'GTA V' => 'https://images7.alphacoders.com/439/439636.jpg',
+            'Other' => 'https://t4.ftcdn.net/jpg/04/42/21/53/360_F_442215355_AjiR6ogucq3vPzjFAAEfwbPXYGqYVAap.jpg'
         ];
 
         foreach ($games as $name => $img) {
