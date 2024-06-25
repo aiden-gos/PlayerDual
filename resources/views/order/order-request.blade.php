@@ -30,10 +30,13 @@
         </div>
 
         <div class="mt-6 flex justify-end">
+        <x-secondary-button @click="()=>{location.reload();}" class="mr-2" >
+                {{ __('Close') }}
+        </x-secondary-button>
         <form method="post" action="{{ route('rent.reject') }}">
             @csrf
             <input id="accept-id" type="hidden" name="id">
-            <x-danger-button x-on:click="$dispatch('close')">
+            <x-danger-button x-on:click="$dispatch('close')" >
                 {{ __('Reject') }}
             </x-secondary-button>
         </form>
@@ -41,9 +44,9 @@
         <form method="post" action="{{ route('rent.accept') }}">
             @csrf
             <input id="reject-id" type="hidden" name="id">
-            <x-primary-button class="ml-3 bg-green-500">
+            <button class="ml-3 inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 {{ __('Accept') }}
-            </x-primary-button>
+            </button>
         </form>
 
         </div>

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class HomeService
 {
+    const DAY = 15;
+    
     public function __construct()
     {
         //
@@ -23,7 +25,7 @@ class HomeService
         $games = Game::all();
         $stories = Story::where('status', 'open')
             ->withCount(['likes' => function ($query) {
-                $query->where('created_at', '>=', now()->subDays(15));
+                $query->where('created_at', '>=', now()->subDays(self::DAY));
             }])
             ->orderByDesc('likes_count')
             ->limit(10)
@@ -40,7 +42,7 @@ class HomeService
     private function getHotUsers()
     {
         $hotUsers = User::with(['games'])->withCount(['ordering' => function ($query) {
-            $query->where('orders.created_at', '>', now()->subDays(15));
+            $query->where('orders.created_at', '>', now()->subDays(self::DAY));
         }])
             ->orderBy('ordering_count', 'DESC')
             ->limit(15)
@@ -52,13 +54,21 @@ class HomeService
     {
         $ordersSubquery = DB::table('orders')
             ->select('ordered_user_id as user_id', DB::raw('SUM(total_price) as total'))
-            ->where('created_at', '>=', now()->subDays(15))
+            ->where('created_at', '>=', now()->subDays(self::DAY))
             ->groupBy('ordered_user_id');
 
+        $donatesSubquery = DB::table('donates')
+            ->select('donated_user_id as user_id', DB::raw('SUM(price) as total'))
+            ->where('created_at', '>=', now()->subDays(self::DAY))
+            ->groupBy('donated_user_id');
+
         $vipUsers = User::with(['games']) // Correctly use `with` for Eloquent models
-            ->select('users.*', DB::raw('(IFNULL(o.total, 0)) as price_all'))
+            ->select('users.*', DB::raw('(IFNULL(o.total, 0)+ IFNULL(d.total, 0)) as price_all'))
             ->leftJoinSub($ordersSubquery, 'o', function ($join) {
                 $join->on('users.id', '=', 'o.user_id');
+            })
+            ->leftJoinSub($donatesSubquery, 'd', function ($join) {
+                $join->on('users.id', '=', 'd.user_id');
             })
             ->groupBy('users.id')
             ->orderBy('price_all', 'desc')

@@ -10,6 +10,8 @@ use App\Notifications\RentNotify;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
+use DateInterval;
 
 class PreOrderService
 {
@@ -127,10 +129,9 @@ class PreOrderService
         return redirect()->back();
     }
 
-    public function endRent(Request $request, $id)
+    public function endPreOrder(Request $request, $id)
     {
         DB::beginTransaction();
-
         try {
             if (!empty($id)) {
                 $order = Order::find(['id' => $id, 'status' => 'accepted'])->first();
@@ -199,11 +200,32 @@ class PreOrderService
             ->join('users', 'ordering_user_id', 'users.id')
             ->get();
 
+        self::calculateSecondsToStart($renting);
+        self::calculateSecondsToStart($rented);
+
         return response()->json([
             'renting' => $renting,
             'rented' => $rented,
             'renting_pending' => $renting_pending,
             'rented_pending' => $rented_pending
         ]);
+    }
+
+    function calculateSecondsToStart($order) {
+        if ($order && isset($order->start_at)) {
+            $startAt = new \DateTime($order->start_at);
+            $now = new \DateTime();
+            $diff = $now->diff($startAt);
+
+            // Calculate the total number of seconds
+            $secondsToStart = ($diff->invert == 0 ? 1 : -1) * ( // Check if the date is in the past
+                ($diff->days * 24 * 60 * 60) + // Days to seconds
+                ($diff->h * 60 * 60) +         // Hours to seconds
+                ($diff->i * 60) +              // Minutes to seconds
+                $diff->s                       // Seconds
+            );
+            $order->seconds_until_end = $secondsToStart;
+        }
+
     }
 }

@@ -50,9 +50,11 @@ class UserService
             'userStatus' => $userStatus,
             'preOrderStatus' => $preOrderStatus || $user->price == 0,
             'rate' => $rate,
-            'showRate' => $showRate,
+            'showRate' => $showRate['showRate'],
             'gallery' => $gallery,
             'top_donate' => $top_donate,
+            'rateCount' => $showRate['rateCount'],
+            'orderCount' => $showRate['orderCount'],
         ]);
     }
 
@@ -163,7 +165,6 @@ class UserService
             Log::error($th);
         }
 
-
         return $rate;
     }
 
@@ -175,17 +176,21 @@ class UserService
             $orderCount = Order::where('ordering_user_id', $request->user()->id)
                 ->where('ordered_user_id', $user->id)
                 ->count();
-
+            
             $rateCount = Rate::where('user_id', $user->id)
                 ->where('author_id', $request->user()->id)
                 ->count();
-
+            
             $showRate = $orderCount > 0 && $rateCount < $orderCount &&
                 isset($request->user()->id) && $request->user()->id != $user->id;
         } catch (\Throwable $th) {
             Log::debug($th);
         }
 
-        return $showRate;
+        return [
+            'showRate' => $showRate,
+            'orderCount' => $orderCount,
+            'rateCount' => $rateCount
+        ];
     }
 }

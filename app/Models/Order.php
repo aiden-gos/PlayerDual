@@ -25,12 +25,12 @@ class Order extends Model
 
     protected $with = ['ordering_user', 'ordered_user'];
 
-    public function orderingUser()
+    public function ordering_user()
     {
         return $this->belongsTo(User::class, 'ordering_user_id');
     }
 
-    public function orderedUser()
+    public function ordered_user()
     {
         return $this->belongsTo(User::class, 'ordered_user_id');
     }

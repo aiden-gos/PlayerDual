@@ -10,6 +10,8 @@ use App\Notifications\RentNotify;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
+use DateInterval;
 
 class OrderService
 {
@@ -195,6 +197,10 @@ class OrderService
             ->join('users', 'ordering_user_id', 'users.id')
             ->get();
 
+        self::calculateSecondsUntilEnd($rented);
+    
+        self::calculateSecondsUntilEnd($renting);
+            
         return response()->json([
             'renting' => $renting,
             'rented' => $rented,
@@ -206,5 +212,21 @@ class OrderService
     public function listRequest(Request $request)
     {
         return view('request.request-order');
+    }
+
+    private function calculateSecondsUntilEnd($order) {
+        if ($order) {
+            $endTime = (new \DateTime($order->updated_at))->add(new \DateInterval('PT' . $order->duration . 'H'));
+            $now = new \DateTime();
+            $diff = $now->diff($endTime);
+    
+            // Calculate the total number of seconds
+            $secondsUntilEnd = ($diff->days * 24 * 60 * 60) + // Days to seconds
+                               ($diff->h * 60 * 60) +         // Hours to seconds
+                               ($diff->i * 60) +              // Minutes to seconds
+                               $diff->s;          
+                                           // Seconds
+            $order->seconds_until_end = $secondsUntilEnd;
+        }
     }
 }

@@ -58,7 +58,7 @@
                     @endif
                 </div>
             @endif
-
+            @auth
             <button @click="requestOpen = !requestOpen; $('#request-sidebar').removeClass('hidden');"
                 class="rounded-t-xl p-1 fixed top-[50%] right-0 bg-rose-500 z-30 -rotate-90 mr-[-20px]">
                 <span class="text-white ">Request</span>
@@ -73,7 +73,7 @@
                     @include('layouts.request')
                 </div>
             </div>
-
+            @endauth
             <!-- Page Content -->
             <main @click="open = false, requestOpen = false" style="flex: 1 1 auto; -ms-overflow-style: none; scrollbar-width: none;" id="main"
                 class="w-full pt-12 overflow-x-hidden">

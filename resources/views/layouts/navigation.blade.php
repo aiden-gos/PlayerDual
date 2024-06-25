@@ -346,9 +346,11 @@
 
         <div class="mt-6">
             <x-input-label for="am" value="{{ __('Money') }}" class="sr-only" />
-
-            <x-text-input id="am" name="money" type="number" class="mt-1 block w-3/4"
-                placeholder="{{ __('Type number') }}" />
+            <div class="flex flex-row items-center">
+                <div class='mr-[-20px] z-30 mt-1'>$</div>
+                <x-text-input id="am" name="money" type="number" class="mt-1 block w-3/4 px-5"
+                    placeholder="{{ __('Type number') }}" />
+            </div>
         </div>
 
         <div class="mt-6 flex justify-end">

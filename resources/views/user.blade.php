@@ -18,7 +18,8 @@
                 <div class="w-full flex flex-col gap-5 sm:border-r sm:pr-5">
                     <div class="flex flex-row justify-between ">
                         <div class="text-2xl font-bold">{{ $user->name }}</div>
-
+                        @auth
+                        @if($user->id != Auth::user()->id)
                         @if ($follow)
                             <form method="post" action="{{ route('follow.destroy') }}">
                                 @csrf
@@ -64,6 +65,8 @@
                                 </x-primary-button>
                             </form>
                         @endif
+                        @endif
+                        @endauth
                     </div>
 
                     <div class="flex flex-row gap-2">

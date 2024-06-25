@@ -42,7 +42,7 @@ class PreOrderController extends Controller
     {
         $id = $request->input('id');
 
-        $this->rentService->endRent($request, $id);
+        return $this->rentService->endPreOrder($request, $id);
     }
 
     public function requestPreOrder(Request $request)

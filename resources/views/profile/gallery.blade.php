@@ -5,7 +5,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white sm:rounded-lg">
                 <div class="pb-5 flex flex-col justify-between w-full">
                     <form method="post" action="{{ route('profile.gallery.upload') }}" class="space-y-6"
                         enctype="multipart/form-data">
@@ -17,7 +17,7 @@
 
                         <input id="upload" type="file" class="filepond" name="upload" data-allow-reorder="true"
                             data-max-file-size="20MB" accept="image/png, image/jpeg, image/gif, video/mp4">
-                        <div id="chooser" class=""></div>
+                        <!-- <div id="chooser" class=""></div> -->
 
                         <div id="file-info"></div>
                     </form>
@@ -43,7 +43,7 @@
                                 "thumbnailHoverEffect2": "imageScaleIn80",
                                 "thumbnailGutterWidth": 10,
                                 "thumbnailGutterHeight": 10,
-                                "thumbnailOpenImage": true
+                                "thumbnailOpenImage": true,
                             }'>
                             @foreach ($gallery as $ele)
                                 <a href="{{ $ele->link }}" data-ngthumb="{{ $ele->link }}" data-ngdesc=""></a>
@@ -58,7 +58,7 @@
 
 <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs"
     data-app-key="57e7cwbrqrgxbxm"></script>
-<script>
+<!-- <script>
     options = {
         success: function(files) {
             $.ajax({
@@ -91,7 +91,7 @@
 
     var button = Dropbox.createChooseButton(options);
     document.getElementById("chooser").appendChild(button);
-</script>
+</script> -->
 
 <script type="module">
     import * as FilePond from "{{ Vite::asset('node_modules/filepond/dist/filepond.esm.js') }}";
@@ -120,6 +120,7 @@
     FilePond.create(document.querySelector('input[name=upload]'), {
         storeAsFile: true,
         allowReorder: true,
+        credits:false,
         imageEditor: {
             createEditor: openEditor,
             imageReader: [createDefaultImageReader],
@@ -131,12 +132,5 @@
                 ...getEditorDefaults({}),
             },
         }
-    });
-</script>
-
-<script>
-    $('#upload').on('change', function() {
-        var file = $(this)[0].files[0];
-        console.log(file);
     });
 </script>

@@ -8,12 +8,12 @@
             <p class="font-bold">{{ $item->author->name }}</p>
             <p class=""><span>{{ $item->created_at }}</span></p>
             <p class="py-2">{{ $item->content }}</p>
-            @if ($item->author->id == Auth::user()->id)
+            <!-- @if ($item->author->id == Auth::user()->id)
                 <div class="flex flex-row gap-5">
                     <button id="update-rate" class="text-yellow-600">Update</button>
                     <input type="hidden" id="id" value="{{ $item->id }}">
                 </div>
-            @endif
+            @endif -->
         </a>
         <div class="">
             <div class="flex flex-row">
@@ -54,7 +54,7 @@
         </div>
     </div>
 </div>
-<script>
+<!-- <script>
     $(document).ready(function() {
         var btnUpdate = $('#update-rate');
         var stateFormShow = true;
@@ -71,4 +71,4 @@
 
         })
     })
-</script>
+</script> -->

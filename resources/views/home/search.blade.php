@@ -18,17 +18,6 @@
             </div>
 
             <div class="flex flex-col">
-                <label for="date" class="ml-2 text-stone-600 text-sm font-medium">Price</label>
-                <div class="flex flex-row gap-4 items-center">
-                    <input id="price-min" type="number" id="date" value="0"
-                        class="mt-2 block text-stone-600 w-full rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                    to
-                    <input id="price-max" type="number" id="date" value="100"
-                        class="mt-2 block w-full text-stone-600 rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                </div>
-            </div>
-
-            <div class="flex flex-col">
                 <label for="game" class="ml-2 text-stone-600 text-sm font-medium">Game</label>
 
                 <select id="game"
@@ -38,6 +27,17 @@
                         <option value="{{ $game->id }}">{{ $game->name }}</option>
                     @endforeach
                 </select>
+            </div>
+    
+            <div class="flex flex-col">
+                <label for="date" class="ml-2 text-stone-600 text-sm font-medium">Price range</label>
+                <div class="flex flex-row gap-4 items-center">
+                    <input id="price-min" type="number" id="date" value="0"
+                        class="mt-2 block text-stone-600 w-full rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                    to
+                    <input id="price-max" type="number" id="date" value="100"
+                        class="mt-2 block w-full text-stone-600 rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                </div>
             </div>
 
             <div class="mt-6 grid w-full justify-start xl:justify-end space-x-4 w-full">

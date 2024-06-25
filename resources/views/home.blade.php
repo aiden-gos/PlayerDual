@@ -29,7 +29,7 @@
                         {{-- Pan  --}}
                         <div class="w-full">
                             <img class="object-fill h-40 w-full rounded-xl"
-                                src="https://files.playerduo.net/production/images/banner/715867c6-698f-411a-b4f9-1e9093130b60__ff5aee00-79ee-11ed-a19f-23a3b10d190e__admin_banner.jpg"
+                                src="https://res.cloudinary.com/dsicdcjye/image/upload/v1719282549/715867c6-698f-411a-b4f9-1e9093130b60__ff5aee00-79ee-11ed-a19f-23a3b10d190e__admin_banner_vfm7xy.png"
                                 alt="">
                         </div>
                         {{-- Pan  --}}
@@ -105,7 +105,7 @@
                                     @foreach ($vip_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-40 w-full"
+                                                <img class="rounded-t-xl h-40 w-full object-cover"
                                                     src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
@@ -155,7 +155,7 @@
                                     @foreach ($hot_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-40 w-full"
+                                                <img class="rounded-t-xl h-40 w-full object-cover"
                                                     src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span

@@ -103,7 +103,7 @@
                 <x-input-label for="" :value="__('Cost')" />
             </div>
             <div class="w-full flex flex-col-reverse items-center">
-                <div class="flex-col items-center">$<input id="cost" name="cost" type="text" readonly="readonly"  class="border-0 p-0"/></div>
+                <div class="flex-col items-center w-full">$<input id="cost" name="cost" type="text" readonly="readonly"  class="border-0 p-0"/></div>
             </div>
         </div>
 
