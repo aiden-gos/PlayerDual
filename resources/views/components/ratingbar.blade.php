@@ -2,7 +2,7 @@
 <div class="flex flex-row-reverse justify-end items-center">
     <input id="star-1" type="radio"
         class="peer -ms-5 size-5 bg-transparent border-0 text-transparent cursor-pointer appearance-none checked:bg-none focus:bg-none focus:ring-0 focus:ring-offset-0"
-        name="star" value="5">
+        name="star" value="5" checked>
     <label for="star-1"
         class="peer-checked:text-yellow-400 text-gray-300 pointer-events-none dark:peer-checked:text-yellow-600 dark:text-neutral-600">
         <svg class="flex-shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"

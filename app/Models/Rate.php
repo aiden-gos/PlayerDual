@@ -18,7 +18,7 @@ class Rate extends Model
 
     protected $with = ['author'];
 
-      public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

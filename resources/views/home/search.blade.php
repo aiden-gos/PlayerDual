@@ -18,16 +18,6 @@
             </div>
 
             <div class="flex flex-col">
-                <label for="date" class="ml-2 text-stone-600 text-sm font-medium">Price</label>
-                <div class="flex flex-row gap-4 items-center">
-                    <input id="price-min" type="number" id="date" value="0"
-                        class="mt-2 block text-stone-600 w-full rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                    to <input id="price-max" type="number" id="date" value="100"
-                        class="mt-2 block w-full text-stone-600 rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                </div>
-            </div>
-
-            <div class="flex flex-col">
                 <label for="game" class="ml-2 text-stone-600 text-sm font-medium">Game</label>
 
                 <select id="game"
@@ -37,6 +27,17 @@
                         <option value="{{ $game->id }}">{{ $game->name }}</option>
                     @endforeach
                 </select>
+            </div>
+    
+            <div class="flex flex-col">
+                <label for="date" class="ml-2 text-stone-600 text-sm font-medium">Price range</label>
+                <div class="flex flex-row gap-4 items-center">
+                    <input id="price-min" type="number" min='0' max='100' id="date" value="0"
+                        class="mt-2 block text-stone-600 w-full rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                    to
+                    <input id="price-max" type="number" min='0' max='100' id="date" value="100"
+                        class="mt-2 block w-full text-stone-600 rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                </div>
             </div>
 
             <div class="mt-6 grid w-full justify-start xl:justify-end space-x-4 w-full">
@@ -106,7 +107,7 @@
                 result.forEach(e => {
                     script += `<a href="/user/${e.id}" class="rounded-xl border mt-5">
                             <div>
-                                <img class="rounded-t-xl h-[160px] w-full" src="${e.avatar ?? ""}">
+                                <img class="rounded-t-xl h-40 w-full object-cover" src="${e.avatar ?? ""}">
                                 <div class="w-full flex justify-end">
                                     <span
                                         class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">$ ${e.price}/h</span>
@@ -116,10 +117,19 @@
                                 <span
                                     class="text-lg font-bold whitespace-nowrap">${e.name}</span>
                                 <br>
-                                <span class="text-gray-400">${e.title ?? ""}</span>
+                                <div class="text-gray-400 h-5">${e.title ?? " "}</div>
                                 <div class="mt-5 flex flex-row justify-between">
-                                    <div>game</div>
-                                    <div class="flex flex-row items-center">
+                                    <div class="flex flex-row items-center gap-1">`;
+                    e.games.forEach((game, index) => {
+                        if (index < 3) {
+                            script +=
+                                `<img class="w-5 h-5 rounded-full" src="${game.img}" alt="">`;
+                        }
+                        if (index >= 3 && index == e.games.length - 1) {
+                            script += `<span class="text-xs">+${e.games.length - 3}</span>`;
+                        }
+                    });
+                    script += `</div><div class="flex flex-row items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                             class="h-6 w-6 text-yellow-500">
                                             <path fill="currentColor"

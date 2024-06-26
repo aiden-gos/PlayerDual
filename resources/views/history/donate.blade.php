@@ -57,7 +57,7 @@
                                                 {{ $item->created_at }}
                                             </td>
                                             <td class="px-6 py-4 ">
-                                                {{ $item->price }}
+                                                {{ number_format($item->price) }}
                                             </td>
                                             <td class="px-6 py-4 ">
                                                 {{ $item->message }}

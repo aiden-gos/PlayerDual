@@ -30,6 +30,9 @@
         </div>
 
         <div class="mt-6 flex justify-end">
+        <x-secondary-button @click="()=>{location.reload();}" class="mr-2" >
+                {{ __('Close') }}
+        </x-secondary-button>
         <form method="post" action="{{ route('pre-order.reject') }}">
             @csrf
             <input id="accept-id-pre-order" type="hidden" name="id">
@@ -41,9 +44,9 @@
         <form method="post" action="{{ route('pre-order.accept') }}">
             @csrf
             <input id="reject-id-pre-order" type="hidden" name="id">
-            <x-primary-button class="ml-3">
+            <button class="ml-3 inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 {{ __('Accept') }}
-            </x-primary-button>
+            </button>
         </form>
 
         </div>

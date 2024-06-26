@@ -6,9 +6,9 @@
         Pre-order
 </button>
 @else
-<button x-data=""
+{{-- <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Pre-order-form')"
-    class="bg-red-200 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button>
+    class="bg-red-200 text-white w-full py-3 rounded-md max-w-64" disabled>Pre-order</button> --}}
 @endif
 
 <x-modal name="Pre-order-form" focusable>
@@ -39,7 +39,8 @@
                 <x-input-label for="name" :value="__('Balance')" />
             </div>
             <div class="w-full">
-                <div>${{Auth::user()->balance}}</div>
+                <div>${{number_format(Auth::user()->balance)}}</div>
+                <div id="errorContainerPreOrder"></div>
             </div>
         </div>
         <hr>
@@ -79,8 +80,8 @@
             <div class="w-full">
                 <x-input-label for="" :value="__('Cost')" />
             </div>
-            <div class="w-full flex flex-col">
-                <input id="costPreOrder" name="cost" type="number" readonly="readonly"  class="border-0"/>
+            <div class="w-full flex flex-row items-center">
+                $<input id="costPreOrder" name="cost" type="text" readonly="readonly"  class="border-0 p-0"/>
             </div>
         </div>
 
@@ -116,17 +117,29 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
 <script>
     $("#PreOrder").validate({
+        ignore:[],
 		onfocusout: false,
 		onkeyup: false,
 		onclick: false,
 		rules: {
 			"cost": {
 				required: true,
+                min:0,
                 max:{{Auth::user()->balance}}
 			}
-		}
+		},
+        messages: {
+            "cost": {
+                required: "Please enter a valid amount",
+                min: "Please enter a valid amount",
+                max: "You don't have enough balance"
+            }
+        },
+        errorPlacement: function(error, element) {
+        $("#errorContainerPreOrder").html(error);
+    }
 	});
 </script>
 @else
-    <a class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a>
+    <!-- <a class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a> -->
 @endauth

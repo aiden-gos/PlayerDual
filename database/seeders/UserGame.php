@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class RoleSeeder extends Seeder
+class UserGame extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,11 +15,9 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $names = ['manager', 'member'];
-        foreach ($names as $name) {
-            DB::table('roles')->insert([
-                'name' => $name,
-            ]);
+        $users = User::all();
+        foreach ($users as $user) {
+            $user->games()->attach(array_rand(array_flip(range(1, 10)), rand(4, 6)));
         }
     }
 }

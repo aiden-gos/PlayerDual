@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/gallery', [ProfileController::class, 'uploadGallery'])->name('profile.gallery.upload');
+    Route::delete('/gallery', [ProfileController::class, 'deleteGallery'])->name('profile.gallery.delete');
     Route::post('/gallerydropbox', [ProfileController::class, 'uploadDropbox'])->name('profile.gallery.dropbox');
     Route::patch('/payment', [ProfileController::class, 'updatePayment'])->name('profile.payment.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

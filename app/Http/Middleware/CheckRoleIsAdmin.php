@@ -18,7 +18,8 @@ class CheckRoleIsAdmin
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {   if (auth()->user()->role_id !== 1) {
+    {
+        if (auth()->user()->role_id !== 1) {
             return abort(404);
         }
 

@@ -1,34 +1,34 @@
 @auth
     <?php
-    $renting = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-        ->where('ordering_user_id', Auth::user()->id)
-        ->where('orders.status', 'pre-ordered')
-        ->join('users', 'ordered_user_id', 'users.id')
-        ->first();
+    // $renting = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //     ->where('ordering_user_id', Auth::user()->id)
+    //     ->where('orders.status', 'pre-ordered')
+    //     ->join('users', 'ordered_user_id', 'users.id')
+    //     ->first();
 
-    $rented = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
-        ->where('ordered_user_id', Auth::user()->id)
-        ->where('orders.status', 'pre-ordered')
-        ->join('users', 'ordering_user_id', 'users.id')
-        ->first();
+    // $rented = App\Models\Order::select(['orders.*', 'users.name', 'users.avatar'])
+    //     ->where('ordered_user_id', Auth::user()->id)
+    //     ->where('orders.status', 'pre-ordered')
+    //     ->join('users', 'ordering_user_id', 'users.id')
+    //     ->first();
 
-    $time = 0;
-    $duration = 0;
-    $cancel = true;
+    // $time = 0;
+    // $duration = 0;
+    // $cancel = true;
 
-    if ($renting) {
-        $time = $renting->start_at;
-    } elseif ($rented) {
-        $time = $rented->start_at;
-    }
+    // if ($renting) {
+    //     $time = $renting->start_at;
+    // } elseif ($rented) {
+    //     $time = $rented->start_at;
+    // }
 
-    $time = strtotime($time);
-    $currentTime = time();
-    $remainingTime = $time - $currentTime;
+    // $time = strtotime($time);
+    // $currentTime = time();
+    // $remainingTime = $time - $currentTime;
     ?>
 
-    @if ($renting || $rented)
-        <div class="">
+    {{-- @if ($renting || $rented) --}}
+        {{-- <div class="">
             <div class="backdrop-blur-3xl bg-rose-500/20 rounded-2xl p-2 px-5 flex flex-row items-center gap-5">
                 @if ($renting && !$rented)
                     <div class="pt-2">
@@ -81,8 +81,8 @@
                 @endif
 
             </div>
-        </div>
-        <script>
+        </div> --}}
+        {{-- <script>
             var time = '{{ $remainingTime }}'
             startTimer(time, $('#countdown-pre-order'));
 
@@ -109,8 +109,8 @@
                     }
                 }, 1000);
             }
-        </script>
-    @endif
+        </script> --}}
+    {{-- @endif --}}
 
     {{-- Listening End Rent event --}}
     <script type="module">

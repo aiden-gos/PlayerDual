@@ -4,6 +4,13 @@
             <h2 class="text-xl font-bold w-full text-center">Game list</h2>
             <hr>
             <div class="flex flex-col justify-center items-start w-full">
+                <button id="all" name="ALL PLAYERS"
+                    class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
+                    <img class="w-8 h-8 rounded-md"
+                        src="https://image.winudf.com/v2/image1/Y29tLmJsYWNrb2Nlbi5hbGxpbm9uZV9uZXdnYW1lc19zY3JlZW5fMF8xNjgxMzQ4ODQ2XzA2Mw/screen-0.jpg?fakeurl=1&type=.jpg"
+                        alt="">
+                    <div> All </div>
+                </button>
                 @foreach ($games as $item)
                     <button id="{{ $item->id }}" name="{{ $item->name }}"
                         class="filter-game py-2 flex flex-row gap-2 items-center hover:bg-rose-100 rounded-md w-full">
@@ -22,12 +29,25 @@
                         {{-- Pan  --}}
                         <div class="w-full">
                             <img class="object-fill h-40 w-full rounded-xl"
-                                src="https://files.playerduo.net/production/images/banner/715867c6-698f-411a-b4f9-1e9093130b60__ff5aee00-79ee-11ed-a19f-23a3b10d190e__admin_banner.jpg"
+                                src="https://res.cloudinary.com/dsicdcjye/image/upload/v1719282549/715867c6-698f-411a-b4f9-1e9093130b60__ff5aee00-79ee-11ed-a19f-23a3b10d190e__admin_banner_vfm7xy.png"
                                 alt="">
                         </div>
                         {{-- Pan  --}}
                         <div
-                            class="overflow-x-auto flex flex-row gap-3"style="-ms-overflow-style: none; scrollbar-width: none;">
+                            class="overflow-auto flex flex-row gap-3" style="-ms-overflow-style: none; scrollbar-width: none;">
+                            @auth
+                            <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'up-story-form')"
+                                class="bg-gray-200 min-w-48 rounded-t-xl text-black border w-full py-3 justify-center rounded-md max-w-64 flex flex-col items-center p-2 gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 24 24">
+                                    <path
+                                        d="M 12 2 C 6.4889971 2 2 6.4889971 2 12 C 2 17.511003 6.4889971 22 12 22 C 17.511003 22 22 17.511003 22 12 C 22 6.4889971 17.511003 2 12 2 z M 12 4 C 16.430123 4 20 7.5698774 20 12 C 20 16.430123 16.430123 20 12 20 C 7.5698774 20 4 16.430123 4 12 C 4 7.5698774 7.5698774 4 12 4 z M 11 7 L 11 11 L 7 11 L 7 13 L 11 13 L 11 17 L 13 17 L 13 13 L 17 13 L 17 11 L 13 11 L 13 7 L 11 7 z">
+                                    </path>
+                                </svg>
+                                Post your story
+                            </button>
+                            @include('stories.stories-up')
+                        @endauth
+
                             @foreach ($stories as $story)
                                 <button class="flex flex-col border rounded-xl story" href=""
                                     x-data=""
@@ -46,9 +66,9 @@
                                     },
                                 }})'>
                                     <div>
-                                        <video class="max-w-[130px] object-cover rounded-t-xl"
+                                        <video class="min-w-48 h-60 rounded-t-xl object-cover"
                                             src="{{ $story->video_link }}" alt=""></video>
-                                        <div class="text-white mt-[-20px] flex w-full justify-end text-sm">
+                                        <div class="text-white mt-[-20px] flex w-full justify-end text-sm px-2">
                                             <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -68,10 +88,12 @@
                                 </button>
                             @endforeach
                         </div>
-
+ 
                         {{-- Filter game  --}}
                         <div class="mt-5 hidden game-container w-full">
+
                             <h1 id="name-game" class="text-xl text-rose-500 font-bold"></h1>
+
                             <div
                                 class="filter-game-container w-full grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
                             </div>
@@ -82,10 +104,11 @@
                         {{-- Filter game  --}}
 
                         <div id="home">
-                            {{-- Search  --}}
-                            @include('home.search')
-                            <div class="search "></div>
-                            {{-- Search  --}}
+
+                        {{-- Search  --}}
+                        @include('home.search')
+                        <div class="search "></div>
+                        {{-- Search  --}}
 
                             {{-- vip player  --}}
                             <div class="mt-5">
@@ -96,19 +119,31 @@
                                     @foreach ($vip_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-[160px] w-full" src="{{ $item->avatar ?? '' }}">
+                                                <img class="rounded-t-xl h-40 w-full object-cover"
+                                                    src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
-                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ $item->price }}/h</span>
+                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ number_format($item->price) }}/h</span>
                                                 </div>
                                             </div>
                                             <div class="p-2 overflow-hidden truncate">
                                                 <span
                                                     class="text-lg font-bold whitespace-nowrap">{{ $item->name ?? '' }}</span>
                                                 <br>
-                                                <span class="text-gray-400">{{ $item->title ?? '' }}</span>
+                                                <div class="text-gray-400 h-5">{{ $item->title ?? '' }}</div>
                                                 <div class="mt-5 flex flex-row justify-between">
-                                                    <div>game</div>
+                                                    <div class="flex flex-row items-center gap-1">
+                                                        @foreach ($item->games as $index => $game)
+                                                            @if ($index < 3)
+                                                                <img class="w-5 h-5 rounded-full"
+                                                                    src="{{ $game->img ?? '' }}" alt="">
+                                                            @endif
+                                                            @if ($index >= 3 && $index == count($item->games) - 1)
+                                                                <span
+                                                                    class="text-xs">+{{ count($item->games) - 3 }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                     <div class="flex flex-row items-center">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             class="h-6 w-6 text-yellow-500">
@@ -134,19 +169,31 @@
                                     @foreach ($hot_user as $item)
                                         <a href="/user/{{ $item->id }}" class="rounded-xl border mt-5">
                                             <div>
-                                                <img class="rounded-t-xl h-[160px] w-full" src="{{ $item->avatar ?? '' }}">
+                                                <img class="rounded-t-xl h-40 w-full object-cover"
+                                                    src="{{ $item->avatar ?? '' }}">
                                                 <div class="w-full flex justify-end">
                                                     <span
-                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ $item->price }}/h</span>
+                                                        class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">${{ number_format($item->price) }}/h</span>
                                                 </div>
                                             </div>
                                             <div class="p-2 overflow-hidden truncate">
                                                 <span
                                                     class="text-lg font-bold whitespace-nowrap">{{ $item->name ?? '' }}</span>
                                                 <br>
-                                                <span class="text-gray-400">{{ $item->title ?? '' }}</span>
+                                                <div class="text-gray-400 h-5">{{ $item->title ?? '' }}</div>
                                                 <div class="mt-5 flex flex-row justify-between">
-                                                    <div>game</div>
+                                                    <div class="flex flex-row items-center gap-1">
+                                                        @foreach ($item->games as $index => $game)
+                                                            @if ($index < 3)
+                                                                <img class="w-5 h-5 rounded-full"
+                                                                    src="{{ $game->img ?? '' }}" alt="">
+                                                            @endif
+                                                            @if ($index >= 3 && $index == count($item->games) - 1)
+                                                                <span
+                                                                    class="text-xs">+{{ count($item->games) - 3 }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                     <div class="flex flex-row items-center">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                             class="h-6 w-6 text-yellow-500">
@@ -174,22 +221,29 @@
         $(document).ready(function() {
             $(".filter-game").click(function() {
                 $(".filter-game").removeClass('bg-rose-400 hover:bg-rose-400');
-                $(this).addClass('bg-rose-400 hover:bg-rose-400');
-                $('#home').hide();
-                var game = $(this).attr('id')
-                var name = $(this).attr('name');
-                var img = $(this).children('img').attr('src');
+                    if ($(this).hasClass('active')) {
+                        $('#home').show();
+                        $(".game-container").addClass('hidden');
+                        $(this).removeClass('active');
+                    } else {
 
-                $('#name-game').text(name);
+                        $(this).addClass('bg-rose-400 hover:bg-rose-400 active');
+                        $('#home').hide();
+                        var game = $(this).attr('id')
+                        var name = $(this).attr('name');
+                        var img = $(this).children('img').attr('src');
 
-                $.ajax({
-                    url: "{{ route('home.game', '') }}/" + game,
-                    type: 'GET',
+                        $('#name-game').text(name);
 
-                    success: function(result) {
-                        handleSuccessAjaxFilterGame(result);
+                        $.ajax({
+                            url: "{{ route('home.game', '') }}/" + game,
+                            type: 'GET',
+
+                            success: function(result) {
+                                handleSuccessAjaxFilterGame(result);
+                            }
+                        });
                     }
-                });
             })
 
             function handleSuccessAjaxFilterGame(result) {
@@ -205,7 +259,7 @@
                     result.data.forEach(e => {
                         script += `<a href="/user/${e.id}" class="rounded-xl border mt-5">
                             <div>
-                                <img class="rounded-t-xl" src="${e.avatar}">
+                                <img class="rounded-t-xl h-40 w-full object-cover" src="${e.avatar}">
                                 <div class="w-full flex justify-end">
                                     <span
                                         class="text-white p-2 rounded-full bg-rose-500 text-xs mr-2 mb-[10px] mt-[-40px]">$ ${e.price}/h</span>
@@ -215,16 +269,25 @@
                                 <span
                                     class="text-lg font-bold whitespace-nowrap">${e.name}</span>
                                 <br>
-                                <span class="text-gray-400">title user player</span>
+                                <div class="text-gray-400 h-5">${e.title ?? ""}</div>
                                 <div class="mt-5 flex flex-row justify-between">
-                                    <div>game</div>
-                                    <div class="flex flex-row items-center">
+                                 <div class="flex flex-row items-center gap-1">`;
+                        e.games.forEach((game, index) => {
+                            if (index < 3) {
+                                script += `<img class="w-5 h-5 rounded-full" src="${game.img}" alt="">`;
+                            }
+                            if (index >= 3 && index == e.games.length - 1) {
+                                script += `<span class="text-xs">+${e.games.length - 3}</span>`;
+                            }
+                        });
+
+                        script += `</div><div class="flex flex-row items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                             class="h-6 w-6 text-yellow-500">
                                             <path fill="currentColor"
                                                 d="M10 1.36l1.45 4.46h4.69l-3.79 2.75 1.45 4.46-3.79-2.75-3.79 2.75 1.45-4.46-3.79-2.75h4.69z" />
                                         </svg>
-                                        4.9 (420)
+                                        ${e.average_rating ?? "0"} (${e.count_rating ?? "0"})
                                     </div>
                                 </div>
                             </div>

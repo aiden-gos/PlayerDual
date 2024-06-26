@@ -10,6 +10,8 @@ use App\Notifications\RentNotify;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
+use DateInterval;
 
 class OrderService
 {
@@ -46,7 +48,10 @@ class OrderService
                 //Realtime notification
 
                 event(new EventActionNotify($user_ordered->id, $request->user()->name . " rent you now"));
-                event(new EventActionNotify($user_ordered->id . '-rent', ['order' => $order, 'user' => $request->user()]));
+                event(new EventActionNotify($user_ordered->id . '-rent', [
+                    'order' => $order,
+                    'user' => $request->user()
+                ]));
             } catch (\Throwable $th) {
                 Log::error($th);
             }
@@ -83,10 +88,10 @@ class OrderService
     public function acceptRent(Request $request)
     {
         DB::beginTransaction();
+
         try {
             $id = $request->input('id');
             if (!empty($id)) {
-
                 $order = Order::find(['id' => $id])->first();
                 $order->update([
                     'status' => 'accepted',
@@ -140,7 +145,6 @@ class OrderService
     {
         try {
             if (!empty($id)) {
-
                 $order = Order::find(['id' => $id])->first();
 
                 $order->update([
@@ -163,5 +167,66 @@ class OrderService
             return true;
         }
         return false;
+    }
+
+    public function requestOrder(Request $request)
+    {
+        $renting = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'accepted')
+            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented = Order::select(['orders.*', 'users.id', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'accepted')
+            ->whereRaw('DATE_ADD(orders.updated_at, INTERVAL orders.duration HOUR) > NOW()')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->first();
+
+        $renting_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'pending')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'pending')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->get();
+
+        self::calculateSecondsUntilEnd($rented);
+    
+        self::calculateSecondsUntilEnd($renting);
+            
+        return response()->json([
+            'renting' => $renting,
+            'rented' => $rented,
+            'renting_pending' => $renting_pending,
+            'rented_pending' => $rented_pending
+        ]);
+    }
+
+    public function listRequest(Request $request)
+    {
+        return view('request.request-order');
+    }
+
+    private function calculateSecondsUntilEnd($order) {
+        if ($order) {
+            $endTime = (new \DateTime($order->updated_at))->add(new \DateInterval('PT' . $order->duration . 'H'));
+            $now = new \DateTime();
+            $diff = $now->diff($endTime);
+    
+            // Calculate the total number of seconds
+            $secondsUntilEnd = ($diff->days * 24 * 60 * 60) + // Days to seconds
+                               ($diff->h * 60 * 60) +         // Hours to seconds
+                               ($diff->i * 60) +              // Minutes to seconds
+                               $diff->s;          
+                                           // Seconds
+            $order->seconds_until_end = $secondsUntilEnd;
+        }
     }
 }

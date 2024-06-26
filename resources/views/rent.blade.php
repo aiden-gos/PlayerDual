@@ -12,9 +12,9 @@
 
 </button>
 @else
-<button x-data=""
+{{-- <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'Rent-form')"
-    class="bg-red-300 text-white w-full py-3 rounded-md max-w-64" disabled>Rent</button>
+    class="bg-red-300 text-white w-full py-3 rounded-md max-w-64" disabled>Rent</button> --}}
 @endif
 
 <x-modal name="Rent-form" focusable>
@@ -55,7 +55,8 @@
                 <x-input-label for="name" :value="__('Balance')" />
             </div>
             <div class="w-full">
-                <div>${{Auth::user()->balance}}</div>
+                <div>${{number_format(Auth::user()->balance)}}</div>
+                <div id="errorContainer"></div>
             </div>
         </div>
         <hr>
@@ -101,8 +102,8 @@
             <div class="w-full">
                 <x-input-label for="" :value="__('Cost')" />
             </div>
-            <div class="w-full flex flex-col">
-                <input id="cost" name="cost" type="number" readonly="readonly"  class="border-0"/>
+            <div class="w-full flex flex-col-reverse items-center">
+                <div class="flex-col items-center w-full">$<input id="cost" name="cost" type="text" readonly="readonly"  class="border-0 p-0"/></div>
             </div>
         </div>
 
@@ -153,7 +154,17 @@
                 min:0,
                 max:{{Auth::user()->balance}}
 			}
-		}
+		},
+        messages: {
+            "cost": {
+                required: "Please enter a valid amount",
+                min: "Please enter a valid amount",
+                max: "You don't have enough balance"
+            }
+        },
+        errorPlacement: function(error, element) {
+        $("#errorContainer").html(error);
+    }
 	});
 </script>
 @else

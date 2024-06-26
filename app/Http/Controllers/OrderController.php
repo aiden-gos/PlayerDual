@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 
@@ -47,5 +48,15 @@ class OrderController extends Controller
     {
         $id = $request->input('id');
         return $this->rentService->endRent($request, $id);
+    }
+
+    public function requestOrder(Request $request)
+    {
+        return $this->rentService->requestOrder($request);
+    }
+
+    public function listRequest(Request $request)
+    {
+        return $this->rentService->listRequest($request);
     }
 }

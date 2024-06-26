@@ -12,8 +12,9 @@ class NotificationController extends Controller
     {
         try {
             $id = $request->route('id');
-            if($id){
-                DB::table('notifications')->where('id',$id)->update(['read_at'=>now()]);
+
+            if ($id) {
+                DB::table('notifications')->where('id', $id)->update(['read_at' => now()]);
             }
         } catch (\Throwable $th) {
             Log::error($th);
@@ -23,6 +24,6 @@ class NotificationController extends Controller
     public function readAllNotify(Request $request)
     {
         $request->user()->unreadNotifications->markAsRead();
-        return response()->json('Read all notification ok',200);
+        return response()->json('Read all notification ok', 200);
     }
 }

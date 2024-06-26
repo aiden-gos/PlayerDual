@@ -1,8 +1,9 @@
 @auth
+@if(!(Auth::user()->id == $user->id))
 <button x-data=""
     x-on:click.prevent="$dispatch('open-modal', 'donate-form')"
     class="bg-white text-black border w-full py-3 rounded-md max-w-64">Donate</button>
-
+@endif
 <x-modal name="donate-form" focusable>
     <style>label.error{color: red}</style>
     <form id="donate" method="post" action="{{ route('donate') }}" class="p-6 space-y-6">
@@ -34,7 +35,7 @@
                 <x-input-label for="name" :value="__('Balance')" />
             </div>
             <div class="w-full">
-                <div>${{Auth::user()->balance}}</div>
+                <div>${{number_format(Auth::user()->balance)}}</div>
             </div>
         </div>
         <hr>

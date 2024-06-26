@@ -1,6 +1,6 @@
 <div class='w-full flex flex-row gap-2 p-5'>
     <a href="/user/{{ $item->author->id }}">
-        <div class="pt-2"><img class="rounded-full object-cover" width="50" height="50" src="{{ $item->author->avatar }}"
+        <div class="pt-2"><img class="rounded-full object-cover h-10 w-10" src="{{ $item->author->avatar }}"
                 class="avt-1-15 avt-img" alt="PD"></div>
     </a>
     <div class="flex flex-row justify-between w-full p-2 items-center">
@@ -8,18 +8,12 @@
             <p class="font-bold">{{ $item->author->name }}</p>
             <p class=""><span>{{ $item->created_at }}</span></p>
             <p class="py-2">{{ $item->content }}</p>
-            @if ($item->author->id == Auth::user()->id)
+            <!-- @if ($item->author->id == Auth::user()->id)
                 <div class="flex flex-row gap-5">
                     <button id="update-rate" class="text-yellow-600">Update</button>
                     <input type="hidden" id="id" value="{{ $item->id }}">
-                    <form method="post" action="{{ route('rate.create') }}/{{ $item->id }}">
-                        @csrf
-                        @method('delete')
-                        <input type="hidden" name="id">
-                        <button class="text-red-600">Delete</button>
-                    </form>
                 </div>
-            @endif
+            @endif -->
         </a>
         <div class="">
             <div class="flex flex-row">
@@ -60,7 +54,7 @@
         </div>
     </div>
 </div>
-<script>
+<!-- <script>
     $(document).ready(function() {
         var btnUpdate = $('#update-rate');
         var stateFormShow = true;
@@ -77,4 +71,4 @@
 
         })
     })
-</script>
+</script> -->

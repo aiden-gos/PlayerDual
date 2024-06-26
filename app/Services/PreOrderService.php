@@ -10,6 +10,8 @@ use App\Notifications\RentNotify;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
+use DateInterval;
 
 class PreOrderService
 {
@@ -46,7 +48,10 @@ class PreOrderService
                 //Realtime notification
 
                 event(new EventActionNotify($user_ordered->id, $request->user()->name . " pre-order you now"));
-                event(new EventActionNotify($user_ordered->id . '-pre-order', ['preOrder' => $order, 'user' => $request->user()]));
+                event(new EventActionNotify($user_ordered->id . '-pre-order', [
+                    'preOrder' => $order,
+                    'user' => $request->user()
+                ]));
             } catch (\Throwable $th) {
                 Log::error($th);
             }
@@ -57,17 +62,22 @@ class PreOrderService
     public function acceptRent(Request $request, $id)
     {
         DB::beginTransaction();
-        try {
 
-            if (empty($id))
+        try {
+            if (empty($id)) {
                 return redirect()->back();
+            }
 
             $order = Order::find(['id' => $id])->first();
-            $currentOrder = Order::where('ordered_user_id', $order->ordered_user_id)->where('status', 'accepted')->first();
+            $currentOrder = Order::where('ordered_user_id', $order->ordered_user_id)
+                ->where('status', 'accepted')->first();
             $order->update([
                 'status' => 'pre-ordered',
                 'start_at' => $currentOrder->end_at,
-                'end_at' => date('Y-m-d H:i:s', strtotime($currentOrder->end_at . ' + ' . $order->duration . ' hours'))
+                'end_at' => date(
+                    'Y-m-d H:i:s',
+                    strtotime($currentOrder->end_at . ' + ' . $order->duration . ' hours')
+                )
             ]);
 
             $orderRJ = Order::where('ordered_user_id', $order->ordered_user_id)
@@ -101,7 +111,6 @@ class PreOrderService
         DB::beginTransaction();
         try {
             if (!empty($id)) {
-
                 $order = Order::find(['id' => $id])->first();
 
                 $order->update([
@@ -116,14 +125,14 @@ class PreOrderService
             DB::rollBack();
             Log::error($th);
         }
+
         return redirect()->back();
     }
 
-    public function endRent(Request $request, $id)
+    public function endPreOrder(Request $request, $id)
     {
         DB::beginTransaction();
         try {
-
             if (!empty($id)) {
                 $order = Order::find(['id' => $id, 'status' => 'accepted'])->first();
 
@@ -152,6 +161,7 @@ class PreOrderService
             DB::rollBack();
             Log::error($th);
         }
+
         return redirect()->back();
     }
 
@@ -162,5 +172,60 @@ class PreOrderService
             return true;
         }
         return false;
+    }
+
+    public function requestPreOrder(Request $request)
+    {
+        $renting = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordered')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordered')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->first();
+
+        $renting_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordering_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordering')
+            ->join('users', 'ordered_user_id', 'users.id')
+            ->first();
+
+        $rented_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
+            ->where('ordered_user_id', $request->user()->id)
+            ->where('orders.status', 'pre-ordering')
+            ->join('users', 'ordering_user_id', 'users.id')
+            ->get();
+
+        self::calculateSecondsToStart($renting);
+        self::calculateSecondsToStart($rented);
+
+        return response()->json([
+            'renting' => $renting,
+            'rented' => $rented,
+            'renting_pending' => $renting_pending,
+            'rented_pending' => $rented_pending
+        ]);
+    }
+
+    function calculateSecondsToStart($order) {
+        if ($order && isset($order->start_at)) {
+            $startAt = new \DateTime($order->start_at);
+            $now = new \DateTime();
+            $diff = $now->diff($startAt);
+
+            // Calculate the total number of seconds
+            $secondsToStart = ($diff->invert == 0 ? 1 : -1) * ( // Check if the date is in the past
+                ($diff->days * 24 * 60 * 60) + // Days to seconds
+                ($diff->h * 60 * 60) +         // Hours to seconds
+                ($diff->i * 60) +              // Minutes to seconds
+                $diff->s                       // Seconds
+            );
+            $order->seconds_until_end = $secondsToStart;
+        }
+
     }
 }
