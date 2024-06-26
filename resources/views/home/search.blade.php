@@ -32,10 +32,10 @@
             <div class="flex flex-col">
                 <label for="date" class="ml-2 text-stone-600 text-sm font-medium">Price range</label>
                 <div class="flex flex-row gap-4 items-center">
-                    <input id="price-min" type="number" id="date" value="0"
+                    <input id="price-min" type="number" min='0' max='100' id="date" value="0"
                         class="mt-2 block text-stone-600 w-full rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
                     to
-                    <input id="price-max" type="number" id="date" value="100"
+                    <input id="price-max" type="number" min='0' max='100' id="date" value="100"
                         class="mt-2 block w-full text-stone-600 rounded-3xl border border-gray-200  py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
                 </div>
             </div>

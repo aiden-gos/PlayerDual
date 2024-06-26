@@ -24,12 +24,13 @@ class HomeService
         $hot_user = self::getHotUsers();
         $games = Game::all();
         $stories = Story::where('status', 'open')
-            ->withCount(['likes' => function ($query) {
-                $query->where('created_at', '>=', now()->subDays(self::DAY));
-            }])
-            ->orderByDesc('likes_count')
-            ->limit(10)
-            ->get();
+        ->withCount(['likes', 'comments'])
+        ->get()
+        ->sortByDesc(function ($story) {
+            return $story->likes_count + $story->comments_count;
+        })
+        ->take(10)
+        ->values();
 
         return view('home', [
             'vip_user' => $vip_user,
@@ -41,10 +42,10 @@ class HomeService
 
     private function getHotUsers()
     {
-        $hotUsers = User::with(['games'])->withCount(['ordering' => function ($query) {
+        $hotUsers = User::with(['games'])->withCount(['ordered' => function ($query) {
             $query->where('orders.created_at', '>', now()->subDays(self::DAY));
         }])
-            ->orderBy('ordering_count', 'DESC')
+            ->orderBy('ordered_count', 'DESC')
             ->limit(15)
             ->get();
         return $hotUsers;

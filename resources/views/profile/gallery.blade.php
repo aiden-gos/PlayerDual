@@ -22,31 +22,33 @@
                         <div id="file-info"></div>
                     </form>
                 </div>
+                <div class='w-full flex flex-row justify-end'><button id="btn-del" class="p-2 rounded-md text-white bg-red-500">Delete</button></div>
                 <div class="">
                     @if (empty($gallery))
                         <div class="text-gray-600">Empty gallery</div>
                     @else
-                        <div ID="ngy2p"
-                            data-nanogallery2='{
-                                "itemsBaseURL": "http://nanogallery2.nanostudio.org/samples/",
-                                "thumbnailWidth": "300",
-                                "thumbnailBorderVertical": 0,
-                                "thumbnailBorderHorizontal": 0,
-                                "colorScheme": {
+                        <div id="my_nanogallery2" ID="ngy2p"
+                        data-nanogallery2='{
+                            "itemsBaseURL": "http://nanogallery2.nanostudio.org/samples/",
+                            "thumbnailWidth": "300",
+                            "thumbnailBorderVertical": 0,
+                            "thumbnailBorderHorizontal": 0,
+                            "colorScheme": {
                                 "thumbnail": {
                                     "background": "rgba(255,255,255,1)"
                                 }
-                                },
-                                "thumbnailLabel": {
+                            },
+                            "thumbnailLabel": {
                                 "position": "overImageOnBottom"
-                                },
-                                "thumbnailHoverEffect2": "imageScaleIn80",
-                                "thumbnailGutterWidth": 10,
-                                "thumbnailGutterHeight": 10,
-                                "thumbnailOpenImage": true,
-                            }'>
+                            },
+                            "thumbnailHoverEffect2": "imageScaleIn80",
+                            "thumbnailGutterWidth": 10,
+                            "thumbnailGutterHeight": 10,
+                            "thumbnailSelectable": true,                                
+                            "thumbnailOpenImage": true
+                        }'>
                             @foreach ($gallery as $ele)
-                                <a href="{{ $ele->link }}" data-ngthumb="{{ $ele->link }}" data-ngdesc=""></a>
+                                <a id="{{ $ele->id }}" href="{{ $ele->link }}" data-ngthumb="{{ $ele->link }}" data-ngdesc=""></a>
                             @endforeach
                         </div>
                     @endif
@@ -100,13 +102,15 @@
     import FilePondPluginFileValidateSize from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.esm.js') }}";
     import FilePondPluginImagePreview from "{{ Vite::asset('node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js') }}";
     import FilePondPluginImageExifOrientation from "{{ Vite::asset('node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.esm.js') }}";
+    import FilePondPluginFileValidateType from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.esm.js') }}";
 
     FilePond.registerPlugin(
         // FilePondPluginImageEditor,
         FilePondPluginFilePoster,
         FilePondPluginImagePreview,
         FilePondPluginImageExifOrientation,
-        FilePondPluginFileValidateSize
+        FilePondPluginFileValidateSize,
+        FilePondPluginFileValidateType
     );
 
     import {
@@ -133,4 +137,27 @@
             },
         }
     });
+</script>
+
+<script>
+    $('#btn-del').on('click', function() {
+  var ngy2data = $("#my_nanogallery2").nanogallery2('data');
+  ngy2data.items.forEach( function(item) {
+    if( item.selected ) {
+        
+        $.ajax({
+                url: "{{ route('profile.gallery.delete') }}",
+                type: 'DELETE',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "link": item.src
+                },
+                success: function(result) {
+                    item.delete();
+                }
+            });
+    }
+  });
+  $("#my_nanogallery2").nanogallery2('resize');
+});
 </script>

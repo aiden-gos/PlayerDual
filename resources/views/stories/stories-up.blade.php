@@ -6,7 +6,7 @@
                 color: red;
             }
         </style>
-        <form id="story" method="post" action="{{ route('stories.up') }}" class="p-6  flex flex-row gap-10"
+        <form id="story" method="post" action="{{ route('stories.up') }}" class="p-6  flex flex-col sm:flex-row gap-10"
             enctype="multipart/form-data">
             @csrf
             <div class="w-full">
@@ -70,7 +70,6 @@
         import FilePondPluginFileValidateSize from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.esm.js') }}";
         import FilePondPluginImageExifOrientation from "{{ Vite::asset('node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.esm.js') }}";
         import FilePondPluginFileValidateType from "{{ Vite::asset('node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.esm.js') }}";
-
 
         FilePond.registerPlugin(
             FilePondPluginMediaPreview,

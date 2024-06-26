@@ -12,20 +12,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Services\ProfileService;
 
 class ProfileController extends Controller
 {
+    protected $profileService;
+
+    public function __construct()
+    {
+        $this->profileService = new ProfileService();
+    }
+
     /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
     {
-        $games =  Game::all();
-
-        return view('profile.edit', [
-            'user' => $request->user(),
-            'games' => $games
-        ]);
+        return $this->profileService->edit($request);
     }
 
     /**
@@ -33,9 +36,7 @@ class ProfileController extends Controller
      */
     public function changePassword(Request $request): View
     {
-        return view('profile.password', [
-            'user' => $request->user(),
-        ]);
+        return $this->profileService->changePassword($request);
     }
 
     /**
@@ -43,9 +44,7 @@ class ProfileController extends Controller
      */
     public function account(Request $request): View
     {
-        return view('profile.account', [
-            'user' => $request->user(),
-        ]);
+        return $this->profileService->account($request);
     }
 
     /**
@@ -53,11 +52,7 @@ class ProfileController extends Controller
      */
     public function payment(Request $request): View
     {
-        return view('profile.payment', [
-            'user' => $request->user(),
-            'payment_method' => $request->user()->paymentMethods(),
-            'intent' => $request->user()->createSetupIntent()
-        ]);
+        return $this->profileService->payment($request);
     }
 
     /**
@@ -65,12 +60,7 @@ class ProfileController extends Controller
      */
     public function gallery(Request $request): View
     {
-        $gallery = Gallery::where('user_id', $request->user()->id)->get();
-
-        return view('profile.gallery', [
-            'user' => $request->user(),
-            'gallery' => $gallery
-        ]);
+        return $this->profileService->gallery($request);
     }
 
     /**
@@ -78,17 +68,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-        $request->user()->micro = $request->has('micro') ? 1 : 0;
-        $request->user()->camera = $request->has('camera') ? 1 : 0;
-        $request->user()->save();
-
-        $request->user()->games()->sync($request->input('games'));
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return $this->profileService->update($request);
     }
 
     /**
@@ -96,11 +76,7 @@ class ProfileController extends Controller
      */
     public function updatePayment(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        $request->user()->save();
-
-        return Redirect::route('profile.payment')->with('status', 'payment-updated');
+        return $this->profileService->updatePayment($request);
     }
 
     /**
@@ -108,21 +84,7 @@ class ProfileController extends Controller
      */
     public function updateAvatar(ProfileUpdateRequest $request): RedirectResponse
     {
-        if ($request->hasFile('avatar')) {
-            if (!empty($request->user()->avatar)) {
-                try {
-                    $public_id =  explode('.', explode('/', $request->user()->avatar)[7])[0];
-                    Cloudinary::destroy($public_id);
-                } catch (\Throwable $th) {
-                    Log::error("Error detroy old avatar");
-                }
-            }
-            $uploaded = Cloudinary::upload($request->file('avatar')->getRealPath());
-            $uploadedFileUrl = $uploaded->getSecurePath();
-            Log::debug($uploadedFileUrl);
-        }
-        $request->user()->update(['avatar' => $uploadedFileUrl]);
-        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+        return $this->profileService->updateAvatar($request);
     }
 
     /**
@@ -130,47 +92,12 @@ class ProfileController extends Controller
      */
     public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
     {
-        if ($request->hasFile('upload')) {
-            if (in_array(
-                $request->file('upload')->guessExtension(),
-                ['jpg', 'png', 'gif']
-            )) {
-                $uploaded = Cloudinary::upload($request->file('upload')->getRealPath());
-                $uploadedFileUrl = $uploaded->getSecurePath();
-                Gallery::create([
-                    'type' => 'image', 'link' => $uploadedFileUrl,
-                    'user_id' => $request->user()->id
-                ]);
-            } elseif (in_array(
-                $request->file('upload')->guessExtension(),
-                ['mp4', 'wmv', 'avi']
-            )) {
-                $uploaded = Cloudinary::uploadVideo($request->file('upload')->getRealPath());
-                $uploadedFileUrl = $uploaded->getSecurePath();
-                Gallery::create([
-                    'type' => 'video', 'link' => $uploadedFileUrl,
-                    'user_id' => $request->user()->id
-                ]);
-            }
-        }
-        return Redirect::route('profile.gallery');
+        return $this->profileService->uploadGallery($request);
     }
 
     public function uploadDropbox(Request $request)
     {
-        $link = $request->input('link');
-
-        if (in_array(
-            array_reverse(explode('.', $link))[0],
-            ['jpg', 'png', 'gif']
-        )) {
-            Gallery::create(['type' => 'image', 'link' => $link, 'user_id' => $request->user()->id]);
-        } elseif (in_array(
-            array_reverse(explode('.', $link))[0],
-            ['mp4', 'wmv', 'avi']
-        )) {
-            Gallery::create(['type' => 'video', 'link' => $link, 'user_id' => $request->user()->id]);
-        }
+        return $this->profileService->uploadDropbox($request);
     }
 
     /**
@@ -178,19 +105,11 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
-        ]);
+        return $this->profileService->destroy($request);
+    }
 
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+    public function deleteGallery(Request $request)
+    {
+        return $this->profileService->deleteGallery($request);
     }
 }

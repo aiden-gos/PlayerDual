@@ -171,7 +171,8 @@ class UserService
     private function isShowRateForm($request, $user)
     {
         $showRate = false;
-
+        $orderCount = 0;
+        $rateCount = 0;
         try {
             $orderCount = Order::where('ordering_user_id', $request->user()->id)
                 ->where('ordered_user_id', $user->id)

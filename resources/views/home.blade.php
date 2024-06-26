@@ -35,6 +35,19 @@
                         {{-- Pan  --}}
                         <div
                             class="overflow-auto flex flex-row gap-3" style="-ms-overflow-style: none; scrollbar-width: none;">
+                            @auth
+                            <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'up-story-form')"
+                                class="bg-gray-200 min-w-48 rounded-t-xl text-black border w-full py-3 justify-center rounded-md max-w-64 flex flex-col items-center p-2 gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 24 24">
+                                    <path
+                                        d="M 12 2 C 6.4889971 2 2 6.4889971 2 12 C 2 17.511003 6.4889971 22 12 22 C 17.511003 22 22 17.511003 22 12 C 22 6.4889971 17.511003 2 12 2 z M 12 4 C 16.430123 4 20 7.5698774 20 12 C 20 16.430123 16.430123 20 12 20 C 7.5698774 20 4 16.430123 4 12 C 4 7.5698774 7.5698774 4 12 4 z M 11 7 L 11 11 L 7 11 L 7 13 L 11 13 L 11 17 L 13 17 L 13 13 L 17 13 L 17 11 L 13 11 L 13 7 L 11 7 z">
+                                    </path>
+                                </svg>
+                                Post your story
+                            </button>
+                            @include('stories.stories-up')
+                        @endauth
+
                             @foreach ($stories as $story)
                                 <button class="flex flex-col border rounded-xl story" href=""
                                     x-data=""
@@ -75,7 +88,7 @@
                                 </button>
                             @endforeach
                         </div>
-
+ 
                         {{-- Filter game  --}}
                         <div class="mt-5 hidden game-container w-full">
 
@@ -91,10 +104,11 @@
                         {{-- Filter game  --}}
 
                         <div id="home">
-                            {{-- Search  --}}
-                            @include('home.search')
-                            <div class="search "></div>
-                            {{-- Search  --}}
+
+                        {{-- Search  --}}
+                        @include('home.search')
+                        <div class="search "></div>
+                        {{-- Search  --}}
 
                             {{-- vip player  --}}
                             <div class="mt-5">
@@ -207,29 +221,29 @@
         $(document).ready(function() {
             $(".filter-game").click(function() {
                 $(".filter-game").removeClass('bg-rose-400 hover:bg-rose-400');
-                if ($(this).hasClass('active')) {
-                    $('#home').show();
-                    $(".game-container").addClass('hidden');
-                    $(this).removeClass('active');
-                } else {
+                    if ($(this).hasClass('active')) {
+                        $('#home').show();
+                        $(".game-container").addClass('hidden');
+                        $(this).removeClass('active');
+                    } else {
 
-                    $(this).addClass('bg-rose-400 hover:bg-rose-400 active');
-                    $('#home').hide();
-                    var game = $(this).attr('id')
-                    var name = $(this).attr('name');
-                    var img = $(this).children('img').attr('src');
+                        $(this).addClass('bg-rose-400 hover:bg-rose-400 active');
+                        $('#home').hide();
+                        var game = $(this).attr('id')
+                        var name = $(this).attr('name');
+                        var img = $(this).children('img').attr('src');
 
-                    $('#name-game').text(name);
+                        $('#name-game').text(name);
 
-                    $.ajax({
-                        url: "{{ route('home.game', '') }}/" + game,
-                        type: 'GET',
+                        $.ajax({
+                            url: "{{ route('home.game', '') }}/" + game,
+                            type: 'GET',
 
-                        success: function(result) {
-                            handleSuccessAjaxFilterGame(result);
-                        }
-                    });
-                }
+                            success: function(result) {
+                                handleSuccessAjaxFilterGame(result);
+                            }
+                        });
+                    }
             })
 
             function handleSuccessAjaxFilterGame(result) {

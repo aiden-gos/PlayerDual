@@ -40,6 +40,7 @@
             </div>
             <div class="w-full">
                 <div>${{number_format(Auth::user()->balance)}}</div>
+                <div id="errorContainerPreOrder"></div>
             </div>
         </div>
         <hr>
@@ -116,17 +117,29 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
 <script>
     $("#PreOrder").validate({
+        ignore:[],
 		onfocusout: false,
 		onkeyup: false,
 		onclick: false,
 		rules: {
 			"cost": {
 				required: true,
+                min:0,
                 max:{{Auth::user()->balance}}
 			}
-		}
+		},
+        messages: {
+            "cost": {
+                required: "Please enter a valid amount",
+                min: "Please enter a valid amount",
+                max: "You don't have enough balance"
+            }
+        },
+        errorPlacement: function(error, element) {
+        $("#errorContainerPreOrder").html(error);
+    }
 	});
 </script>
 @else
-    <a class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a>
+    <!-- <a class="bg-rose-500 text-white w-full py-3 rounded-md max-w-64 text-center" href="{{route('login')}}">Pre-order</a> -->
 @endauth
