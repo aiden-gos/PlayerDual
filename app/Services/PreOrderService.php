@@ -10,8 +10,6 @@ use App\Notifications\RentNotify;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use DateTime;
-use DateInterval;
 
 class PreOrderService
 {
@@ -211,7 +209,8 @@ class PreOrderService
         ]);
     }
 
-    function calculateSecondsToStart($order) {
+    private function calculateSecondsToStart($order)
+    {
         if ($order && isset($order->start_at)) {
             $startAt = new \DateTime($order->start_at);
             $now = new \DateTime();
@@ -226,6 +225,5 @@ class PreOrderService
             );
             $order->seconds_until_end = $secondsToStart;
         }
-
     }
 }

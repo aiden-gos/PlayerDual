@@ -23,14 +23,14 @@ class Order extends Model
         'end_at'
     ];
 
-    protected $with = ['ordering_user', 'ordered_user'];
+    protected $with = ['orderingUser', 'orderedUser'];
 
-    public function ordering_user()
+    public function orderingUser()
     {
         return $this->belongsTo(User::class, 'ordering_user_id');
     }
 
-    public function ordered_user()
+    public function orderedUser()
     {
         return $this->belongsTo(User::class, 'ordered_user_id');
     }

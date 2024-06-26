@@ -10,7 +10,6 @@ use Dcblogdev\Dropbox\Facades\Dropbox;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use App\Services\StoriesService;
 
 class StoriesService
 {
