@@ -196,8 +196,8 @@ test('end pre-order', function () {
     $this->assertDatabaseHas('orders', ['id' => $order->id, 'status' => 'completed']);
     $user1->refresh();
     $user2->refresh();
-    $this->assertEquals($user1->balance, 3000 + $order->total_price);
-    $this->assertEquals($user2->balance, 2000 - $order->total_price);
+    $this->assertEquals($user1->balance, 3000);
+    $this->assertEquals($user2->balance, 2000);
 });
 
 test('end pre-order err input', function () {

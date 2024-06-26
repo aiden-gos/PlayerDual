@@ -24,7 +24,6 @@ test('order', function () {
 
     $response->assertRedirect();
 
-
     $this->assertDatabaseHas('orders', [
         'ordering_user_id' => $user1->id,
         'ordered_user_id' => $user2->id,
