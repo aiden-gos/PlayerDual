@@ -16,16 +16,34 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        return $this->homeService->index();
+        $data = $this->homeService->index();
+
+        return view('home', $data);
     }
 
     public function search(Request $request)
     {
-        return $this->homeService->search($request);
+        $name = $request->query("name");
+        $sex = $request->query("sex");
+        $min_price = $request->query("priceMin");
+        $max_price = $request->query("priceMax");
+        $game = $request->query("game");
+
+        $result = $this->homeService->search($name, $sex, $min_price, $max_price, $game);
+
+        return response()->json($result, 200);
     }
 
     public function filterGame(Request $request)
     {
-        return $this->homeService->filterGame($request);
+        $game = $request->route("game");
+
+        if ($game) {
+            $result = $this->homeService->filterGame($game);
+        } else {
+            return response()->json(['msg' => "Require game id"], 400);
+        }
+
+        return response()->json($result, 200);
     }
 }

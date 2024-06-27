@@ -20,11 +20,15 @@ class RankController extends Controller
 
     public function getRankIncome(Request $request)
     {
-        return $this->rankService->getRankIncome($request);
+        $result = $this->rankService->getRankIncome($request);
+
+        return response()->json($result, 200);
     }
 
     public function getRankOutcome(Request $request)
     {
-        return $this->rankService->getRankOutcome($request);
+        $result = $this->rankService->getRankOutcome($request);
+
+        return response()->json($result, 200);
     }
 }

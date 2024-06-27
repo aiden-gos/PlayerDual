@@ -37,7 +37,7 @@ class RankService
             ->take(10)
             ->get();
 
-        return response()->json($users);
+        return $users;
     }
 
     public function getRankOutcome(Request $request)
@@ -64,6 +64,6 @@ class RankService
             ->take(10)
             ->get();
 
-        return response()->json($users);
+        return $users;
     }
 }

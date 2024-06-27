@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 
@@ -17,46 +16,100 @@ class OrderController extends Controller
 
     public function rent(Request $request)
     {
-
         $user_id = $request->input('user_id');
-        $durationTime = $request->input('time');
+        $duration = $request->input('time');
         $msg = $request->input('msg');
+        $auth_user = $request->user();
 
-        return $this->rentService->rent($request, $user_id, $durationTime, $msg);
+        if (!$user_id || !$duration) {
+            return redirect()->back()->with('error', 'Bad Requests.');
+        }
+
+        $result = $this->rentService->rent($auth_user, $user_id, $duration, $msg);
+
+        if (!$result) {
+            return redirect()->back()->with('error', 'Order failure.');
+        }
+
+        return redirect()->back()->with('success', 'Order successfully.');
     }
 
     public function off(Request $request)
     {
         $user_id = $request->input('user_id');
-        $durationTime = $request->input('time');
+        $duration = $request->input('time');
 
-        return $this->rentService->off($request, $user_id, $durationTime);
+        if (!$user_id || !$duration) {
+            return redirect()->back()->with('error', 'Bad Requests.');
+        }
+
+        $result = $this->rentService->off($request, $user_id, $duration);
+
+        if (!$result) {
+            return redirect()->back()->with('error', 'Offline failure.');
+        }
+
+        return redirect()->back()->with('success', 'Offline successfully.');
     }
 
     public function acceptRent(Request $request)
     {
-        return $this->rentService->acceptRent($request);
+        $order_id = $request->input('id');
+        if (!$order_id) {
+            return redirect()->back()->with('error', 'Bad Requests.');
+        }
+
+        $result = $this->rentService->acceptRent($order_id);
+
+        if (!$result) {
+            return redirect()->back()->with('error', 'Accept order failure.');
+        }
+
+        return redirect()->back()->with('success', 'Accept order successfully.');
     }
 
     public function rejectRent(Request $request)
     {
-        $id = $request->input('id');
-        return $this->rentService->rejectRent($request, $id);
+        $order_id = $request->input('id');
+
+        if (!$order_id) {
+            return redirect()->back()->with('error', 'Bad Requests.');
+        }
+        $result = $this->rentService->rejectRent($order_id);
+
+        if (!$result) {
+            return redirect()->back()->with('error', 'Reject order failure.');
+        }
+
+        return redirect()->back()->with('success', 'Reject order successfully.');
     }
 
     public function endRent(Request $request)
     {
-        $id = $request->input('id');
-        return $this->rentService->endRent($request, $id);
+        $order_id = $request->input('id');
+        if (!$order_id) {
+            return redirect()->back()->with('error', 'Bad Requests.');
+        }
+
+        $result = $this->rentService->endRent($order_id);
+
+        if (!$result) {
+            return redirect()->back()->with('error', 'Reject order failure.');
+        }
+
+        return redirect()->back()->with('success', 'Reject order successfully.');
     }
 
     public function requestOrder(Request $request)
     {
-        return $this->rentService->requestOrder($request);
+        $auth_user_id = $request->user()->id;
+        $data = $this->rentService->requestOrder($auth_user_id);
+
+        return response()->json($data);
     }
 
     public function listRequest(Request $request)
     {
-        return $this->rentService->listRequest($request);
+        return view('request.request-order');
     }
 }

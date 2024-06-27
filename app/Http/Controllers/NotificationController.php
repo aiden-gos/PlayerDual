@@ -2,28 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct()
+    {
+        $this->notificationService = new NotificationService();
+    }
+
     public function readNotify(Request $request)
     {
-        try {
-            $id = $request->route('id');
+        $id = $request->route('id');
 
-            if ($id) {
-                DB::table('notifications')->where('id', $id)->update(['read_at' => now()]);
-            }
-        } catch (\Throwable $th) {
-            Log::error($th);
+        if ($id) {
+            $this->notificationService->readNotify($id);
+        } else {
+            return response()->json(['msg' => 'Read notification failure'], 400);
         }
+
+        return response()->json(['msg' => 'Read notification succesfully'], 200);
     }
 
     public function readAllNotify(Request $request)
     {
-        $request->user()->unreadNotifications->markAsRead();
-        return response()->json('Read all notification ok', 200);
+        $result = $request->user()->unreadNotifications->markAsRead();
+
+        if (!$result) {
+            return response()->json('Read all notification failure', 400);
+        }
+
+        return response()->json(['msg' => 'Read all notification succesfully'], 200);
     }
 }

@@ -2,37 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Follow;
+use App\Services\FollowService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class FollowController extends Controller
 {
+    protected $followService;
+
+    public function __construct()
+    {
+        $this->followService = new FollowService();
+    }
+
     public function store(Request $request)
     {
-        $follow = Follow::where('following_user_id', $request->user()->id)
-            ->where('followed_user_id', $request->input('id'))
-            ->first();
+        $following_user_id = $request->user()->id;
+        $followed_user_id = $request->input('id');
 
-        if (!$follow) {
-            Follow::create([
-                'following_user_id' => $request->user()->id,
-                'followed_user_id' => $request->input('id')
-            ]);
+        if ($followed_user_id && $following_user_id) {
+            $this->followService->store($following_user_id, $followed_user_id);
+        } else {
+            return redirect()->back()->with('error', 'Follow failure.');
         }
-        return redirect()->back();
+
+        return redirect()->back()->with('success', 'Follow successfully.');
     }
 
     public function destroy(Request $request)
     {
-        $follow = Follow::where('following_user_id', $request->user()->id)
-            ->where('followed_user_id', $request->input('id'))
-            ->first();
+        $following_user_id = $request->user()->id;
+        $followed_user_id = $request->input('id');
 
-        if ($follow) {
-            $follow->delete();
+        if ($followed_user_id && $following_user_id) {
+            $this->followService->destroy($following_user_id, $followed_user_id);
+        } else {
+            return redirect()->back()->with('error', 'Unfollow failure.');
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Unfollow successfully.');
     }
 }

@@ -19,7 +19,9 @@ class UserController extends Controller
 
     public function get(Request $request)
     {
-        return $this->userService->get($request);
+        $data = $this->userService->get($request);
+
+        return view('user', $data);
     }
 
     public function follow(Request $request)

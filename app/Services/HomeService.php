@@ -7,12 +7,11 @@ use App\Models\Story;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class HomeService
 {
-    const DAY = 15;
-    
+    const SUB_DAY = 15;
+
     public function __construct()
     {
         //
@@ -24,26 +23,26 @@ class HomeService
         $hot_user = self::getHotUsers();
         $games = Game::all();
         $stories = Story::where('status', 'open')
-        ->withCount(['likes', 'comments'])
-        ->get()
-        ->sortByDesc(function ($story) {
-            return $story->likes_count + $story->comments_count;
-        })
-        ->take(10)
-        ->values();
+            ->withCount(['likes', 'comments'])
+            ->get()
+            ->sortByDesc(function ($story) {
+                return $story->likes_count + $story->comments_count;
+            })
+            ->take(10)
+            ->values();
 
-        return view('home', [
+        return  [
             'vip_user' => $vip_user,
             'hot_user' => $hot_user,
             'games' => $games,
             'stories' => $stories
-        ]);
+        ];
     }
 
     private function getHotUsers()
     {
         $hotUsers = User::with(['games'])->withCount(['ordered' => function ($query) {
-            $query->where('orders.created_at', '>', now()->subDays(self::DAY));
+            $query->where('orders.created_at', '>', now()->subDays(self::SUB_DAY));
         }])
             ->orderBy('ordered_count', 'DESC')
             ->limit(15)
@@ -55,12 +54,12 @@ class HomeService
     {
         $ordersSubquery = DB::table('orders')
             ->select('ordered_user_id as user_id', DB::raw('SUM(total_price) as total'))
-            ->where('created_at', '>=', now()->subDays(self::DAY))
+            ->where('created_at', '>=', now()->subDays(self::SUB_DAY))
             ->groupBy('ordered_user_id');
 
         $donatesSubquery = DB::table('donates')
             ->select('donated_user_id as user_id', DB::raw('SUM(price) as total'))
-            ->where('created_at', '>=', now()->subDays(self::DAY))
+            ->where('created_at', '>=', now()->subDays(self::SUB_DAY))
             ->groupBy('donated_user_id');
 
         $vipUsers = User::with(['games']) // Correctly use `with` for Eloquent models
@@ -79,48 +78,48 @@ class HomeService
         return $vipUsers;
     }
 
-    public function search(Request $request)
+    public function search($name, $sex, $min_price, $max_price, $game)
     {
         $user = User::query();
 
-        if (!empty($request->query("name"))) {
-            $user->where('name', 'like', '%' . $request->query('name') . '%');
+        if (!empty($name)) {
+            $user->where('name', 'like', '%' . $name . '%');
         }
-        if ($request->query("sex") == "1" || $request->query("sex") == "0") {
-            $user->where("sex", $request->query("sex"));
+
+        if ($sex == "1" || $sex == "0") {
+            $user->where("sex", $sex);
         }
-        if (!empty($request->query("priceMin"))) {
-            $user->where("price", ">", $request->query("priceMin"));
+
+        if (!empty($min_price)) {
+            $user->where("price", ">", $min_price);
         }
-        if (!empty($request->query("priceMax"))) {
-            $user->where("price", "<", $request->query("priceMax"));
+
+        if (!empty($max_price)) {
+            $user->where("price", "<", $max_price);
         }
-        if (!empty($request->query("priceMax"))) {
-            $user->where("price", "<", $request->query("priceMax"));
-        }
-        if (!empty($request->query("game"))) {
-            $gameId = $request->query("game");
-            $user->whereHas('games', function ($query) use ($gameId) {
-                $query->where('game_id', $gameId);
+
+        if (!empty($game)) {
+            $user->whereHas('games', function ($query) use ($game) {
+                $query->where('game_id', $game);
             });
         }
 
-        $reslut = $user->limit(20)->get();
-        return response()->json($reslut, 200);
+        $result = $user->limit(20)->get();
+
+        return $result;
     }
 
-    public function filterGame(Request $request)
+    public function filterGame($game)
     {
         $user = User::query();
 
-        if (!empty($request->route("game")) && $request->route("game") != 'all') {
-            $gameId = $request->route("game");
-            $user->whereHas('games', function ($query) use ($gameId) {
-                $query->where('game_id', $gameId);
+        if (!empty($game) && $game != 'all') {
+            $user->whereHas('games', function ($query) use ($game) {
+                $query->where('game_id', $game);
             });
         }
 
         $reslut = $user->paginate(20);
-        return response()->json($reslut, 200);
+        return $reslut;
     }
 }
