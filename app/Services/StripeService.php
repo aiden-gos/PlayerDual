@@ -17,7 +17,7 @@ class StripeService
 
     public function paymentMethod(Request $request)
     {
-        $stripeCustomer = $request->user()->createOrGetStripeCustomer();
+        $request->user()->createOrGetStripeCustomer();
         return $request->user()->redirectToBillingPortal(route('profile.payment'));
     }
 

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Services\ProfileService;
 
 class ProfileService
 {
@@ -20,7 +19,7 @@ class ProfileService
     {
         //
     }
- 
+
     public function edit(Request $request): View
     {
         $games =  Game::all();
@@ -143,18 +142,17 @@ class ProfileService
 
             $gallery = Gallery::where(['link' => $src])->first();
 
-            if($gallery && $gallery->user_id == $request->user()->id) {
+            if ($gallery && $gallery->user_id == $request->user()->id) {
                 $gallery->delete();
             } else {
-                return response()->json(['msg'=>'Delete gallery fail'], 400);
+                return response()->json(['msg' => 'Delete gallery fail'], 400);
             }
-
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['msg'=>'Delete gallery fail'], 400);
+            return response()->json(['msg' => 'Delete gallery fail'], 400);
         }
 
-        return response()->json(['msg'=>'Delete gallery success'], 200);
+        return response()->json(['msg' => 'Delete gallery success'], 200);
     }
 
     public function uploadDropbox(Request $request)

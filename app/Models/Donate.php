@@ -16,14 +16,14 @@ class Donate extends Model
         'price',
     ];
 
-    protected $with = ['donating_user', 'donated_user'];
+    protected $with = ['donatingUser', 'donatedUser'];
 
-    public function donating_user()
+    public function donatingUser()
     {
         return $this->belongsTo(User::class, 'donating_user_id');
     }
 
-    public function donated_user()
+    public function donatedUser()
     {
         return $this->belongsTo(User::class, 'donated_user_id');
     }

@@ -198,9 +198,9 @@ class OrderService
             ->get();
 
         self::calculateSecondsUntilEnd($rented);
-    
+
         self::calculateSecondsUntilEnd($renting);
-            
+
         return response()->json([
             'renting' => $renting,
             'rented' => $rented,
@@ -214,18 +214,19 @@ class OrderService
         return view('request.request-order');
     }
 
-    private function calculateSecondsUntilEnd($order) {
+    private function calculateSecondsUntilEnd($order)
+    {
         if ($order) {
             $endTime = (new \DateTime($order->updated_at))->add(new \DateInterval('PT' . $order->duration . 'H'));
             $now = new \DateTime();
             $diff = $now->diff($endTime);
-    
+
             // Calculate the total number of seconds
             $secondsUntilEnd = ($diff->days * 24 * 60 * 60) + // Days to seconds
-                               ($diff->h * 60 * 60) +         // Hours to seconds
-                               ($diff->i * 60) +              // Minutes to seconds
-                               $diff->s;          
-                                           // Seconds
+                ($diff->h * 60 * 60) +         // Hours to seconds
+                ($diff->i * 60) +              // Minutes to seconds
+                $diff->s;
+            // Seconds
             $order->seconds_until_end = $secondsUntilEnd;
         }
     }
