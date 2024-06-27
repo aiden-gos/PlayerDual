@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
             $table->string('content');
-            $table->integer('user_id');
-            $table->integer('author_id');
+            $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained('users', 'id')->onDelete('cascade');
             $table->integer('star');
             $table->timestamps();
         });

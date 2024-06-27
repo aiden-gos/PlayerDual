@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('micro')->nullable();
             $table->boolean('camera')->nullable();
-            $table->unsignedBigInteger('role_id')->default(2);
+            $table->foreignId('role_id')->default(2)->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

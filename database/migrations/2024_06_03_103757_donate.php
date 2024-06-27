@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('donates', function (Blueprint $table) {
-            $table->unsignedBigInteger('donating_user_id');
-            $table->unsignedBigInteger('donated_user_id');
+            $table->foreignId('donating_user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('donated_user_id')->constrained('users', 'id')->onDelete('cascade');
             $table->string('message')->nullable();
             $table->double('price');
             $table->timestamps();
