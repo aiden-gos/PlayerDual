@@ -18,21 +18,16 @@ class PreOrderService
         //
     }
 
-    public function preOrder(Request $request, $user_id, $durationTime, $msg)
+    public function preOrder($auth_user, $user_id, $durationTime, $msg)
     {
-
-        if (empty($user_id) || empty($durationTime)) {
-            return redirect()->back();
-        }
-
         $user_ordered = User::find(['id' => $user_id])->first();
 
         $cost = $user_ordered->price * $durationTime;
 
-        if (self::checkUserBalance($request, $user_ordered, $cost)) {
+        if (self::checkUserBalance($auth_user, $cost)) {
             try {
                 $order = Order::create([
-                    'ordering_user_id' => $request->user()->id,
+                    'ordering_user_id' => $auth_user->id,
                     'ordered_user_id' => $user_ordered->id,
                     'message' => $msg,
                     'status' => 'pre-ordering',
@@ -41,31 +36,29 @@ class PreOrderService
                     'total_price' => $cost,
                 ]);
 
-                $user_ordered->notify(new ActionNotify([$request->user()->name . " pre-order you now"]));
-                $user_ordered->notify(new RentNotify($request->user()->id, $request->user()->name));
+                $user_ordered->notify(new ActionNotify([$auth_user->name . " pre-order you now"]));
+                $user_ordered->notify(new RentNotify($auth_user->id, $auth_user->name));
                 //Realtime notification
 
-                event(new EventActionNotify($user_ordered->id, $request->user()->name . " pre-order you now"));
+                event(new EventActionNotify($user_ordered->id, $auth_user->name . " pre-order you now"));
                 event(new EventActionNotify($user_ordered->id . '-pre-order', [
                     'preOrder' => $order,
-                    'user' => $request->user()
+                    'user' => $auth_user
                 ]));
             } catch (\Throwable $th) {
                 Log::error($th);
+                return false;
             }
         }
-        return redirect()->back();
+
+        return true;
     }
 
-    public function acceptRent(Request $request, $id)
+    public function acceptRent($id)
     {
         DB::beginTransaction();
 
         try {
-            if (empty($id)) {
-                return redirect()->back();
-            }
-
             $order = Order::find(['id' => $id])->first();
             $currentOrder = Order::where('ordered_user_id', $order->ordered_user_id)
                 ->where('status', 'accepted')->first();
@@ -100,41 +93,41 @@ class PreOrderService
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th);
+            return false;
         }
-        return redirect()->back();
+        return true;
     }
 
-    public function rejectRent(Request $request, $id)
+    public function rejectRent($id)
     {
         DB::beginTransaction();
         try {
-            if (!empty($id)) {
-                $order = Order::find(['id' => $id])->first();
+            $order = Order::find(['id' => $id])->first();
 
-                $order->update([
-                    'status' => 'rejected'
-                ]);
+            $order->update([
+                'status' => 'rejected'
+            ]);
 
-                event(new EventActionNotify($order->ordering_user_id . '-pre-order-request', ['order' => $order]));
+            event(new EventActionNotify($order->ordering_user_id . '-pre-order-request', ['order' => $order]));
 
-                DB::commit();
-            }
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th);
+            return false;
         }
 
-        return redirect()->back();
+        return true;
     }
 
-    public function endPreOrder(Request $request, $id)
+    public function endPreOrder($auth_user, $id)
     {
         DB::beginTransaction();
         try {
             if (!empty($id)) {
                 $order = Order::find(['id' => $id, 'status' => 'accepted'])->first();
 
-                if ($request->user()->id == $order->ordered_user_id) {
+                if ($auth_user->id == $order->ordered_user_id) {
                     $order->update([
                         'status' => 'rejected'
                     ]);
@@ -158,42 +151,42 @@ class PreOrderService
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th);
+            return false;
         }
 
-        return redirect()->back();
+        return true;
     }
 
-    private function checkUserBalance(Request $request, $user_ordered, $cost)
+    private function checkUserBalance($auth_user, $cost)
     {
-
-        if ($request->user()->balance >= $cost) {
-            return true;
+        if ($auth_user->balance < $cost) {
+            return false;
         }
-        return false;
+        return true;
     }
 
-    public function requestPreOrder(Request $request)
+    public function requestPreOrder($auth_user)
     {
         $renting = Order::select(['orders.*', 'users.name', 'users.avatar'])
-            ->where('ordering_user_id', $request->user()->id)
+            ->where('ordering_user_id', $auth_user->id)
             ->where('orders.status', 'pre-ordered')
             ->join('users', 'ordered_user_id', 'users.id')
             ->first();
 
         $rented = Order::select(['orders.*', 'users.name', 'users.avatar'])
-            ->where('ordered_user_id', $request->user()->id)
+            ->where('ordered_user_id', $auth_user->id)
             ->where('orders.status', 'pre-ordered')
             ->join('users', 'ordering_user_id', 'users.id')
             ->first();
 
         $renting_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
-            ->where('ordering_user_id', $request->user()->id)
+            ->where('ordering_user_id', $auth_user->id)
             ->where('orders.status', 'pre-ordering')
             ->join('users', 'ordered_user_id', 'users.id')
             ->first();
 
         $rented_pending = Order::select(['orders.*', 'users.name', 'users.avatar'])
-            ->where('ordered_user_id', $request->user()->id)
+            ->where('ordered_user_id', $auth_user->id)
             ->where('orders.status', 'pre-ordering')
             ->join('users', 'ordering_user_id', 'users.id')
             ->get();
@@ -201,12 +194,12 @@ class PreOrderService
         self::calculateSecondsToStart($renting);
         self::calculateSecondsToStart($rented);
 
-        return response()->json([
+        return [
             'renting' => $renting,
             'rented' => $rented,
             'renting_pending' => $renting_pending,
             'rented_pending' => $rented_pending
-        ]);
+        ];
     }
 
     private function calculateSecondsToStart($order)

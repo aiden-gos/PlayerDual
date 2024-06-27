@@ -43,7 +43,7 @@ class UserService
 
         $showRate = self::isShowRateForm($request, $user);
 
-        return view('user', [
+        return [
             'user' => $user,
             'follow' => $follow,
             'orderConflict' => $orderConflict || $user->price == 0,
@@ -55,7 +55,7 @@ class UserService
             'top_donate' => $top_donate,
             'rateCount' => $showRate['rateCount'],
             'orderCount' => $showRate['orderCount'],
-        ]);
+        ];
     }
 
     private function getTopDonate($id)
@@ -177,11 +177,11 @@ class UserService
             $orderCount = Order::where('ordering_user_id', $request->user()->id)
                 ->where('ordered_user_id', $user->id)
                 ->count();
-            
+
             $rateCount = Rate::where('user_id', $user->id)
                 ->where('author_id', $request->user()->id)
                 ->count();
-            
+
             $showRate = $orderCount > 0 && $rateCount < $orderCount &&
                 isset($request->user()->id) && $request->user()->id != $user->id;
         } catch (\Throwable $th) {

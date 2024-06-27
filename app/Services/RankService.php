@@ -13,10 +13,8 @@ class RankService
         //
     }
 
-    public function getRankIncome(Request $request)
+    public function getRankIncome($day)
     {
-        $day = $request->route('day') ?? 1;
-
         $ordersSubquery = DB::table('orders')
             ->select('ordered_user_id as user_id', DB::raw('SUM(total_price) as total'))
             ->where('created_at', '>=', Carbon::now()->subDays($day))
@@ -37,13 +35,11 @@ class RankService
             ->take(10)
             ->get();
 
-        return response()->json($users);
+        return $users;
     }
 
-    public function getRankOutcome(Request $request)
+    public function getRankOutcome($day)
     {
-        $day = $request->route('day') ?? 1;
-
         $ordersSubquery = DB::table('orders')
             ->select('ordering_user_id as user_id', DB::raw('SUM(total_price) as total'))
             ->where('created_at', '>=', Carbon::now()->subDays($day))
@@ -64,6 +60,6 @@ class RankService
             ->take(10)
             ->get();
 
-        return response()->json($users);
+        return $users;
     }
 }

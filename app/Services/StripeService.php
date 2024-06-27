@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Stripe\Stripe;
 use Stripe\StripeClient;
@@ -15,43 +16,42 @@ class StripeService
         //
     }
 
-    public function paymentMethod(Request $request)
+    public function paymentMethod($auth_user)
     {
-        $request->user()->createOrGetStripeCustomer();
-        return $request->user()->redirectToBillingPortal(route('profile.payment'));
+        try {
+            $auth_user->createOrGetStripeCustomer();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+        return true;
     }
 
-    public function checkout(Request $request)
+    public function checkout($auth_user, $money)
     {
-        $money = $request->input('money') * 100;
-        $paymentMethod = $request->user()->defaultPaymentMethod();
+        $money = $money * 100;
+        $paymentMethod = $auth_user->defaultPaymentMethod();
 
-        if (empty($paymentMethod)) {
-            // return Redirect::route("profile.edit")->with('status', 'checkout-fail-1');
-            $request->user()->createOrGetStripeCustomer();
-            return $request->user()->redirectToBillingPortal(route('profile.payment'));
-        } elseif ($money <= 0) {
-            // return Redirect::route("profile.edit")->with('status', 'checkout-fail-2');
-            return $request->user()->redirectToBillingPortal(route('profile.payment'));
+        if (empty($paymentMethod) || $money <= 0) {
+            $auth_user->createOrGetStripeCustomer();
+            return false;
         }
 
-        $user =  $request->user();
         try {
-            $user->invoiceFor('Checkout', $money);
+            $auth_user->invoiceFor('Checkout', $money);
         } catch (\Throwable $th) {
-            return $request->user()->redirectToBillingPortal(route('profile.payment'));
             $strip = new StripeClient();
             $strip->invoces->voidInvoice('id', []);
+            return false;
         }
 
-        $user->update(['balance' => ($user->balance + ($money / 100))]);
-        return Redirect::route("home")->with('status', 'checkout-ok');
+        $auth_user->update(['balance' => ($auth_user->balance + ($money / 100))]);
+
+        return true;
     }
 
-    public function handleWebhook(Request $request)
+    public function handleWebhook($payload, $sig_header)
     {
-        $payload = $request->getContent();
-        $sig_header = $request->header('stripe-signature');
         $event = null;
 
         try {
@@ -62,11 +62,11 @@ class StripeService
             );
         } catch (\UnexpectedValueException $e) {
             // Invalid payload
-            http_response_code(400);
+            return false;
             exit();
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
-            http_response_code(400);
+            return false;
             exit();
         }
 
@@ -76,6 +76,6 @@ class StripeService
             // Then defined your logic here to handle invoice payment succeeded
         }
 
-        http_response_code(200);
+        return true;
     }
 }

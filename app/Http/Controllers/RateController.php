@@ -18,20 +18,23 @@ class RateController extends Controller
 
     public function store(Request $request)
     {
-        return $this->rateService->saveRate($request);
-    }
+        $request->validate([
+            'content' => 'required|max:255',
+            'star' => 'required|integer|min:1|max:5',
+            'user_id' => 'required',
+        ]);
 
-    public function update(Request $request)
-    {
-        $id = $request->route('id');
+        $content = $request->input('content');
+        $star = $request->input('star');
+        $auth_user = $request->user();
+        $user_id = $request->input('user_id');
 
-        return $this->rateService->updateRate($request, $id);
-    }
+        $result = $this->rateService->saveRate($content, $star, $auth_user, $user_id);
 
-    public function delete(Request $request)
-    {
-        $id = $request->route('id');
+        if (!$result) {
+            return redirect()->back()->with('error', 'Add rate failure.');
+        }
 
-        return $this->rateService->deleteRate($request, $id);
+        return redirect()->back()->with('success', 'Add rate successfully.');
     }
 }

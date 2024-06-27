@@ -3,44 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Services\CommentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
+    protected $commentService;
+
+    public function __construct()
+    {
+        $this->commentService = new CommentService();
+    }
+
     public function index(Request $request)
     {
         $id = $request->route('id');
 
-        $comment = Comment::where('story_id', $id)
-            // ->orderByRaw('CASE WHEN story_id = ? THEN 0 ELSE 1 END, created_at ASC', [$request->user()->id])
-            ->orderBy('created_at', 'ASC')
-            ->get();
-        return response()->json($comment);
+        if ($id) {
+            $comment = $this->commentService->index($id);
+
+            return response()->json($comment);
+        } else {
+            return response()->json(["msg" => "Require id"], 400);
+        }
     }
 
     public function store(Request $request)
     {
         $id = $request->route('id');
         $content = $request->input('content');
-        $comment = Comment::create([
-            'content' => $content,
-            'story_id' =>  $id,
-            'user_id' => $request->user()->id,
 
-        ]);
-        return response()->json($comment);
+        if ($id) {
+            $comment = $this->commentService->store($id, $content, $request->user()->id);
+            return response()->json($comment);
+        } else {
+            return response()->json(["msg" => "Require id"], 400);
+        }
     }
 
     public function destroy(Request $request)
     {
         $id = $request->route('id');
 
-        $comment = Comment::find(['id' => $id])->first();
-
-        if ($comment && $request->user()->id == $comment->user->id) {
-            $comment->delete();
+        if ($id) {
+            $comment = $this->commentService->destroy($id, $request->user()->id);
+            return response()->json($comment);
+        } else {
+            return response()->json(["msg" => "Require id"], 400);
         }
-        return response()->json($comment);
     }
 }

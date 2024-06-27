@@ -20,173 +20,167 @@ class ProfileService
         //
     }
 
-    public function edit(Request $request): View
+    public function edit($auth_user)
     {
         $games =  Game::all();
 
-        return view('profile.edit', [
-            'user' => $request->user(),
+        return [
+            'user' => $auth_user,
             'games' => $games
-        ]);
+        ];
     }
 
-    public function changePassword(Request $request): View
+    public function payment($auth_user)
     {
-        return view('profile.password', [
-            'user' => $request->user(),
-        ]);
+        return [
+            'user' => $auth_user,
+            'payment_method' => $auth_user->paymentMethods(),
+            'intent' => $auth_user->createSetupIntent()
+        ];
     }
 
-    public function account(Request $request): View
+    public function gallery($auth_user)
     {
-        return view('profile.account', [
-            'user' => $request->user(),
-        ]);
-    }
+        $gallery = Gallery::where('user_id', $auth_user->id)->get();
 
-    public function payment(Request $request): View
-    {
-        return view('profile.payment', [
-            'user' => $request->user(),
-            'payment_method' => $request->user()->paymentMethods(),
-            'intent' => $request->user()->createSetupIntent()
-        ]);
-    }
-
-    public function gallery(Request $request): View
-    {
-        $gallery = Gallery::where('user_id', $request->user()->id)->get();
-
-        return view('profile.gallery', [
-            'user' => $request->user(),
+        return [
+            'user' => $auth_user,
             'gallery' => $gallery
-        ]);
+        ];
     }
 
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update($auth_user, $micro, $camera, $games)
     {
-        $request->user()->fill($request->validated());
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($auth_user->isDirty('email')) {
+            $auth_user->email_verified_at = null;
         }
-        $request->user()->micro = $request->has('micro') ? 1 : 0;
-        $request->user()->camera = $request->has('camera') ? 1 : 0;
-        $request->user()->save();
 
-        $request->user()->games()->sync($request->input('games'));
+        $auth_user->micro = $micro ? 1 : 0;
+        $auth_user->camera = $micro ? 1 : 0;
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        try {
+            $auth_user->save();
+            $auth_user->games()->sync($games);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+
+        return true;
     }
 
-    public function updatePayment(ProfileUpdateRequest $request): RedirectResponse
+    public function updatePayment($auth_user)
     {
-        $request->user()->fill($request->validated());
-
-        $request->user()->save();
-
-        return Redirect::route('profile.payment')->with('status', 'payment-updated');
+        try {
+            $auth_user->save();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+        return true;
     }
 
-    public function updateAvatar(ProfileUpdateRequest $request): RedirectResponse
+    public function updateAvatar($auth_user, $file)
     {
-        if ($request->hasFile('avatar')) {
-            if (!empty($request->user()->avatar)) {
-                try {
-                    $public_id =  explode('.', explode('/', $request->user()->avatar)[7])[0];
-                    Cloudinary::destroy($public_id);
-                } catch (\Throwable $th) {
-                    Log::error("Error detroy old avatar");
-                }
+        try {
+            if (!empty($auth_user->avatar)) {
+                $public_id =  explode('.', explode('/', $auth_user->avatar)[7])[0];
+                Cloudinary::destroy($public_id);
             }
-            $uploaded = Cloudinary::upload($request->file('avatar')->getRealPath());
+
+            $uploaded = Cloudinary::upload($file->getRealPath());
             $uploadedFileUrl = $uploaded->getSecurePath();
-            Log::debug($uploadedFileUrl);
+
+            $auth_user->update(['avatar' => $uploadedFileUrl]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
         }
-        $request->user()->update(['avatar' => $uploadedFileUrl]);
-        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+        return true;
     }
 
-    public function uploadGallery(ProfileUpdateRequest $request): RedirectResponse
+    public function uploadGallery($auth_user, $file)
     {
-        if ($request->hasFile('upload')) {
+        try {
             if (in_array(
-                $request->file('upload')->guessExtension(),
+                $file->guessExtension(),
                 ['jpg', 'png', 'gif']
             )) {
-                $uploaded = Cloudinary::upload($request->file('upload')->getRealPath());
+                $uploaded = Cloudinary::upload($file->getRealPath());
                 $uploadedFileUrl = $uploaded->getSecurePath();
                 Gallery::create([
                     'type' => 'image', 'link' => $uploadedFileUrl,
-                    'user_id' => $request->user()->id
+                    'user_id' => $auth_user->id
                 ]);
             } elseif (in_array(
-                $request->file('upload')->guessExtension(),
+                $file->guessExtension(),
                 ['mp4', 'wmv', 'avi']
             )) {
-                $uploaded = Cloudinary::uploadVideo($request->file('upload')->getRealPath());
+                $uploaded = Cloudinary::uploadVideo($file->getRealPath());
 
                 $uploadedFileUrl = $uploaded->getSecurePath();
                 Gallery::create([
                     'type' => 'video', 'link' => $uploadedFileUrl,
-                    'user_id' => $request->user()->id
+                    'user_id' => $auth_user->id
                 ]);
-            }
-        }
-        return Redirect::route('profile.gallery');
-    }
-
-    public function deleteGallery(Request $request)
-    {
-        try {
-            $src = $request->input('link');
-
-            $gallery = Gallery::where(['link' => $src])->first();
-
-            if ($gallery && $gallery->user_id == $request->user()->id) {
-                $gallery->delete();
-            } else {
-                return response()->json(['msg' => 'Delete gallery fail'], 400);
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['msg' => 'Delete gallery fail'], 400);
+            return false;
         }
 
-        return response()->json(['msg' => 'Delete gallery success'], 200);
+        return true;
     }
 
-    public function uploadDropbox(Request $request)
+    public function deleteGallery($auth_user, $src)
     {
-        $link = $request->input('link');
+        try {
+            $gallery = Gallery::where(['link' => $src])->first();
 
-        if (in_array(
-            array_reverse(explode('.', $link))[0],
-            ['jpg', 'png', 'gif']
-        )) {
-            Gallery::create(['type' => 'image', 'link' => $link, 'user_id' => $request->user()->id]);
-        } elseif (in_array(
-            array_reverse(explode('.', $link))[0],
-            ['mp4', 'wmv', 'avi']
-        )) {
-            Gallery::create(['type' => 'video', 'link' => $link, 'user_id' => $request->user()->id]);
+            if ($gallery && $gallery->user_id == $auth_user->id) {
+                $gallery->delete();
+            } else {
+                return false;
+            }
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
         }
+
+        return true;
     }
 
-    public function destroy(Request $request): RedirectResponse
+    public function uploadDropbox($auth_user, $link)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
-        ]);
+        try {
+            if (in_array(
+                array_reverse(explode('.', $link))[0],
+                ['jpg', 'png', 'gif']
+            )) {
+                Gallery::create(['type' => 'image', 'link' => $link, 'user_id' => $auth_user->id]);
+            } elseif (in_array(
+                array_reverse(explode('.', $link))[0],
+                ['mp4', 'wmv', 'avi']
+            )) {
+                Gallery::create(['type' => 'video', 'link' => $link, 'user_id' => $auth_user->id]);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+        return true;
+    }
 
-        $user = $request->user();
+    public function destroy($user)
+    {
+        try {
+            Auth::logout();
+            $user->delete();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return true;
     }
 }
