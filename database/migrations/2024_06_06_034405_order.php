@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ordering_user_id');
-            $table->unsignedBigInteger('ordered_user_id');
+            $table->foreignId('ordering_user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('ordered_user_id')->constrained('users', 'id')->onDelete('cascade');
             $table->string('message')->nullable();
             $table->string('status');
             $table->double('price');

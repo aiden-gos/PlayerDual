@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
-            StoriesSeeder::class,
             GameSeeder::class,
-            DonateSeeder::class,
             UserGame::class,
+            DonateSeeder::class,
+            StoriesSeeder::class,
             UserRate::class,
         ]);
     }

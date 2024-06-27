@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('video_link')->nullable();
             $table->text('content')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('status')->default('open');
             $table->integer('view')->default(0);
             $table->integer('like')->default(0);

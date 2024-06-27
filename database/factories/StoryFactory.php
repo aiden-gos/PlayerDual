@@ -28,7 +28,7 @@ class StoryFactory extends Factory
             'title' => fake()->title(),
             'video_link' => $link[array_rand($link)],
             'content' => fake()->name(),
-            'user_id' => random_int(1, 105),
+            'user_id' => random_int(1, 100),
             'view' => random_int(1, 1000),
             'like' => random_int(1, 1000)
         ];
