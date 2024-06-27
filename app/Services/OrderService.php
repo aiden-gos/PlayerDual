@@ -84,7 +84,6 @@ class OrderService
         DB::beginTransaction();
 
         try {
-
             $order = Order::find(['id' => $id])->first();
             $order->update([
                 'status' => 'accepted',
@@ -140,7 +139,6 @@ class OrderService
     public function endRent($id)
     {
         try {
-
             $order = Order::find(['id' => $id])->first();
 
             $order->update([
